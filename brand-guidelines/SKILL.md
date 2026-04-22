@@ -365,14 +365,40 @@ Note the ladder: **the subtitle of the Large tier equals the headline of the Sma
 - **Medium** — default. Most marketing outputs land here.
 - **Large** — high-impact. Posters, OOH, hero slides, editorial covers.
 
-### 2. Placement
+### 2. Horizontal spacing — the X rhythm
+
+Reference: SOT "Horizontal spacing" ([node 428:51357](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=428-51357)).
+
+Compositions are built from **horizontal content bands** (headline, image, subtitle, callout, floating object) stacked vertically. Every gap — margin, inter-band, pre-lockup — is a multiple of `X`, the same value that sizes the logo. Layout size → X → logo → margins → band gaps → type sizes. One chain, no orphan decisions.
+
+**The rules:**
+
+- **Canvas margins: `X` on all four sides.** The safe content area is `(canvas_w − 2X)` wide by `(canvas_h − 2X)` tall. No content, no lockup, no floating object ever crosses into the X margin.
+- **Gap between adjacent content bands: `1X`.** Use this between headline ↔ image, image ↔ subtitle, or any two directly-stacked content blocks.
+- **Gap between the last content band and the bottom lockup: `2X`.** The lockup always gets a double gutter — it anchors the composition and needs breathing room.
+
+Measured on the SOT 1080×1350 reference (X = 54):
+
+| Element | Value | In X |
+|---|---|---|
+| Canvas margin (all 4 sides) | 54 px | `1X` |
+| Content column width | 972 px | `canvas_w − 2X` |
+| Adjacent-band gap | 54 px | `1X` |
+| Last-band → lockup gap | 108 px | `2X` |
+| Lockup strip height (baseline X for the symbol) | 54 px | `1X` |
+
+**Floating / overlapping objects.** When a composition uses layered imagery (hero object + backing shapes, as in the SOT third variant), the first object starts `2X` below the headline band. Subsequent objects may overlap each other and visual judgment takes over — but nothing crosses the outer `X` margin, and nothing pushes into the `2X` zone above the lockup.
+
+**Why this matters.** Because every gap is a multiple of X, a layout stays coherent whether you scale it to 1080×1350, 1920×1080, or 2048×2048: X recomputes, margins and band gaps scale with it, and all proportional relationships stay intact. A poster and an Instagram post built from the same system read as the same brand.
+
+### 3. Placement
 
 - **Headline anchors the top of the canvas**, margin `X` from the top edge and margin `X` from both left and right edges. Its text block width = `canvas_width − 2X`.
 - **Subtitle sits directly under the headline**, same left and right margins. Gap from headline baseline ≈ `X / 2` (27 px at X=54; matches the medium/large SOT frames — small deviates slightly smaller, that is fine as a minimum).
 - **Logo anchors the bottom** per §Logo.5 priority placement (full lockup stretched edge-to-edge).
-- Vertical space between the subtitle block and the logo = whatever remains. That empty space is deliberate; do not fill it with decoration.
+- Vertical space between the subtitle block and the logo = whatever remains, subject to the band-gap rules in §Composition.2. That empty space is deliberate; do not fill it with decoration.
 
-### 3. Headline alignment — left or center only
+### 4. Headline alignment — left or center only
 
 Headlines may be **left-aligned** or **center-aligned**. Both are valid and interchangeable — pick based on what the composition needs:
 
@@ -387,15 +413,16 @@ The subtitle follows the headline's alignment. Never mix: left-aligned headline 
 
 In Figma, set `text.textAlignHorizontal = 'LEFT'` or `'CENTER'`. Never `'RIGHT'`. In CSS, `text-align: left` or `text-align: center`.
 
-### 4. Anti-patterns
+### 5. Anti-patterns
 
-- Do not right-align headlines or subtitles. Left and center only (§Composition.3).
+- Do not right-align headlines or subtitles. Left and center only (§Composition.4).
+- Do not use band gaps that are not multiples of X (§Composition.2). Adjacent bands = `1X`, last band to lockup = `2X`, margins = `X`.
 - Do not mix alignments within one composition — if the headline is centered, the subtitle is centered too.
 - Do not pick headline sizes outside these three tiers. Custom sizes break the X-system and produce layouts that feel "almost right".
 - Do not mix the tiers within a single composition (e.g. large headline with small subtitle). Pick a tier; stay in it.
 - Do not set body copy in Bold — Bold is reserved for the headline. Body copy and subtitles use Regular.
 
-### 5. Figma build recipe — composition with headline, subtitle, and full lockup
+### 6. Figma build recipe — composition with headline, subtitle, and full lockup
 
 ```javascript
 const canvasW = 1080;
@@ -446,7 +473,7 @@ subtitle.y = headline.y + headline.height + Math.round(X * 0.5);
 // Logo — use §Logo.8 full-lockup recipe at the bottom.
 ```
 
-### 6. Body copy and other type sizes
+### 7. Body copy and other type sizes
 
 Beyond the headline/subtitle tiers, any additional type in a composition (captions, metadata, small labels) should follow the same X-scaled logic. The entry-points text already established this: Qonto Sans Regular at `max(12, round(X × 0.245))`. For layout captions or legal footnotes, use the same 12 px floor / `0.245 × X` target. Do not introduce type sizes that sit between these defined ratios.
 
