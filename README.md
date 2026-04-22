@@ -1,88 +1,53 @@
-# Qonto Design Skills
+# Qonto Brand Design Skills
 
-Modular, AI-native brand skill system for Qonto. Machine-readable `.md` files that serve as the single source of truth for the Qonto brand — consumed by Claude Projects, Claude Code, and internal tools.
+An [agent skill](https://docs.claude.com/en/docs/claude-code/skills) collection that puts Qonto's brand guidelines directly into your AI workflow. Ask Claude to build a poster, social post, flyer, or deck — and it will follow the rules from the Brand Kit SOT by default.
 
-## Quick start
-
-### Claude Projects (claude.ai)
-1. Paste `SKILL.md` as custom instructions
-2. Upload territory `.md` files as project knowledge
-3. Start prompting — Claude knows the brand
-
-### Claude Code
-```bash
-git clone https://github.com/qonto/qonto-design-skills.git
-cd qonto-design-skills
-```
-Claude Code reads the `.md` files directly from the folder.
-
-### Install (planned)
-```bash
-npx skills add qonto/design-skills
-```
-
-## What's inside
-
-```
-qonto-design-skills/
-├── SKILL.md                        ← Orchestrator (always loaded)
-├── generate-tokens.js              ← .md → CSS generator
-├── territories/
-│   ├── photography.md              ← Live
-│   ├── typography.md               ← Live
-│   ├── tone.md                     ← Live
-│   ├── logo.md                     ← Live
-│   ├── color.md                    ← Live
-│   └── (iconography, visual...)    ← Coming
-├── assets/
-│   ├── qonto-brand-tokens.css      ← Auto-generated
-│   └── QontoSans-*.otf             ← Fonts (to add)
-└── templates/
-    └── territory-template.md
-```
-
-## Territories
-
-| Territory | Status | Source |
-|---|---|---|
-| Photography | Live | Figma Brand Creative Direction |
-| Typography | Live | Notion Qonto Sans Guide |
-| Tone of voice | Live | Figma Brand Kit SOT + Notion Wiki |
-| Logo | Live | Figma Brand Kit SOT |
-| Color | Live | Figma Brand Kit SOT + Gradient Tool |
-| Iconography | Coming | — |
-| Visual language | Coming | — |
-| Object style | Coming | — |
-| Composition | Coming | — |
-| Motion | Coming | — |
-
-## CSS tokens
-
-The territory files generate a CSS custom properties file for use in tool outputs (not tool UIs).
+## Installation
 
 ```bash
-node generate-tokens.js
+npx skills add joanpons-bd/qonto-brand-design-skills
 ```
 
-Reads `color.md` + `typography.md` → outputs `assets/qonto-brand-tokens.css`.
+Once installed, the skill auto-loads in Claude Code and Claude Desktop.
 
-Or via Claude Code: ask "Regenerate the brand tokens CSS file."
+## What's included
 
-## Architecture
+### qonto-brand-design-skill
 
-**SKILL.md** is the orchestrator — it's always loaded and routes to the right territory file based on the topic. Each territory is a self-contained `.md` file covering one brand domain (color, typography, tone, etc.) with a consistent structure: rules, tokens, examples, source references.
+Brand guidelines for marketing, social graphics, decks, flyers, and any external-facing visual content.
 
-The `.md` files are the API contract between brand rules and every consumer: Claude Projects, Claude Code, internal tools (Print Lab, Asset Creator, Social Studio, One Pager Builder), and the CSS tokens file.
+- **Logo** — five canonical configurations (wordmark, wordmark + entry points, full lockup, symbol, circular avatar), the 5 % sizing rule, priority placement, library component keys, and a tested Figma build recipe.
+- **Composition** — three headline tiers (small / medium / large) with sizes scaled from the logo X multiplier, placement, and alignment rules (left and center only).
+- **Color** — marketing uses black and white only; product uses the full expressive palette. Coming soon: token tables per context.
+- **Typography** — Qonto Sans as the primary typeface. Coming soon: full type scale beyond headline/subtitle.
+- **Source of truth** — every rule is measured from the [Qonto Brand Kit — SOT Figma file](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT). When a design-system token disagrees with the hex in the skill, the skill wins (the DS is mid-migration to match the SOT).
 
-## Source
+## Usage
 
-- [Figma Brand Kit SOT](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT)
-- [Notion WIP hub](https://www.notion.so/qonto/Brand-skill-system-WIP-32f31ee4c69681eba603fbdf353f502d)
+The skill loads automatically whenever it is relevant. You can also invoke it explicitly.
+
+### Example prompts
+
+```
+Create a 1080×1350 Instagram post announcing our Q2 results. Medium headline.
+```
+
+```
+Build a flyer promoting our new invoicing feature. Use the full Qonto lockup.
+```
+
+```
+What's the right logo size for a 1920×1080 deck slide?
+```
+
+```
+Is it OK to put the Qonto wordmark at the top-right of this layout?
+```
 
 ## Contributing
 
-1. Copy `templates/territory-template.md`
-2. Follow the structure of `territories/photography.md` as reference
-3. Extract content from Figma or Notion source
-4. Test in a Claude Project
-5. Submit a PR
+This skill is a living document. If you spot a rule that disagrees with the [Brand Kit SOT](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT), open an issue or a PR. Rule edits should cite the SOT node ID they come from.
+
+## License
+
+MIT
