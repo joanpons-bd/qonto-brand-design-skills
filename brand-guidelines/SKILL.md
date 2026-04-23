@@ -192,8 +192,6 @@ Reference: Brand Kit SOT node [220:51714](https://www.figma.com/design/9MBP81zVp
 - **Bottom-left cluster only** (no symbol). Mirror of the above.
 - **Top-right / top-left cluster only.** Same, anchored to the top edge.
 
-**Direction (horizontal).** Within any placement, lockups **read left-to-right by default with the wordmark on the right end** (symbol → auto-gap → entry points → divider → wordmark). The **mirrored orientation** (wordmark on the left, reading: wordmark → divider → entry points → auto-gap → symbol) is allowed when the composition calls for it. Inversion is most relevant for the two-piece **wordmark + entry points** configuration (no symbol), where wordmark-left can better serve a left-leaning layout. **Auto-gap behaviour is symmetric** in both orientations — whichever piece hugs which margin, the gap still fills between symbol and cluster. Pick one direction per composition; do not mix. Visual reference: [SOT node 220:52554](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=220-52554).
-
 **Rules that apply to all placements:**
 - Margin on every canvas edge = `X`.
 - The logo anchors the composition — it does not compete with the headline.
@@ -335,29 +333,6 @@ Key pitfalls (do not skip):
 - **Wordmark.** The wordmark component has its own internal colors and no glyph-in-container structure. Use `color=white` on dark backgrounds. No stroke.
 
 For other configurations (wordmark + entry points, flower symbol) instantiate the matching component set from §Logo.2 and apply the same sizing math. Always check `set.variantGroupProperties` first; the wordmark and square sets expose only `{ color: ['black', 'white'] }`.
-
-**Flipping to the mirrored orientation (wordmark-left).** Per §Logo.5 Direction, lockups may read right-to-left when the composition calls for it — most commonly in the `wordmark + entry points` two-piece. To adapt the recipe above, swap left/right anchors and reverse intra-cluster order:
-
-```javascript
-// Symbol hugs the RIGHT margin (if present)
-sym.x = canvasW - X - X;          // = right margin − symbol width
-
-// Cluster anchored at LEFT margin, reading wordmark → divider → entry points
-wordmark.x = X;                                          // hug left margin
-wordmark.y = baselineY;
-
-divider.x = wordmark.x + wordmarkW + clusterGap;
-divider.y = baselineY;
-
-entry.x = divider.x + 1 + clusterGap;
-entry.y = baselineY;
-
-// Auto gap now sits between the cluster (right edge = entry.x + entry.width)
-// and the symbol (left edge = sym.x). Symmetric behaviour.
-const autoGap = sym.x - (entry.x + entry.width);
-```
-
-All other rules (squircle cornerRadius, dark-bg stroke, variant selection, sizing) are unchanged. Do not mix orientations in the same composition.
 
 ### 9. Non-Figma outputs
 
