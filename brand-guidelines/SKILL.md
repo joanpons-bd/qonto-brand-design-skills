@@ -500,9 +500,9 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 |---|---|---|
 | **A. Stack — text then visual** | Text band top → `1X` → visual band → `2X` → lockup | Message-first product announcements, feature reveals |
 | **B. Stack — visual then text** | Visual band top → `1X` → text band → `2X` → lockup | "Look at this, here's why" — visual sells, headline punctuates |
-| **C. Split — text ↔ visual** | Landscape: text one half, visual other half. Portrait: collapses to A or B. | KPI + supporting image, testimonial + face, equal-weight pairs |
-| **D. Overlay — text on full-bleed image** | Image bleeds edge-to-edge; text block + lockup sit on top within `X` margins | Atmospheric, photo-led campaigns |
-| **E. Overlay — text card on bleed image** | Image full-bleed; solid-colour card (usually white) with headline + lockup, card honours `X` margin and `X` internal padding | Photo + crisp readable message, landing-page hero |
+| **C. Split — text ↔ visual** | Landscape: text one half, visual other half. Portrait: collapses to A or B. The **visual side also ends at `lockupY − 2X`** — the 2X clearance before the lockup applies to every last band, including the visual half of a split (never let a photo run into the lockup strip). | KPI + supporting image, testimonial + face, equal-weight pairs |
+| **D. Overlay — text on full-bleed image** | Image bleeds edge-to-edge; text block + lockup sit on top within `X` margins. **Dark-background recipe:** use the `color=white` logo variants and apply a `1px` white stroke to the symbol (per §Logo.3). Verify contrast: headline and lockup must read cleanly against the busiest region of the photo, not just the calm edge. | Atmospheric, photo-led campaigns |
+| **E. Overlay — text card on bleed image** | Image full-bleed; solid-colour card (usually white) with headline + lockup, card honours `X` margin and `X` internal padding. Card uses **sharp corners** (`cornerRadius = 0`) — rounded corners are not Qonto-native. | Photo + crisp readable message, landing-page hero |
 | **F. Layered — floating objects + text** | Text at top → `2X` → three overlapping cascading objects (§Composition.2 floating-object rule) → `2X` → lockup | Editorial, object-of-the-week, feature-rich storytelling |
 
 **Picking the right archetype:**
@@ -517,9 +517,11 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 
 - Outer margin `X` on all sides (§Composition.2), except for full-bleed images in D and E, which bleed past the margin but never the text block or the lockup.
 - Lockup sits at the bottom X strip (§Logo.5). In archetype E it sits inside the card, not at the canvas bottom.
+- **Every last content band ends at `lockupY − 2X`**, not at the canvas bottom. This holds for text bands (A), visual bands (B), both halves of a split (C), overlay text blocks (D), and cards (E). The 2X breathing room before the lockup is non-negotiable.
 - Text block honours horizontal (§Composition.5) and vertical (§Composition.6) alignment rules.
 - Headline tier (§Composition.1) picked for the archetype, not per element.
 - Grid (§Composition.3) as a reference, especially when splitting (C) or sizing the text card (E).
+- **Sharp corners by default** — cards, frames, and rectangular brand shapes use `cornerRadius = 0`. Rounded corners are not part of the brand language. (Object-style rules are coming; until then, default to sharp.)
 
 **Not a cage.** These six archetypes cover the vast majority of Qonto touch points, but a genuinely novel composition can exist if every underlying rule (X-scaled type, X-margin, band-gap, alignment, colour) holds. If you need a new archetype, measure it against the SOT and propose it as an addition to this section rather than a one-off.
 
