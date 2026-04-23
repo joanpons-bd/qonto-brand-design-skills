@@ -37,7 +37,7 @@ When unclear which context applies, ask.
 ## Universal rules
 
 - Primary typeface: **Qonto Sans** (custom). Fallback: Manrope → Arial.
-- Default weight: Regular (400). Sentence case only — never ALL CAPS.
+- Available weights: **Light, Regular, Semi Bold, Bold, Black** (there is **no Medium** weight — using `style: 'Medium'` in Figma will fail to load). Default weight: Regular (400). Headlines: Bold. Sentence case only — never ALL CAPS.
 - Minimum body size: 14px.
 - Generous whitespace. Rounded corners (16–24px) on cards and containers.
 - Never use pure `#000000` — Qonto's black is `#050505` (token `primary/black`).
@@ -172,6 +172,7 @@ Minimum auto gap — if the gap would compress below `X`, the full lockup no lon
 - Size: `round(X × 0.245)` px — at X=54 that's 13 px; at X=100 that's 24 px. Hard floor of 12 px (drop the entry points if the computed value falls below).
 - Line-height: `round(X × 0.36)` px — at X=54 that's 19 px; at X=100 that's 36 px.
 - Color: same as the divider and wordmark — `#050505` on light, `#ffffff` on dark.
+- **Alignment: left within the text block.** Lines start flush left; the block's right edge sits `X/2` from the divider. The ragged right edge (Invoicing shorter than Business Account) is intentional — don't right-align.
 - Three lines maximum: `Business Account\nCompany Creation\nInvoicing` is the canonical copy. Translate per market; keep to three short lines.
 
 ### 5. Placement
@@ -224,6 +225,8 @@ When a partner logo appears with Qonto:
 Paste this into `use_figma` when placing a logo in a new Figma layout. Adjust `canvasW`, `canvasH`, and the desired variant.
 
 The `Qonto logo wordmark` is a **component set** with one variant property — `color` (`black` or `white`). Use `importComponentSetByKeyAsync`, then pick the variant via its name (`color=black` / `color=white`). Using `importComponentByKeyAsync` on a component set returns "not found".
+
+**Operational note — chunk long builds.** A single `figma_execute` call that imports both component sets **and** builds multiple frames reliably exceeds the 25s plugin timeout. Split it: (1) setup + import component sets in one call, note the returned IDs, (2) build each frame in its own call using `await figma.getNodeByIdAsync(id)` to re-resolve the imports. Dynamic-page mode also requires `await figma.setCurrentPageAsync(page)` and `await figma.getNodeByIdAsync(id)` — the synchronous variants throw.
 
 ```javascript
 const canvasW = 1080;
@@ -289,6 +292,7 @@ entry.fontSize = entrySize;
 entry.lineHeight = { unit: 'PIXELS', value: entryLH };
 entry.characters = 'Business Account\nCompany Creation\nInvoicing';
 entry.fills = [{ type: 'SOLID', color: inkRGB }];
+entry.textAlignHorizontal = 'LEFT';                       // flush-left block; ragged right is intentional
 entry.resize(entry.width, X);
 
 // 3. Divider — 1 px × X, vertical.
@@ -639,6 +643,16 @@ Canonical exports of the SOT for any context that isn't Figma — decks, docs, e
 ### Filename conventions
 
 Observed library convention: `{Subject} {Scene/Theme} {Mood}.png` — e.g., `Thomas Tech Office Action.png`. When asking a user for a specific photo, request by mood and scene keywords (e.g., "a calm, wide shot with negative space in the upper-left" rather than a specific filename) — the user will find the match faster than the agent can guess.
+
+### Within a Figma session: reuse by `imageHash`
+
+Once an asset is applied to any node in the current Figma file, the Plugin API returns an `imageHash` (e.g., `bba4a50a88e89a9be31d630b2338de5a81bf46bf`). That hash is reusable for the rest of the session — apply it to new rectangles directly without re-fetching:
+
+```javascript
+rect.fills = [{ type: 'IMAGE', imageHash: '<stored hash>', scaleMode: 'FILL' }];
+```
+
+Log the hash the first time an asset lands so subsequent uses in the same session skip the download round-trip.
 
 ---
 
