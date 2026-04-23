@@ -336,8 +336,8 @@ For other configurations (wordmark + entry points, flower symbol) instantiate th
 
 ### 9. Non-Figma outputs
 
-- **HTML / React**: serve the wordmark SVG asset (from the Logos library export) — never typeset "Qonto" as HTML text styled to look like the logo. Apply `fill: #050505` or `#ffffff`. Set height via CSS; width is auto.
-- **Print / PDF**: embed the SVG or a high-res PNG at the computed size; respect the 5% margin rule relative to the trim box.
+- **HTML / React**: serve the wordmark SVG from `Logo/` in the [Asset library](#asset-library) — never typeset "Qonto" as HTML text styled to look like the logo. Apply `fill: #050505` or `#ffffff`. Set height via CSS; width is auto.
+- **Print / PDF**: embed the SVG or a high-res PNG (from `Logo/` in the [Asset library](#asset-library)) at the computed size; respect the 5% margin rule relative to the trim box.
 - **Social exports**: compute `X` from the export dimensions, not from the design canvas.
 
 ---
@@ -516,6 +516,7 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 **Rules shared across all archetypes:**
 
 - Outer margin `X` on all sides (§Composition.2), except for full-bleed images in D and E, which bleed past the margin but never the text block or the lockup.
+- **Photography comes from `Photography [Self-server]/` in the [Asset library](#asset-library)** — don't generate or swap in arbitrary imagery for archetypes B, C, D, E.
 - Lockup sits at the bottom X strip (§Logo.5). In archetype E it sits inside the card, not at the canvas bottom.
 - **Every last content band ends at `lockupY − 2X`**, not at the canvas bottom. This holds for text bands (A), visual bands (B), both halves of a split (C), overlay text blocks (D), and cards (E). The 2X breathing room before the lockup is non-negotiable.
 - Text block honours horizontal (§Composition.5) and vertical (§Composition.6) alignment rules.
@@ -597,7 +598,7 @@ Beyond the headline/subtitle tiers, any additional type in a composition (captio
 
 ## Photography
 
-See [`references/photography.md`](references/photography.md) for AI generation prompts and photo-selection rules.
+See [`references/photography.md`](references/photography.md) for AI generation prompts and photo-selection rules. For approved shots, pull from `Photography [Self-server]/` in the [Asset library](#asset-library) — any image in that folder is cleared for use.
 
 <!-- Expansion territories (to be nailed next, same approach as logo + composition: pull from SOT, write concrete specs, test against Figma library components):
      - Color
@@ -611,6 +612,31 @@ See [`references/photography.md`](references/photography.md) for AI generation p
 
 ---
 
+## Asset library
+
+Canonical exports of the SOT for any context that isn't Figma — decks, docs, email, Canva, Notion, landing pages, social tools.
+
+**Where it lives:** [Qonto Brand Asset Library](https://drive.google.com/drive/folders/1E0HtZCvHVv4K0e-Yx9pTqJi0eYNytbOH) on Google Drive.
+
+**Source vs export.** The Figma SOT is the source of truth; the Drive library is the export pipeline's output. If an asset exists in both, Drive mirrors Figma — if they disagree, Figma wins and the Drive copy is stale. Flag the mismatch to the brand team rather than working around it.
+
+| Folder | What's in it | Use for | Source / cross-link |
+|---|---|---|---|
+| `Logo/` | SVG and PNG exports of every canonical logo configuration | Any non-Figma surface that needs a logo | SOT [node 399:548](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=399-548) · §Logo |
+| `Icons/` | Qonto icon set (single system for marketing and product) | Iconography in any surface | SOT [node 399:1333](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=399-1333) · (full §Iconography rules to come) |
+| `Photography [Self-server]/` | Approved photography pool — no gate, self-serve | Full-bleed backgrounds, card imagery (§Composition.7 archetypes D, E) | §Photography |
+| `Card Assets/` | Product-card renders | Feature and product-announcement compositions | — |
+| `Trustpilot/` | Rating badges and visuals | Social-proof placements | — |
+| `UI Snapshots/` | Approved product screenshots | Product-story compositions in marketing | — |
+
+### How the agent reaches it
+
+- **With a Google Drive connector** (Claude Desktop, Claude Code with the Drive MCP, Cursor with Drive access): fetch directly by folder + filename.
+- **Without a connector**: ask the user which asset they want and quote the folder path + filename pattern so they can grab it in two clicks.
+- **Never invent or redraw a brand asset** when the canonical export exists in the library. If you think an asset is missing, say so — don't improvise.
+
+---
+
 ## For AI tools
 
 When this skill is in context:
@@ -620,5 +646,6 @@ When this skill is in context:
 3. **For any logo placement**: use the sizing formula in §Logo.4 and the library component keys in §Logo.2. Never draw the logo from shapes.
 3a. **For any multi-element layout**: compute `X` first (§Logo.4), then derive headline, subtitle, body, logo, and margins from `X` per §Composition. Pick one headline tier per composition.
 4. Before creating anything in Figma, call `search_design_system` to confirm components are available; import via `importComponentByKeyAsync`.
-5. If a guideline here conflicts with a DS token, trust this file and flag the mismatch to the brand team.
-6. When unsure, default to the universal rules and ask for clarification.
+5. **For any brand asset** (logo, icon, photo, card render, Trustpilot badge, UI snapshot) **outside Figma**: consult §Asset library for the canonical export rather than inventing, redrawing, or generating.
+6. If a guideline here conflicts with a DS token, trust this file and flag the mismatch to the brand team.
+7. When unsure, default to the universal rules and ask for clarification.
