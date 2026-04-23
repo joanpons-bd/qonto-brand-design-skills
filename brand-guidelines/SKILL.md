@@ -441,12 +441,12 @@ where `n` is the column count and `X = 0.05 × min(canvas_w, canvas_h)`. The `(n
 
 ### 4. Placement
 
-- **Headline anchors the top of the canvas**, margin `X` from the top edge and margin `X` from both left and right edges. Its text block width = `canvas_width − 2X`.
+- **Headline sits at the top or center of the canvas** (never bottom — see §Composition.6 for the vertical alignment rule). Left and right margin = `X`. Its text block width = `canvas_width − 2X`.
 - **Subtitle sits directly under the headline**, same left and right margins. Gap from headline baseline ≈ `X / 2` (27 px at X=54; matches the medium/large SOT frames — small deviates slightly smaller, that is fine as a minimum).
 - **Logo anchors the bottom** per §Logo.5 priority placement (full lockup stretched edge-to-edge).
 - Vertical space between the subtitle block and the logo = whatever remains, subject to the band-gap rules in §Composition.2. That empty space is deliberate; do not fill it with decoration.
 
-### 5. Headline alignment — left or center only
+### 5. Horizontal alignment — left or center only
 
 Headlines may be **left-aligned** or **center-aligned**. Both are valid and interchangeable — pick based on what the composition needs:
 
@@ -461,18 +461,82 @@ The subtitle follows the headline's alignment. Never mix: left-aligned headline 
 
 In Figma, set `text.textAlignHorizontal = 'LEFT'` or `'CENTER'`. Never `'RIGHT'`. In CSS, `text-align: left` or `text-align: center`.
 
-### 6. Anti-patterns
+### 6. Vertical alignment — top or center only
+
+The headline + subtitle block sits at one of two vertical positions within the canvas. Reference: SOT "Vertical alignment" ([node 450:52060](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=450-52060)).
+
+- **Top** — the default. Block's top edge at margin `X` from the canvas top. This is what the §Composition.2 band rules and §Composition.4 placement assume.
+- **Center** — block vertically centered in the content area. Top of block at `y = X + (canvas_h − 2X − block.height) / 2`. Equal whitespace above and below the block.
+
+**Bottom-aligned headlines are never permitted.** Every tier × every horizontal alignment in the SOT's bottom row is slashed through. The lockup holds the bottom; the headline does not compete for it.
+
+When to use each:
+
+- **Top** — default reading order: headline → visual → logo. Marketing, editorial, most social posts.
+- **Center** — formal, ceremonial, minimal. Poster-like compositions where the headline is the focal point and a visual below wants symmetric breathing room.
+
+The subtitle never separates from the headline — always directly below with the `X/2` gap (§Composition.4). The pair moves as one block when you center-align vertically.
+
+**Combining axes.** Horizontal × vertical multiply; any combination from the table below is valid:
+
+| Horizontal | Vertical | Feel |
+|---|---|---|
+| Left | Top | Default — reading flow, asymmetric layouts |
+| Left | Center | Formal with asymmetric emphasis |
+| Center | Top | Balanced, magazine-cover |
+| Center | Center | Ceremonial, poster, title card |
+
+Bottom is never valid regardless of horizontal alignment. Right is never valid regardless of vertical alignment.
+
+In Figma code, top-alignment is `block.y = X`; center-alignment is `block.y = X + Math.round((canvasH - 2*X - block.height) / 2)`.
+
+### 7. Directional layout structures
+
+Reference: SOT "Layouts" ([node 450:52523](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=450-52523)).
+
+These are the canonical archetypes for Qonto marketing touch points. Every composition should recognisably belong to one of them. They compose the rules from §§Composition.1–6 into reusable patterns — use them as starting points for posters, social posts, OOH, landing pages, decks, emails. The SOT shows each archetype in both portrait (1080×1350) and landscape (1920×1080); the rules scale to any size via X.
+
+| Archetype | Pattern | Best for |
+|---|---|---|
+| **A. Stack — text then visual** | Text band top → `1X` → visual band → `2X` → lockup | Message-first product announcements, feature reveals |
+| **B. Stack — visual then text** | Visual band top → `1X` → text band → `2X` → lockup | "Look at this, here's why" — visual sells, headline punctuates |
+| **C. Split — text ↔ visual** | Landscape: text one half, visual other half. Portrait: collapses to A or B. | KPI + supporting image, testimonial + face, equal-weight pairs |
+| **D. Overlay — text on full-bleed image** | Image bleeds edge-to-edge; text block + lockup sit on top within `X` margins | Atmospheric, photo-led campaigns |
+| **E. Overlay — text card on bleed image** | Image full-bleed; solid-colour card (usually white) with headline + lockup, card honours `X` margin and `X` internal padding | Photo + crisp readable message, landing-page hero |
+| **F. Layered — floating objects + text** | Text at top → `2X` → three overlapping cascading objects (§Composition.2 floating-object rule) → `2X` → lockup | Editorial, object-of-the-week, feature-rich storytelling |
+
+**Picking the right archetype:**
+
+- Does the message or the image lead? → A (message) or B (image)
+- Are the two elements equal weight? → C
+- Do you want the viewer inside the image? → D
+- Photo background but the copy must pop? → E
+- Multiple objects or a progression? → F
+
+**Rules shared across all archetypes:**
+
+- Outer margin `X` on all sides (§Composition.2), except for full-bleed images in D and E, which bleed past the margin but never the text block or the lockup.
+- Lockup sits at the bottom X strip (§Logo.5). In archetype E it sits inside the card, not at the canvas bottom.
+- Text block honours horizontal (§Composition.5) and vertical (§Composition.6) alignment rules.
+- Headline tier (§Composition.1) picked for the archetype, not per element.
+- Grid (§Composition.3) as a reference, especially when splitting (C) or sizing the text card (E).
+
+**Not a cage.** These six archetypes cover the vast majority of Qonto touch points, but a genuinely novel composition can exist if every underlying rule (X-scaled type, X-margin, band-gap, alignment, colour) holds. If you need a new archetype, measure it against the SOT and propose it as an addition to this section rather than a one-off.
+
+### 8. Anti-patterns
 
 - Do not right-align headlines or subtitles. Left and center only (§Composition.5).
+- Do not bottom-align the headline block. Top and center only (§Composition.6).
 - Do not use band gaps that are not multiples of X (§Composition.2). Adjacent bands = `1X`, last band to lockup = `2X`, margins = `X`.
 - Do not invent column counts outside the 4 / 8 / 12 ladder (§Composition.3). A 5- or 7-column grid is not Qonto.
 - Do not set gutters that differ from X (§Composition.3). Gutter = X, always.
+- Do not invent a layout outside the six archetypes in §Composition.7 without an explicit reason. Pick A–F first; deviate only when a genuine new need appears.
 - Do not mix alignments within one composition — if the headline is centered, the subtitle is centered too.
 - Do not pick headline sizes outside these three tiers. Custom sizes break the X-system and produce layouts that feel "almost right".
 - Do not mix the tiers within a single composition (e.g. large headline with small subtitle). Pick a tier; stay in it.
 - Do not set body copy in Bold — Bold is reserved for the headline. Body copy and subtitles use Regular.
 
-### 7. Figma build recipe — composition with headline, subtitle, and full lockup
+### 9. Figma build recipe — composition with headline, subtitle, and full lockup
 
 ```javascript
 const canvasW = 1080;
@@ -523,7 +587,7 @@ subtitle.y = headline.y + headline.height + Math.round(X * 0.5);
 // Logo — use §Logo.8 full-lockup recipe at the bottom.
 ```
 
-### 8. Body copy and other type sizes
+### 10. Body copy and other type sizes
 
 Beyond the headline/subtitle tiers, any additional type in a composition (captions, metadata, small labels) should follow the same X-scaled logic. The entry-points text already established this: Qonto Sans Regular at `max(12, round(X × 0.245))`. For layout captions or legal footnotes, use the same 12 px floor / `0.245 × X` target. Do not introduce type sizes that sit between these defined ratios.
 
