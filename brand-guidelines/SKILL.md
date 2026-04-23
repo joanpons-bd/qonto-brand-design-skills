@@ -214,7 +214,7 @@ When a partner logo appears with Qonto:
 - Do not apply shadows, glows, outlines, gradients, or 3D effects.
 - Do not recolor — only `#050505` or `#ffffff`.
 - Do not place the flower symbol without its app-shaped container in production.
-- Do not combine the wordmark and symbol side-by-side outside the approved full lockup.
+- Do not invent a custom lockup by placing canonical components side-by-side (symbol + wordmark, flower + wordmark, symbol + entry points, etc.). The five configurations in §Logo.1 are the only allowed lockups. If canvas space is tight, **step down the §Logo.1 ladder** — full lockup → wordmark + entry points → wordmark alone → symbol alone — instead of composing your own two-piece combination. Visual reference: [SOT node 220:52554](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=220-52554).
 - Do not use over busy backgrounds or photography without contrast protection.
 - Do not use the logo below the minimum size.
 - Do not pair with the old Qonto logotype (pre-rebrand) — only the current wordmark.
@@ -517,6 +517,7 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 
 - Outer margin `X` on all sides (§Composition.2), except for full-bleed images in D and E, which bleed past the margin but never the text block or the lockup.
 - **Photography comes from `Photography [Self-server]/` in the [Asset library](#asset-library)** — don't generate or swap in arbitrary imagery for archetypes B, C, D, E.
+- **Photo-archetype fit.** D and E place text *over* the photo, so they require shots with generous negative space and tonal uniformity in the text zones (upper-left for headline, lower-X strip for lockup). If the provided photo is activity-dense, crops tightly onto subjects, or has no calm region for text to breathe, **propose switching to A, B, or C** — where the photo gets its own dedicated band and doesn't fight the text. Don't force-fit a busy photo into D or E. This applies even when the user explicitly asks for D/E: name the mismatch and recommend the better archetype.
 - Lockup sits at the bottom X strip (§Logo.5). In archetype E it sits inside the card, not at the canvas bottom.
 - **Every last content band ends at `lockupY − 2X`**, not at the canvas bottom. This holds for text bands (A), visual bands (B), both halves of a split (C), overlay text blocks (D), and cards (E). The 2X breathing room before the lockup is non-negotiable.
 - Text block honours horizontal (§Composition.5) and vertical (§Composition.6) alignment rules.
@@ -632,8 +633,12 @@ Canonical exports of the SOT for any context that isn't Figma — decks, docs, e
 ### How the agent reaches it
 
 - **With a Google Drive connector** (Claude Desktop, Claude Code with the Drive MCP, Cursor with Drive access): fetch directly by folder + filename.
-- **Without a connector**: ask the user which asset they want and quote the folder path + filename pattern so they can grab it in two clicks.
+- **Without a connector**: ask the user for **the specific file** — either a drop into the chat, or a public share link to a single file ("Anyone with the link can view"). Quote the folder path + filename pattern so the user finds it fast. **Do not accept a folder link** as the asset handoff — Google Drive folders require auth to enumerate and WebFetch will hit the login wall; you won't be able to pick the right file yourself.
 - **Never invent or redraw a brand asset** when the canonical export exists in the library. If you think an asset is missing, say so — don't improvise.
+
+### Filename conventions
+
+Observed library convention: `{Subject} {Scene/Theme} {Mood}.png` — e.g., `Thomas Tech Office Action.png`. When asking a user for a specific photo, request by mood and scene keywords (e.g., "a calm, wide shot with negative space in the upper-left" rather than a specific filename) — the user will find the match faster than the agent can guess.
 
 ---
 
