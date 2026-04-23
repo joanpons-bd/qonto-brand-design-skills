@@ -391,14 +391,62 @@ Measured on the SOT 1080×1350 reference (X = 54):
 
 **Why this matters.** Because every gap is a multiple of X, a layout stays coherent whether you scale it to 1080×1350, 1920×1080, or 2048×2048: X recomputes, margins and band gaps scale with it, and all proportional relationships stay intact. A poster and an Instagram post built from the same system read as the same brand.
 
-### 3. Placement
+### 3. Grid — the X column system
+
+Reference: SOT "Grid" ([node 450:51608](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=450-51608)).
+
+§Composition.2 governs the **vertical** axis (band gaps). This section governs the **horizontal** axis (columns). Same unit: X. Together they form an X-grounded lattice that a composition can snap to.
+
+**Universal rules:**
+
+- Outer margins: `X` on all four sides (same boundary as §Composition.2).
+- Gutter between columns: `X`.
+- All columns are equal width.
+
+**Column count scales with aspect ratio.** Pick the preset that matches the canvas:
+
+| Canvas shape | Aspect ratio (long ÷ short) | Column count | Examples |
+|---|---|---|---|
+| **Square / portrait** | `≤ 1.5` | **4** | 1080×1080, 1080×1350, A4 portrait |
+| **Landscape** | `1.5 < ratio ≤ 2.5` | **8** | 1920×1080 deck, 2048×1152 |
+| **Ultra-wide / banner** | `> 2.5` | **12** | 2844×460 web banners, billboards |
+
+**Column width formula:**
+
+```
+col_width = (canvas_w − (n + 1) × X) / n
+```
+
+where `n` is the column count and `X = 0.05 × min(canvas_w, canvas_h)`. The `(n + 1)` term covers both outer margins plus every gutter between columns.
+
+| Canvas | X | n | col_width |
+|---|---|---|---|
+| 1080 × 1080 | 54 | 4 | 202.5 px |
+| 1080 × 1350 | 54 | 4 | 202.5 px |
+| 1920 × 1080 | 54 | 8 | 179.25 px |
+| 2844 × 460 | 54 | 12 | ≈ 178.5 px |
+
+**X for extreme aspect ratios.** "5% of the shortest side" is the rule for standard formats (ratio ≤ 2.5). For ultra-wide or ultra-tall canvases (ratio > 2.5), the shortest-side rule produces a margin too small to register (a 2844×460 banner would give X = 23). Instead, anchor X to the **base format the banner is sliced from** — usually a 1080- or 1920-class layout — so brand rhythm stays consistent across the set. Rule of thumb: `X = max(5% × min(canvas_w, canvas_h), 0.028 × max(canvas_w, canvas_h))`. For a 2844×460 frame this yields 79, so round to the nearest existing X in your system (54 if the system is 1080-based).
+
+**How to use the grid:**
+
+- Every composable element (text block, image, callout, KPI card) spans `1..n` columns and lands on column boundaries.
+- A 1-column element is a slim side-rail. A full-bleed element spans all `n` columns (still inside the outer X margin).
+- The full-width headline from §Composition.3 spans all `n` columns — that is already encoded in `canvas_w − 2X`.
+- Common spans in a 4-col grid: `1/1/1/1` (quartet), `2/2` (diptych), `3/1` (hero + rail), `1/3` (rail + hero), `4` (full-bleed).
+- Common spans in an 8-col grid: `2/2/2/2` (four equal cards), `4/4` (diptych), `6/2` (hero + rail), `3/3/2` (asymmetric).
+- The grid is a reference, not a cage. Asymmetric placements (§Composition.2 floating objects) honour the outer margin first and use columns only as visual anchors.
+
+**A note on rounding.** Column widths like `202.5 px` are fine — keep the true value in computation and round at the last moment when placing a shape. If you round each column to `202`, the final column ends up 2 px off-grid. Prefer `canvas_w − marginRight` for the final column's right edge rather than stacking rounded widths.
+
+### 4. Placement
 
 - **Headline anchors the top of the canvas**, margin `X` from the top edge and margin `X` from both left and right edges. Its text block width = `canvas_width − 2X`.
 - **Subtitle sits directly under the headline**, same left and right margins. Gap from headline baseline ≈ `X / 2` (27 px at X=54; matches the medium/large SOT frames — small deviates slightly smaller, that is fine as a minimum).
 - **Logo anchors the bottom** per §Logo.5 priority placement (full lockup stretched edge-to-edge).
 - Vertical space between the subtitle block and the logo = whatever remains, subject to the band-gap rules in §Composition.2. That empty space is deliberate; do not fill it with decoration.
 
-### 4. Headline alignment — left or center only
+### 5. Headline alignment — left or center only
 
 Headlines may be **left-aligned** or **center-aligned**. Both are valid and interchangeable — pick based on what the composition needs:
 
@@ -413,16 +461,18 @@ The subtitle follows the headline's alignment. Never mix: left-aligned headline 
 
 In Figma, set `text.textAlignHorizontal = 'LEFT'` or `'CENTER'`. Never `'RIGHT'`. In CSS, `text-align: left` or `text-align: center`.
 
-### 5. Anti-patterns
+### 6. Anti-patterns
 
-- Do not right-align headlines or subtitles. Left and center only (§Composition.4).
+- Do not right-align headlines or subtitles. Left and center only (§Composition.5).
 - Do not use band gaps that are not multiples of X (§Composition.2). Adjacent bands = `1X`, last band to lockup = `2X`, margins = `X`.
+- Do not invent column counts outside the 4 / 8 / 12 ladder (§Composition.3). A 5- or 7-column grid is not Qonto.
+- Do not set gutters that differ from X (§Composition.3). Gutter = X, always.
 - Do not mix alignments within one composition — if the headline is centered, the subtitle is centered too.
 - Do not pick headline sizes outside these three tiers. Custom sizes break the X-system and produce layouts that feel "almost right".
 - Do not mix the tiers within a single composition (e.g. large headline with small subtitle). Pick a tier; stay in it.
 - Do not set body copy in Bold — Bold is reserved for the headline. Body copy and subtitles use Regular.
 
-### 6. Figma build recipe — composition with headline, subtitle, and full lockup
+### 7. Figma build recipe — composition with headline, subtitle, and full lockup
 
 ```javascript
 const canvasW = 1080;
@@ -473,7 +523,7 @@ subtitle.y = headline.y + headline.height + Math.round(X * 0.5);
 // Logo — use §Logo.8 full-lockup recipe at the bottom.
 ```
 
-### 7. Body copy and other type sizes
+### 8. Body copy and other type sizes
 
 Beyond the headline/subtitle tiers, any additional type in a composition (captions, metadata, small labels) should follow the same X-scaled logic. The entry-points text already established this: Qonto Sans Regular at `max(12, round(X × 0.245))`. For layout captions or legal footnotes, use the same 12 px floor / `0.245 × X` target. Do not introduce type sizes that sit between these defined ratios.
 
