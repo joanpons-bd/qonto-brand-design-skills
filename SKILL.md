@@ -25,7 +25,7 @@ Additional skills (product design system, marketing pages, motion) may be added 
 ## Structure
 
 ```
-qonto-brand-design-skills/
+qonto-brand-design-skill/
 ├── README.md              # Install command + overview
 ├── SKILL.md               # This index file
 └── brand-guidelines/

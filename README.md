@@ -7,7 +7,7 @@ An [agent skill](https://docs.claude.com/en/docs/claude-code/skills) collection 
 The default command runs an interactive prompt that asks which agent to install into and whether to install globally:
 
 ```bash
-npx skills add joanpons-bd/qonto-brand-design-skills
+npx skills add joanpons-bd/qonto-brand-design-skill
 ```
 
 Once installed, the skill auto-loads whenever your agent detects a relevant task.
@@ -18,11 +18,11 @@ Pick the flavour that matches your setup — all of them install the same skill 
 
 | Goal | Command |
 | --- | --- |
-| Install into **all detected agents** in the current project (no prompts) | `npx skills add joanpons-bd/qonto-brand-design-skills --all` |
-| Install into **Claude Code only** | `npx skills add joanpons-bd/qonto-brand-design-skills -a claude` |
-| Install **globally** for your user (available in every project) | `npx skills add joanpons-bd/qonto-brand-design-skills -g` |
-| **Copy** the skill files instead of symlinking (useful when sharing a checkout) | `npx skills add joanpons-bd/qonto-brand-design-skills --copy` |
-| Install **globally into Claude Code only**, copied | `npx skills add joanpons-bd/qonto-brand-design-skills -g -a claude --copy` |
+| Install into **all detected agents** in the current project (no prompts) | `npx skills add joanpons-bd/qonto-brand-design-skill --all` |
+| Install into **Claude Code only** | `npx skills add joanpons-bd/qonto-brand-design-skill -a claude` |
+| Install **globally** for your user (available in every project) | `npx skills add joanpons-bd/qonto-brand-design-skill -g` |
+| **Copy** the skill files instead of symlinking (useful when sharing a checkout) | `npx skills add joanpons-bd/qonto-brand-design-skill --copy` |
+| Install **globally into Claude Code only**, copied | `npx skills add joanpons-bd/qonto-brand-design-skill -g -a claude --copy` |
 
 Supported agents: Claude Code (`claude`), Claude Desktop (`claude-desktop`), Cursor (`cursor`), and any other agent the [`skills` CLI](https://github.com/obra/skills) detects.
 
