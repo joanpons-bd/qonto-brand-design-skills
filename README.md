@@ -1,6 +1,8 @@
-# Qonto Brand Design Skills
+# Qonto Brand Design Skill
 
-An [agent skill](https://docs.claude.com/en/docs/claude-code/skills) collection that puts Qonto's brand guidelines directly into your AI workflow. Ask Claude to build a poster, social post, flyer, or deck — and it will follow the rules from the Brand Kit SOT by default.
+An [agent skill](https://docs.claude.com/en/docs/claude-code/skills) that puts Qonto's brand guidelines directly into your AI workflow. Ask Claude to build a poster, social post, flyer, or deck — and it will follow the rules from the Brand Kit SOT by default.
+
+This is the **master brand skill**. Future skills covering the product design system, marketing pages, and motion will live in their own repositories, independent of this one.
 
 ## Installation
 
@@ -30,16 +32,14 @@ Supported agents: Claude Code (`claude`), Claude Desktop (`claude-desktop`), Cur
 
 Re-run the same install command to pull the latest version. If you installed with `--copy`, re-running overwrites the local copy.
 
-## What's included
-
-### qonto-brand-design-skill
+## What's inside
 
 Brand guidelines for marketing, social graphics, decks, flyers, and any external-facing visual content.
 
 - **Logo** — five canonical configurations (wordmark, wordmark + entry points, full lockup, symbol, circular avatar), the 5 % sizing rule, priority placement, library component keys, and a tested Figma build recipe.
-- **Composition** — three headline tiers (small / medium / large) with sizes scaled from the logo X multiplier, placement, and alignment rules (left and center only).
-- **Color** — marketing uses black and white only; product uses the full expressive palette. Coming soon: token tables per context.
-- **Typography** — Qonto Sans as the primary typeface. Coming soon: full type scale beyond headline/subtitle.
+- **Composition** — headline tiers (small / medium / large) with sizes scaled from the logo X multiplier, placement rules, and alignment grammar.
+- **Color** — marketing is black-led, product uses the full expressive palette, gradients come from the Qonto Gradient plugin as sealed image exports, never hand-rolled.
+- **Typography** — Qonto Sans as the primary typeface (full type scale in progress).
 - **Source of truth** — every rule is measured from the [Qonto Brand Kit — SOT Figma file](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT). When a design-system token disagrees with the hex in the skill, the skill wins (the DS is mid-migration to match the SOT).
 
 ## Usage
