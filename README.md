@@ -38,8 +38,8 @@ Brand guidelines for marketing, social graphics, decks, flyers, and any external
 
 - **Logo** — five canonical configurations (wordmark, wordmark + entry points, full lockup, symbol, circular avatar), the 5 % sizing rule, priority placement, library component keys, and a tested Figma build recipe.
 - **Composition** — headline tiers (small / medium / large) with sizes scaled from the logo X multiplier, placement rules, and alignment grammar.
-- **Color** — marketing is black-led, product uses the full expressive palette, gradients come from the Qonto Gradient plugin as sealed image exports, never hand-rolled.
-- **Typography** — Qonto Sans as the primary typeface (full type scale in progress).
+- **Color** — marketing is white-led with black as secondary and grayscale for content hierarchy; product uses the full expressive palette; gradients come from the Qonto Gradient plugin as sealed image exports, never hand-rolled or rendered as vector fills.
+- **Typography** — Qonto Sans (proprietary, 5 weights × italics) with the X-scaled hierarchy, sentence-case default, 45–75 ch line-length rule, black/white-only ink, Manrope → Arial Latin fallbacks, and per-platform fallbacks for scripts Qonto Sans doesn't cover.
 - **Source of truth** — every rule is measured from the [Qonto Brand Kit — SOT Figma file](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT). When a design-system token disagrees with the hex in the skill, the skill wins (the DS is mid-migration to match the SOT).
 
 ## Usage
