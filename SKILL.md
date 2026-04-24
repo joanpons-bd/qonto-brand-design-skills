@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.2
+version: 2.3
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.2 · Last updated: 2026-04-24 · Status: living document
+> Version: 2.3 · Last updated: 2026-04-24 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -39,7 +39,7 @@ When unclear which context applies, ask.
 - Primary typeface: **Qonto Sans** (custom, proprietary). Fallback: Manrope → Arial. See §Typography.
 - Available weights: **Thin, Light, Regular, Bold, Black** — each with an italic. There is **no Medium** and **no Semi Bold** weight; passing `style: 'Medium'` or `style: 'Semi Bold'` to Figma will fail to load. Default: Regular. Headlines: Bold. Sentence case only — never ALL CAPS.
 - Minimum type size: **12 px** (floor across body, captions, labels, entry-points). See §Typography.4.
-- Generous whitespace. Corner-radius language is split: **structural objects are sharp (0); rounded corners are reserved for floating content** (product cards, small image tiles, icon bounding boxes). Exact radii land with the Object Styles section.
+- Generous whitespace. Corner-radius language is split: **structural objects are sharp (`cornerRadius = 0`); rounded corners are reserved for floating content** (product covers, small image tiles, icon bounding boxes, avatars, chips) and resolve to one of the four atomic shapes. See §Object styles.
 - Never use pure `#000000` — Qonto's black is `#050505` (token `primary/black`). See §Color for the full palette.
 
 ---
@@ -662,7 +662,7 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 | **B. Stack — visual then text** | Visual band top → `1X` → text band → `2X` → lockup | "Look at this, here's why" — visual sells, headline punctuates |
 | **C. Split — text ↔ visual** | Landscape: text one half, visual other half. Portrait: collapses to A or B. The **visual side also ends at `lockupY − 2X`** — the 2X clearance before the lockup applies to every last band, including the visual half of a split (never let a photo run into the lockup strip). | KPI + supporting image, testimonial + face, equal-weight pairs |
 | **D. Overlay — text on full-bleed image** | Image bleeds edge-to-edge; text block + lockup sit on top within `X` margins. **Dark-background recipe:** use the `color=white` logo variants and apply a `1px` white stroke to the symbol (per §Logo.3). Verify contrast: headline and lockup must read cleanly against the busiest region of the photo, not just the calm edge. When the photo's text zone isn't reliably dark, add a scrim — see §Composition.9b for the full Figma build recipe. | Atmospheric, photo-led campaigns |
-| **E. Overlay — text card on bleed image** | Image full-bleed; solid-colour card (usually white) with headline + lockup, card honours `X` margin and `X` internal padding. Card uses **sharp corners** (`cornerRadius = 0`) — rounded corners are not Qonto-native. | Photo + crisp readable message, landing-page hero |
+| **E. Overlay — text card on bleed image** | Image full-bleed; solid-colour card (usually white) with headline + lockup, card honours `X` margin and `X` internal padding. The card is **structural** — it provides the composition's spine, so `cornerRadius = 0` (see §Object styles.2). | Photo + crisp readable message, landing-page hero |
 | **F. Layered — floating objects + text** | Text at top → `2X` → three overlapping cascading objects (§Composition.2 floating-object rule) → `2X` → lockup | Editorial, object-of-the-week, feature-rich storytelling |
 
 **Picking the right archetype:**
@@ -683,7 +683,7 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 - Text block honours horizontal (§Composition.5) and vertical (§Composition.6) alignment rules.
 - Headline tier (§Composition.1) picked for the archetype, not per element.
 - Grid (§Composition.3) as a reference, especially when splitting (C) or sizing the text card (E).
-- **Sharp corners by default** — cards, frames, and rectangular brand shapes use `cornerRadius = 0`. Rounded corners are not part of the brand language. (Object-style rules are coming; until then, default to sharp.)
+- **Sharp grounds, rounded accents.** Structural objects (backing cards, scrims, bands, hero images, full-bleed rectangles) are always sharp (`cornerRadius = 0`). Rounded corners belong to content-scale objects that float *inside* the structure — product covers, small image tiles, icon bounding boxes, avatars, chips — picked from the four atomic shapes in §Object styles.1. Full rules in §Object styles.
 
 **Not a cage.** These six archetypes cover the vast majority of Qonto touch points, but a genuinely novel composition can exist if every underlying rule (X-scaled type, X-margin, band-gap, alignment, colour) holds. If you need a new archetype, measure it against the SOT and propose it as an addition to this section rather than a one-off.
 
@@ -934,12 +934,141 @@ Qonto operates across France, Germany, Italy, Spain, and the Netherlands today, 
 **This exception is for script coverage only.** It does not licence SF Pro / Inter / Helvetica as a Latin substitute when Qonto Sans is simply unavailable — that case stays governed by §Typography.9 (`Qonto Sans → Manrope → Arial`). The two rules compose: script-coverage fallback applies to the non-Latin **run** inside a piece of copy; the surrounding Latin text still follows the Qonto Sans / Manrope / Arial stack.
 
 <!-- Expansion territories (to be nailed next, same approach as logo + composition + color + typography: pull from SOT, write concrete specs, test against Figma library components):
-     - Object style (sharp structure / rounded content — see feedback_sharp_corners)
      - Tone of voice
      - Iconography
      - UI snapshots (product in marketing)
      - Motion
 -->
+
+---
+
+## Object styles
+
+Reference: SOT "Object Style" ([node 507:52699](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=507-52699)).
+
+Every object in a Qonto composition is either **structural** (it provides the compositional scaffolding) or **content** (it sits inside that scaffolding as a thing the viewer reads). Structural objects are sharp. Content objects can be rounded. This single distinction drives every radius choice in the brand.
+
+### 1. The four atomic shapes
+
+Every brand object in marketing resolves to one of four shapes. Reference geometry from SOT atomic origin ([node 507:52699](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=507-52699)), measured on a 294×294 canonical tile (603×294 for the pill).
+
+| Shape | `cornerRadius` | `cornerSmoothing` | Role |
+|---|---|---|---|
+| **Square** | `0` | `0` | Structural scaffolding, hero images, backing cards, full-bleed rectangles, scrims, section bands |
+| **App-square** (soft square) | `≈ 0.136 × short_side` (SOT uses `40` on `294` — round to `0.14×` for other sizes) | `0` | Content tiles: product covers, small image tiles, icon bounding boxes, editorial floats |
+| **Circle** | `≥ 0.5 × short_side` (Figma clamps) | `0` | Avatars, dots, icon marks, circular badges |
+| **Pill** (stadium) | `≥ 0.5 × short_side` on the short axis (Figma clamps to stadium) | `0` | Chips, tags, metric bars, CTA pills |
+
+**Why these four, and not a free radius scale.** The SOT only defines these shapes; any radius outside them (e.g. `8 px`, `12 px`, a "soft" in-between) is an improvisation. When a brief calls for "rounded," the question is *which of the four*, not *what value*. The app-square covers almost all content-tile needs; circle and pill are specialised.
+
+**The `0.14×` ratio for app-square.** Pick the shorter side of the tile, multiply by `0.14`, round to an integer. A 400×600 product cover → `400 × 0.14 = 56` → `cornerRadius: 56`. A 135×208 small image float → `135 × 0.14 ≈ 19`. This ratio tracks the SOT atomic example and keeps small and large tiles reading as the same family.
+
+**Smoothing stays at `0`.** The `cornerSmoothing: 0.8` ("iOS squircle") parameter is reserved for the Qonto symbol's inner square (§Logo) — using it elsewhere pulls objects toward Apple's shape language and away from Qonto's. On everything else, `cornerSmoothing = 0`.
+
+### 2. Sharp grounds, rounded accents
+
+From the SOT sharp-and-rounded spec ([node 516:52710](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=516-52710)):
+
+> *"Larger, hero-level images sit in sharp-edged squares. This gives them weight and anchors the composition. Smaller, supporting images can float within rounded-corner containers — adding depth and layering without competing with the primary visual. This contrast between sharp and soft creates a clear visual hierarchy: the square grounds, the rounded elements accent."*
+
+This is the single governing principle of §Object styles, and it generalises past images:
+
+- **Structural → sharp (`cornerRadius = 0`).** Backing cards that host headline + lockup, full-bleed rectangles, scrims, band dividers, grid-aligned rectangles, the hero image in a composition, any rectangle that provides the composition's spine.
+- **Content → rounded (app-square, circle, or pill per §Object styles.1).** Small image tiles, product cards, icon bounding boxes, floating editorial clusters, avatars, chips — anything that reads as "a thing inside the layout" rather than "the layout itself."
+
+**The test.** For any given object ask: *is this providing the composition's structure, or is it content sitting inside that structure?* Structural → sharp. Content → rounded. If you can't tell, it's structural — sharp is the safer default and the stronger signal.
+
+**What the SOT shows at composition scale.** Large image anchors at `912×742`, `508×338`, `474×359`, `423×423` are all `cornerRadius: 0`. Small floating tiles at `135×208`, `217×334`, `274×423` are all rounded (radii consistent with the `0.14×` app-square ratio from §Object styles.1). Same composition, explicit hierarchy — the sharp images ground; the rounded floats accent.
+
+### 3. Choosing a radius for content tiles
+
+When you've decided an object is content (per §Object styles.2) and needs a radius, map the object's role to one of the four atomic shapes:
+
+| Object role | Shape | Notes |
+|---|---|---|
+| Product cover, small image float, icon bounding box, editorial tile | **App-square** | Use the `0.14 × short_side` ratio; round to integer |
+| Avatar, circular badge, dot marker | **Circle** | Radius ≥ half the short side; Figma clamps |
+| Chip, tag, metric bar, pill button, CTA | **Pill** | Radius ≥ half the short axis; stadium shape |
+| Backing card, scrim, band, hero image | **Square** | Structural — sharp, per §Object styles.2 |
+
+**Uniform stack vs scaled stack.** When multiple tiles sit together at the same visual scale (a grid of product covers, a row of thumbnails), all tiles use the **same radius** — not the `0.14×` of each individual tile's short side, but a single radius picked from the largest tile and applied across. This keeps the set reading as one family. When tiles sit at different scales (a hero tile + a couple of thumbnails), let each tile compute its own `0.14×` radius — different sizes, same ratio, optically consistent.
+
+### 4. Nesting — concentric radii
+
+From the SOT nested-frames spec ([node 516:52728](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=516-52728)):
+
+> *"Use a base corner radius as your reference. The innermost element defines the starting value. For nested frames, set the outer radius to the inner radius plus the distance between the two frames. This keeps corners optically consistent as they scale outward. This rule ensures shapes always feel intentionally nested, never misaligned or awkwardly rounded."*
+
+**The formula.** For any two concentric rounded frames:
+
+```
+outer_radius = inner_radius + gap_between_frames
+```
+
+**Worked example** (from the SOT diagram): inner element `16 px` radius, gap `40 px` between inner and middle frame → middle frame `16 + 40 = 56 px` — the SOT shows this labelled as `16 + 40 px`. Add another frame with a `16 px` gap to the middle → outer `56 + 16 = 72 px`. Triple-nested, optically parallel corners at every level.
+
+**Does not apply when the outer is structural.** If the outer frame is a backing card / scrim / section band (sharp, `cornerRadius = 0` per §Object styles.2), the rule stops — the sharp outer doesn't need to match the rounded inner. The rule governs *rounded inside rounded*, not *rounded inside sharp*. A sharp backing card can perfectly hold a rounded content tile.
+
+### 5. Corner smoothing
+
+- **Default: `cornerSmoothing: 0`** for every brand object in marketing — every rectangle, tile, pill, card, icon box.
+- **Exception: `cornerSmoothing: 0.8`** is reserved for the Qonto symbol's inner square (§Logo). Using it elsewhere imports Apple-style squircles into the brand.
+
+The atomic shapes in §Object styles.1 all resolve to `cornerSmoothing: 0`; don't override unless you're building the logo itself.
+
+### 6. Style and effect
+
+From the SOT style-and-effect spec ([node 521:52763](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=521-52763)):
+
+> *"On floating objects we allow full flat black or white backgrounds as well as transparent options with background blur. We recommend Beautiful Shadows plugin to generate subtle and rich drop shadows on objects when needed."*
+
+**Four background treatments** on a floating content tile (canonical SOT object `370×370` at `cornerRadius: 24`, `cornerSmoothing: 0`):
+
+| Treatment | Fill | Extras |
+|---|---|---|
+| **Flat white** | Solid `#FFFFFF` | No blur, no stroke |
+| **Flat black** | Solid `#000000` | No blur, no stroke |
+| **Blur white** | Transparent fill | Background blur radius `52` over a light scene |
+| **Blur black** | Transparent fill (dark tint) | Background blur radius `52` over a dark scene |
+
+Blur treatments require a **visually varied backing** (a photo, a gradient, a busy composition). Over a flat colour, the blur reads as a washed tint and loses its purpose — use flat white or flat black instead.
+
+**Drop shadows via Beautiful Shadows.** Do not hand-roll single-layer shadows. Use the [Beautiful Shadows](https://www.figma.com/community/plugin/1038073952378169144) plugin to generate a rich multi-layer stack. The SOT canonical shadow on a `370×370` tile is a five-layer stack:
+
+| Layer | Y offset | Blur | Opacity |
+|---|---|---|---|
+| 1 | `10` | `23` | `10 %` |
+| 2 | `41` | `41` | `9 %` |
+| 3 | `93` | `56` | `5 %` |
+| 4 | `166` | `66` | `1 %` |
+| 5 | `259` | `73` | `0 %` |
+
+All layers `#000000`, spread `0`. Regenerate with the plugin when the object size changes — these values are calibrated for the SOT's `370×370` reference and don't linearly scale. Run the plugin on the actual object rather than copying this stack verbatim to a wildly different size.
+
+### 7. Anti-patterns
+
+- **"Rounded corners (16–24 px) on cards and containers" as a universal rule.** Wrong — it inverts the principle. Structural cards and containers are sharp; only content-scale tiles are rounded (§Object styles.2).
+- **Rounding a structural object.** A backing card that hosts headline + lockup, a scrim under an overlay, a full-bleed band — these are sharp. Adding any radius softens the composition's spine.
+- **Sharpening a content object that should be rounded.** A floating product card, a small image tile in an editorial cluster, an icon bounding box — when these are placed sharp, the composition loses the sharp-grounds-rounded-accents contrast.
+- **Radii outside the four atomic shapes.** `8 px`, `12 px`, "slightly rounded" — improvisation. Pick app-square (`0.14×`), circle, or pill.
+- **Non-concentric nesting.** Two rounded frames with a constant radius ignore the gap; corners drift visually. Apply `outer = inner + gap` (§Object styles.4).
+- **Mixing radii within the same role.** A row of product tiles with different radii reads as inconsistency, not intent. Use the uniform-stack rule (§Object styles.3).
+- **`cornerSmoothing: 0.8` outside the logo.** Imports Apple squircle language; `0.8` is logo-only (§Object styles.5).
+- **Single-layer hand-rolled drop shadow.** Flat and cheap; use Beautiful Shadows (§Object styles.6).
+- **Background blur over a flat background.** No variation for the blur to resolve against — use a flat white or flat black treatment instead (§Object styles.6).
+
+### 8. For AI agents — decision ladder
+
+Resolve object style by walking this ladder top-down. Stop at the first rule that applies.
+
+1. **Is this object providing the composition's structure?** (backing card, scrim, band, hero image, full-bleed rectangle) → **sharp.** `cornerRadius: 0`, `cornerSmoothing: 0`. Stop.
+2. **Is this the Qonto symbol's inner square?** → `cornerRadius: 0.22 × symbolSize`, `cornerSmoothing: 0.8`. See §Logo. Stop.
+3. **Is this a chip, tag, pill button, or CTA?** → **pill.** `cornerRadius ≥ 0.5 × short_axis`, `cornerSmoothing: 0`. Stop.
+4. **Is this an avatar, dot, or circular badge?** → **circle.** `cornerRadius ≥ 0.5 × short_side`, `cornerSmoothing: 0`. Stop.
+5. **Is this a content tile nested inside another rounded container?** → **app-square,** apply concentric rule: `outer_radius = inner_radius + gap`. Inherit the stack's uniform radius if in a uniform stack. Stop.
+6. **Default content tile** (product cover, small image float, icon bounding box, editorial tile) → **app-square.** `cornerRadius ≈ 0.14 × short_side` (round to integer), `cornerSmoothing: 0`.
+7. **Does the object float with depth?** Add a Beautiful Shadows multi-layer stack (§Object styles.6). Never a single-layer shadow.
+8. **Background transparent with blur?** Confirm the backing scene is visually varied; otherwise switch to flat white or flat black (§Object styles.6).
 
 ---
 
