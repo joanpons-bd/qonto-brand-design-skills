@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.3
+version: 2.4
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.3 · Last updated: 2026-04-24 · Status: living document
+> Version: 2.4 · Last updated: 2026-04-24 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -1069,6 +1069,162 @@ Resolve object style by walking this ladder top-down. Stop at the first rule tha
 6. **Default content tile** (product cover, small image float, icon bounding box, editorial tile) → **app-square.** `cornerRadius ≈ 0.14 × short_side` (round to integer), `cornerSmoothing: 0`.
 7. **Does the object float with depth?** Add a Beautiful Shadows multi-layer stack (§Object styles.6). Never a single-layer shadow.
 8. **Background transparent with blur?** Confirm the backing scene is visually varied; otherwise switch to flat white or flat black (§Object styles.6).
+
+### 9. Figma build recipe — archetype F with object styles
+
+End-to-end recipe for archetype F (§Composition.7): headline top, three cascading floating objects with the full object-styles treatment (flat black, flat white, translucent blur), concentric nested tile inside the large float, Qonto wordmark at the bottom X strip. Every rule in §Object styles.1–6 touches this recipe.
+
+```javascript
+// --- 0. Page + section (dynamic-page-safe) ---
+await figma.loadAllPagesAsync();
+let page = figma.root.children.find(p => p.name === 'Object Styles Test');
+if (!page) { page = figma.createPage(); page.name = 'Object Styles Test'; }
+await figma.setCurrentPageAsync(page);                         // NOT figma.currentPage = page — throws in dynamic-page mode
+
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Bold' });
+
+// Wipe any prior build with the same section name (idempotent reruns)
+for (const s of page.findAll(n => n.type === 'SECTION' && n.name === 'Archetype F — Object Styles')) s.remove();
+const section = figma.createSection();
+section.name = 'Archetype F — Object Styles';
+section.x = 0; section.y = 0;
+section.resizeWithoutConstraints(1200, 1500);
+page.appendChild(section);
+
+// --- 1. Canvas — structural → sharp (§Object styles.2) ---
+const canvasW = 1080;
+const canvasH = 1350;
+const X = Math.round(Math.min(canvasW, canvasH) * 0.05);       // 54
+
+const canvas = figma.createFrame();
+canvas.name = 'Archetype F — 1080×1350';
+canvas.resize(canvasW, canvasH);
+canvas.cornerRadius = 0;                                        // §Object styles.1 square
+canvas.cornerSmoothing = 0;                                     // §Object styles.5
+canvas.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+section.appendChild(canvas);
+
+// --- 2. Beautiful Shadows canonical stack (§Object styles.6) ---
+// Calibrated for a 370×370 reference tile. Regenerate with the Beautiful Shadows
+// Figma plugin when the tile size differs significantly from ~370 — the stack
+// does not linearly scale.
+const shadowStack = [
+  { type: 'DROP_SHADOW', color: { r: 0, g: 0, b: 0, a: 0.10 }, offset: { x: 0, y: 10 },  radius: 23, spread: 0, visible: true, blendMode: 'NORMAL' },
+  { type: 'DROP_SHADOW', color: { r: 0, g: 0, b: 0, a: 0.09 }, offset: { x: 0, y: 41 },  radius: 41, spread: 0, visible: true, blendMode: 'NORMAL' },
+  { type: 'DROP_SHADOW', color: { r: 0, g: 0, b: 0, a: 0.05 }, offset: { x: 0, y: 93 },  radius: 56, spread: 0, visible: true, blendMode: 'NORMAL' },
+  { type: 'DROP_SHADOW', color: { r: 0, g: 0, b: 0, a: 0.01 }, offset: { x: 0, y: 166 }, radius: 66, spread: 0, visible: true, blendMode: 'NORMAL' },
+  { type: 'DROP_SHADOW', color: { r: 0, g: 0, b: 0, a: 0.00 }, offset: { x: 0, y: 259 }, radius: 73, spread: 0, visible: true, blendMode: 'NORMAL' },
+];
+
+// --- 3. Headline (§Composition.1 medium tier, §Typography.4) ---
+const headline = figma.createText();
+headline.fontName = { family: 'Qonto Sans', style: 'Bold' };
+headline.characters = 'One app to run your business';
+headline.fontSize = Math.round(X * 2.22);                       // 120
+headline.lineHeight = { unit: 'PERCENT', value: 98 };
+headline.letterSpacing = { unit: 'PERCENT', value: 0.5 };
+headline.fills = [{ type: 'SOLID', color: { r: 0.02, g: 0.02, b: 0.02 } }];
+headline.textAutoResize = 'HEIGHT';
+headline.resize(canvasW - 2 * X, headline.height);
+headline.x = X; headline.y = X;
+canvas.appendChild(headline);
+
+// --- 4. Three cascading floats (§Composition.7 archetype F, §Object styles.3) ---
+// Short-side × 0.14 → app-square radius, rounded to integer. cornerSmoothing = 0.
+const appSquare = (shortSide) => Math.round(shortSide * 0.14);
+
+// Vertical layout honours the 2X rule on both sides:
+//   headline bottom → 2X → top of topmost float
+//   bottom of bottommost float → 2X → lockup top (which is canvasH − X − X)
+const lockupTopY = canvasH - X - X;                             // 1242
+const topFloatY  = X + Math.round(headline.height) + 2 * X;     // headline bottom + 2X
+
+// Float 1 — large, flat black, bottom-left (back layer)
+const float1 = figma.createFrame();
+float1.name = 'Float 1 — Flat black';
+float1.resize(420, 560);
+float1.cornerRadius = appSquare(Math.min(420, 560));            // 59
+float1.cornerSmoothing = 0;
+float1.fills = [{ type: 'SOLID', color: { r: 0.02, g: 0.02, b: 0.02 } }];
+float1.effects = shadowStack;
+float1.clipsContent = true;
+float1.x = 80;
+float1.y = lockupTopY - 2 * X - 560;                            // bottom ends at lockupTopY − 2X
+canvas.appendChild(float1);
+
+// Nested tile inside Float 1 — tests §Object styles.4 concentric formula
+// outer 59 = inner 19 + gap 40  →  inner radius = outer − gap
+const innerNest = figma.createRectangle();
+innerNest.name = 'Nested tile';
+innerNest.resize(340, 180);
+const nestGap = 40;
+innerNest.cornerRadius = float1.cornerRadius - nestGap;         // 19
+innerNest.cornerSmoothing = 0;
+innerNest.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+innerNest.x = nestGap;
+innerNest.y = float1.height - nestGap - innerNest.height;
+float1.appendChild(innerNest);
+
+// Float 2 — medium, flat white, middle (overlaps Float 1)
+const float2 = figma.createFrame();
+float2.name = 'Float 2 — Flat white';
+float2.resize(320, 440);
+float2.cornerRadius = appSquare(320);                           // 45
+float2.cornerSmoothing = 0;
+float2.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+float2.effects = shadowStack;
+float2.x = 380;
+float2.y = float1.y - 96;                                       // cascade up ~96px per tile
+canvas.appendChild(float2);
+
+// Float 3 — small, translucent + background blur, top-right (front layer)
+// BACKGROUND_BLUR requires semi-transparent fill; 0.3 opacity reads as frosted glass.
+// Place over a varied backing (Float 2's white edge + Float 1's black edge) so the blur
+// has something to resolve against — §Object styles.6 anti-pattern otherwise.
+const float3 = figma.createFrame();
+float3.name = 'Float 3 — Blur white';
+float3.resize(220, 300);
+float3.cornerRadius = appSquare(220);                           // 31
+float3.cornerSmoothing = 0;
+float3.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 }, opacity: 0.3 }];
+float3.effects = [
+  { type: 'BACKGROUND_BLUR', radius: 52, visible: true },
+  ...shadowStack,
+];
+float3.x = 580;
+float3.y = topFloatY;                                           // honours headline + 2X
+canvas.appendChild(float3);
+
+// --- 5. Lockup (§Logo, §Composition.7 archetype F) ---
+// Qonto wordmark from Logos Library. Key is a COMPONENT_SET → importComponentByKeyAsync
+// fails; use importComponentSetByKeyAsync + .defaultVariant.
+const wordmarkSetKey = 'ea8c642aa816c04f75bb326581c12a90e51c833e';
+let logo;
+try {
+  const comp = await figma.importComponentByKeyAsync(wordmarkSetKey);
+  logo = comp.createInstance();
+} catch (_) {
+  const set = await figma.importComponentSetByKeyAsync(wordmarkSetKey);
+  logo = set.defaultVariant.createInstance();
+}
+const logoScale = X / logo.height;
+logo.resize(logo.width * logoScale, X);
+logo.x = canvasW - X - logo.width;
+logo.y = canvasH - X - logo.height;
+canvas.appendChild(logo);
+```
+
+**Rule coverage.** This recipe touches every subsection of §Object styles: the four atomic shapes (§1), the sharp-structural / rounded-content split (§2), the `0.14×` ratio applied per tile (§3), the concentric `outer = inner + gap` formula (§4), `cornerSmoothing = 0` everywhere (§5), and all three background treatments plus the 5-layer Beautiful Shadows stack (§6). If any rule were wrong in the skill, this recipe would render it wrong — that's what makes it a test, not just a sample.
+
+**Dynamic-page mode gotchas.** Dynamic-page access is the modern default for Figma plugins; three calls behave differently from the classic API:
+
+- `figma.currentPage = page` → use `await figma.setCurrentPageAsync(page)`.
+- `figma.getNodeById(id)` → use `await figma.getNodeByIdAsync(id)`.
+- Library component sets → `importComponentByKeyAsync` throws on a `COMPONENT_SET` key; use `importComponentSetByKeyAsync` and pick a variant (`.defaultVariant.createInstance()`). `figma_search_components` / `search_design_system` results return the **set** key, not a variant key — so the fallback pattern above is the safe default.
+
+**Blur visibility caveat.** `BACKGROUND_BLUR` needs partial transparency on the object's fill to render. A fully opaque or fully empty fill produces no visible frosted-glass effect. Use a semi-transparent fill (`opacity: 0.2–0.3` for blur-white over a light scene; a similar low-opacity dark for blur-black). The SOT calls this a "transparent fill" — in Figma terms, that means translucent, not zero-alpha.
+
+*Empirically validated at `1080×1350` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Object Styles Test", section "Archetype F — Object Styles". Screenshot verified every radius, shadow layer, blur radius, and margin against the expected values in §Object styles.1–6 and §Composition.7.*
 
 ---
 
