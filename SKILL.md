@@ -512,9 +512,9 @@ Three canonical tiers, measured from the SOT "Headline size" section ([node 420:
 
 | Tier | Headline (Qonto Sans **Bold**) | Subtitle (Qonto Sans **Regular**) |
 |---|---|---|
-| **Small** | `1.37 × X` @ 110% line-height | `0.78 × X` @ 110% line-height |
-| **Medium** | `2.22 × X` @ 110% line-height | `0.93 × X` @ 110% line-height |
-| **Large** | `2.76 × X` @ 110% line-height | `1.37 × X` @ 110% line-height |
+| **Small** | `1.37 × X` @ 98% line-height | `0.78 × X` @ 110% line-height |
+| **Medium** | `2.22 × X` @ 98% line-height | `0.93 × X` @ 110% line-height |
+| **Large** | `2.76 × X` @ 98% line-height | `1.37 × X` @ 110% line-height |
 
 At X = 54 px (1080-shortest canvas): small = 74 / 42, medium = 120 / 50, large = 149 / 74.
 
@@ -728,7 +728,7 @@ const textWidth = canvasW - 2 * X;
 const headline = figma.createText();
 headline.fontName = { family: 'Qonto Sans', style: 'Bold' };
 headline.fontSize = headlineSize;
-headline.lineHeight = { unit: 'PERCENT', value: 110 };
+headline.lineHeight = { unit: 'PERCENT', value: 98 };
 headline.characters = 'Gérer vos finances n\u2019a jamais été aussi simple';
 headline.fills = [{ type: 'SOLID', color: inkRGB }];
 headline.textAutoResize = 'HEIGHT';                        // fixed width, wraps to multiple lines
@@ -805,7 +805,7 @@ See §Typography for the full type system. In brief: any non-headline/subtitle t
 
 ## Typography
 
-Source of truth: the Qonto Sans Typography Guide (internal Notion) plus the SOT "Headline size" block ([node 420:50784](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=420-50784)). When the two disagree on a measurable value (e.g. line-height), the SOT wins — the Notion guide is a narrative companion, the SOT is the measured artefact.
+Source of truth: the Qonto Sans Typography Guide (internal Notion) plus the SOT "Headline size" block ([node 420:50784](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=420-50784)). The Notion guide is the narrative companion; the SOT is the measured artefact. When the two disagree, brand ownership adjudicates and the stale source is corrected — the values in this section reflect those adjudications.
 
 ### 1. Family — Qonto Sans only
 
@@ -852,11 +852,11 @@ Three typographic roles. Every size is a multiple of `X` (the composition base u
 
 | Role | Family & weight | Size | Line-height (SOT) | Tracking |
 |---|---|---|---|---|
-| **Headline** | Qonto Sans **Bold** | Small `1.37 × X` · Medium `2.22 × X` · Large `2.76 × X` — see §Composition.1 | 110 % | +0.5 % |
+| **Headline** | Qonto Sans **Bold** | Small `1.37 × X` · Medium `2.22 × X` · Large `2.76 × X` — see §Composition.1 | **98 %** | +0.5 % |
 | **Subtitle** | Qonto Sans **Regular** | Small `0.78 × X` · Medium `0.93 × X` · Large `1.37 × X` — see §Composition.1 | 110 % | +0.5 % |
 | **Body / caption / label / entry-points** | Qonto Sans **Regular** | `max(12 px, round(X × 0.245))` | 130 % | 0 % |
 
-- Headlines are set tight (110 % LH) because density = impact; +0.5 % tracking opens the counters back up at display sizes.
+- Headlines are set **sub-leading (98 % LH)** — lines crowd into each other so the type block reads as one dense shape; +0.5 % tracking opens the counters back up at display sizes so the crowding doesn't fight legibility.
 - Body uses 130 % LH because reading-mode wants air; tracking stays at 0 — Qonto Sans is already tuned for it.
 - **12 px is the floor.** Never ship type smaller, even for legal footnotes — pick a larger canvas instead.
 
