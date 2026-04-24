@@ -18,7 +18,7 @@ When the output lives in Figma, **never draw logos, colors, or type as shapes or
 
 ## Brand identity
 
-Qonto is the European leader in business finance management for SMEs and freelancers — 500,000+ businesses across France, Germany, Italy, and Spain.
+Qonto is the European leader in business finance management for SMEs and freelancers — 500,000+ businesses across France, Germany, Italy, Spain, and the Netherlands.
 
 **Brand personality** — every piece of work should feel like it came from the same hand:
 - **To the point** — clear, concise, no jargon.
@@ -36,10 +36,10 @@ When unclear which context applies, ask.
 
 ## Universal rules
 
-- Primary typeface: **Qonto Sans** (custom). Fallback: Manrope → Arial.
-- Available weights: **Light, Regular, Semi Bold, Bold, Black** (there is **no Medium** weight — using `style: 'Medium'` in Figma will fail to load). Default weight: Regular (400). Headlines: Bold. Sentence case only — never ALL CAPS.
-- Minimum body size: 14px.
-- Generous whitespace. Rounded corners (16–24px) on cards and containers.
+- Primary typeface: **Qonto Sans** (custom, proprietary). Fallback: Manrope → Arial. See §Typography.
+- Available weights: **Thin, Light, Regular, Bold, Black** — each with an italic. There is **no Medium** and **no Semi Bold** weight; passing `style: 'Medium'` or `style: 'Semi Bold'` to Figma will fail to load. Default: Regular. Headlines: Bold. Sentence case only — never ALL CAPS.
+- Minimum type size: **12 px** (floor across body, captions, labels, entry-points). See §Typography.4.
+- Generous whitespace. Corner-radius language is split: **structural objects are sharp (0); rounded corners are reserved for floating content** (product cards, small image tiles, icon bounding boxes). Exact radii land with the Object Styles section.
 - Never use pure `#000000` — Qonto's black is `#050505` (token `primary/black`). See §Color for the full palette.
 
 ---
@@ -799,22 +799,153 @@ frame.insertChild(1, scrim);                               // index 1 = just abo
 
 ### 10. Body copy and other type sizes
 
-Beyond the headline/subtitle tiers, any additional type in a composition (captions, metadata, small labels) should follow the same X-scaled logic. The entry-points text already established this: Qonto Sans Regular at `max(12, round(X × 0.245))`. For layout captions or legal footnotes, use the same 12 px floor / `0.245 × X` target. Do not introduce type sizes that sit between these defined ratios.
+See §Typography for the full type system. In brief: any non-headline/subtitle type (captions, metadata, labels, legal) is Qonto Sans Regular at `max(12 px, round(X × 0.245))` — same as the entry-points text in §Logo.1. Do not introduce sizes that sit between the defined ratios.
+
+---
+
+## Typography
+
+Source of truth: the Qonto Sans Typography Guide (internal Notion) plus the SOT "Headline size" block ([node 420:50784](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=420-50784)). When the two disagree on a measurable value (e.g. line-height), the SOT wins — the Notion guide is a narrative companion, the SOT is the measured artefact.
+
+### 1. Family — Qonto Sans only
+
+Qonto Sans is the brand's primary typeface. **Proprietary — internal use only.** Do not redistribute, embed in public tools, or ship to third parties without brand-team clearance.
+
+**Character.** Qonto Sans is a geometric sans softened by open apertures and generous counters — warm enough to feel human on a product surface, disciplined enough to carry dense financial copy and dataviz without fatigue. Proportions are moderate, the x-height is clean, and rhythm stays even across Regular and Bold so hierarchy comes from weight and scale, not from a switch in voice.
+
+<!-- Joan, draft placeholder: fingerprint letterforms — one or two specific details that are unmistakably Qonto Sans (shape of the `a`, terminal on the `t`, counter of the `4`, diagonals of the `k`, etc.). Pick the 1–3 that distinguish it from Manrope / Inter / Space Grotesk in your eye. Replace this comment with a final sentence when ready. -->
+
+Five weights, each with an italic:
+
+| Weight | Use |
+|---|---|
+| **Thin** / Thin Italic | Editorial accent only |
+| **Light** / Light Italic | Editorial accent only |
+| **Regular** / Regular Italic | Default body, subtitle, entry-points, UI labels |
+| **Bold** / Bold Italic | Default headline |
+| **Black** / Black Italic | Hero-headline accent |
+
+Bold + Regular carry the overwhelming majority of brand work. Do not introduce any weight outside this set, and **never synthesise** — if you need italic or bold, load the real font file. No faux-italic, no faux-bold.
+
+Feedback and font requests: `design@qonto.com`.
+
+### 2. Install — uninstall the previous version first
+
+Qonto Sans is evolving (the SOT still carries transitional `Qonto Sans v4` labels — treat those as artefacts and call the family `Qonto Sans` everywhere in output). When a new cut ships, **uninstall the previous version before installing the new one** — font systems silently prefer the older cut if both are registered and you end up designing against stale metrics.
+
+- **macOS:** Font Book → select old `Qonto Sans` family → right-click → Remove → then double-click the new font files to install.
+- **Windows:** Settings → Personalisation → Fonts → select old `Qonto Sans` → Uninstall → then right-click new files → Install for all users.
+
+Restart Figma (desktop) and any editor that caches font lists (Keynote, Sketch, Illustrator) after install.
+
+### 3. Principles
+
+Every rule below ladders back to one of three:
+
+- **Accessibility first.** Metrics and weights are tuned for legibility at small sizes and low contrast. Don't override — no negative tracking on body, no sub-12 px type, no low-contrast pairings.
+- **Balanced brand voice.** Qonto Sans sits between geometric neutrality and warmth. Treat it as a voice, not a utility.
+- **Design flexibility.** Five weights × italics is enough range. If you feel the urge to bring in a second family, the hierarchy is wrong — fix the hierarchy.
+
+### 4. Hierarchy — three roles, all scaled from X
+
+Three typographic roles. Every size is a multiple of `X` (the composition base unit — see §Composition.1).
+
+| Role | Family & weight | Size | Line-height (SOT) | Tracking |
+|---|---|---|---|---|
+| **Headline** | Qonto Sans **Bold** | Small `1.37 × X` · Medium `2.22 × X` · Large `2.76 × X` — see §Composition.1 | 110 % | +0.5 % |
+| **Subtitle** | Qonto Sans **Regular** | Small `0.78 × X` · Medium `0.93 × X` · Large `1.37 × X` — see §Composition.1 | 110 % | +0.5 % |
+| **Body / caption / label / entry-points** | Qonto Sans **Regular** | `max(12 px, round(X × 0.245))` | 130 % | 0 % |
+
+- Headlines are set tight (110 % LH) because density = impact; +0.5 % tracking opens the counters back up at display sizes.
+- Body uses 130 % LH because reading-mode wants air; tracking stays at 0 — Qonto Sans is already tuned for it.
+- **12 px is the floor.** Never ship type smaller, even for legal footnotes — pick a larger canvas instead.
+
+### 5. Case — sentence case
+
+Sentence case is the default for everything: headlines, subtitles, body, labels, buttons, nav.
+
+- Capitalise the first word and proper nouns. That's it.
+- **No Title Case.** Not for headlines, not for buttons, not for nav.
+- **No ALL CAPS.** Not for emphasis, not for faux small-caps, not for UI chrome.
+
+Exceptions live inside product UI (certain DS metadata labels ship uppercase) — those are governed by the product DS, not this skill.
+
+### 6. Alignment
+
+- **Headlines:** left or centered. Left is the default; center is the accent — reserve it for hero moments (announcements, covers, single-line statements). See §Composition.5.
+- **Subtitles:** match their headline's alignment.
+- **Body / captions / labels: left-aligned only.** Centered body is a readability regression.
+- **No right-aligned or justified type** in any brand surface. Justified sets create rivers in Qonto Sans at brand sizes.
+
+### 7. Line length and rhythm
+
+- **Body line length: 45–75 characters including spaces.** Below 45 the eye jumps too often; above 75 the return sweep fails. If the column is wider than 75 ch, split into two columns or narrow the column.
+- **No orphans** (single word on the last line of a paragraph) and **no widows** (last line of a paragraph stranded at the top of the next column). Rewrite copy; don't force breaks with soft returns.
+- **Watch the rag.** The right edge of a left-aligned paragraph should feel balanced — avoid a silhouette that punches in and out, and never let a long line sit below two short lines.
+- **Stacked headlines: break for meaning, not for shape.** A wrap should land on a natural phrase boundary. Do not tune breaks to make the silhouette prettier.
+- **Kerning:** trust the font by default. Only hand-kern display-size headlines when a visible pair-spacing issue survives at the final size on the final substrate.
+
+### 8. Color — black or white, nothing else
+
+Typography is **`primary/black` or `primary/white`** only. See §Color.9. When a near-black is needed for press (paired with the SOT's print-black), the hex is `#050505` (CMYK `50 50 50 100`) — reads as black with slightly richer on-press behaviour.
+
+### 9. Fallbacks — when Qonto Sans can't ship
+
+Qonto Sans is proprietary, so any surface outside controlled environments (external partner decks, third-party SaaS without font upload, email, code we don't own) needs a fallback.
+
+```
+font-family: "Qonto Sans", "Manrope", Arial, sans-serif;
+```
+
+- **Manrope** — primary fallback. Open-source, closest metrics to Qonto Sans. Use whenever you can register a webfont.
+- **Arial** — ultimate fallback. Installed everywhere. Accept the aesthetic cost when nothing else is available (plain-text email, legacy Office templates, system UI).
+
+Never swap Qonto Sans for Inter, SF Pro, Helvetica, or any other sans — the stack above is fixed.
+
+### 10. Anti-patterns
+
+- **Belt and suspenders.** Repeating the same content across headline + subtitle + caption + image overlay. Say it once, well.
+- **ALL CAPS for emphasis.** Use weight (Bold) or hierarchy (tier up) instead.
+- **Decorative tracking.** Wide-tracked Qonto Sans Thin for "elegance" is a stylesheet cheat, not a brand move.
+- **Coloured type.** Any hue beyond `primary/black` or `primary/white`.
+- **Mixing two families in one surface.** Qonto Sans — or its Manrope/Arial fallback when Qonto Sans isn't available — is the only family on a brand layout. Never run both stacks simultaneously.
+- **Synthesised weights or slants.** Always load the real font file.
+- **Sub-12 px type.** 12 px is the floor — shrink the canvas or rewrite before shrinking type.
+
+### 11. Script coverage and non-Latin fallbacks
+
+Qonto operates across France, Germany, Italy, Spain, and the Netherlands today, with more markets planned (see §Brand identity). Qonto Sans must cover those five languages in full — diacritics (`é è ê ë ï ç à ä ö ü ß ñ ¿ ¡`), the Dutch `ij` digraph (U+0133), currency marks (`€ £ $ ¥ ¢`), and standard punctuation.
+
+**The authoritative supported-glyph list is maintained by the brand team.** Request it from `design@qonto.com` before shipping any non-obvious character, and flag mismatches when you find them. Until that list is published here, treat the following as the working assumption:
+
+- **Confirmed (working assumption — verify when it matters):** Latin + Latin Extended-A — full coverage for FR / DE / IT / ES / NL.
+- **Ask before shipping:** Cyrillic, Greek, Vietnamese, Turkish-specific diacritics, rare math / currency symbols.
+- **Assume not supported:** CJK (Simplified Chinese, Traditional Chinese, Japanese, Korean), Arabic, Hebrew, Devanagari, Thai — and any script not listed above.
+
+**When Qonto Sans can't render the script, fall back per-platform for that script run only — never ship `.notdef` boxes, and never let the rendering engine pick a silent substitute.**
+
+| Surface | Fallback for unsupported-script runs |
+|---|---|
+| Web | `system-ui, -apple-system, "Noto Sans", sans-serif` |
+| iOS native | San Francisco (system) |
+| Android native | Roboto (Latin-adjacent) · Noto Sans CJK (CJK) |
+| Print / deck / PDF | Noto Sans — broadest open-source script coverage |
+
+**This exception is for script coverage only.** It does not licence SF Pro / Inter / Helvetica as a Latin substitute when Qonto Sans is simply unavailable — that case stays governed by §Typography.9 (`Qonto Sans → Manrope → Arial`). The two rules compose: script-coverage fallback applies to the non-Latin **run** inside a piece of copy; the surrounding Latin text still follows the Qonto Sans / Manrope / Arial stack.
+
+<!-- Expansion territories (to be nailed next, same approach as logo + composition + color + typography: pull from SOT, write concrete specs, test against Figma library components):
+     - Object style (sharp structure / rounded content — see feedback_sharp_corners)
+     - Tone of voice
+     - Iconography
+     - UI snapshots (product in marketing)
+     - Motion
+-->
 
 ---
 
 ## Photography
 
 See [`references/photography.md`](references/photography.md) for AI generation prompts and photo-selection rules. For approved shots, pull from `Photography [Self-server]/` in the [Asset library](#asset-library) — any image in that folder is cleared for use.
-
-<!-- Expansion territories (to be nailed next, same approach as logo + composition + color: pull from SOT, write concrete specs, test against Figma library components):
-     - Typography (full type system beyond headline/subtitle)
-     - Tone of voice
-     - Iconography
-     - Object style (sharp structure / rounded content, shadows, cards)
-     - UI snapshots (product in marketing)
-     - Motion
--->
 
 ---
 
