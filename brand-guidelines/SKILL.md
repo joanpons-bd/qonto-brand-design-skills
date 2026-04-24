@@ -636,9 +636,37 @@ Canonical exports of the SOT for any context that isn't Figma — decks, docs, e
 
 ### How the agent reaches it
 
-- **With a Google Drive connector** (Claude Desktop, Claude Code with the Drive MCP, Cursor with Drive access): fetch directly by folder + filename.
+- **With a Google Drive connector** (Claude Desktop, Claude Code with the Drive MCP, Cursor with Drive access): fetch programmatically — see the validated pattern below.
 - **Without a connector**: ask the user for **the specific file** — either a drop into the chat, or a public share link to a single file ("Anyone with the link can view"). Quote the folder path + filename pattern so the user finds it fast. **Do not accept a folder link** as the asset handoff — Google Drive folders require auth to enumerate and WebFetch will hit the login wall; you won't be able to pick the right file yourself.
 - **Never invent or redraw a brand asset** when the canonical export exists in the library. If you think an asset is missing, say so — don't improvise.
+
+### Validated fetch pattern — with a Google Drive connector
+
+End-to-end recipe, tested against the Qonto Brand Asset Library. Tool names are from the Google Drive MCP (`search_files`, `download_file_content`) — other connectors may use different names but the steps map 1:1.
+
+1. **Resolve the subfolder ID.** Do not paste a Drive folder URL as a query argument; the connector won't match it. Query by title and mimeType instead:
+   ```
+   search_files({ query: "title contains 'Photography' and mimeType = 'application/vnd.google-apps.folder'" })
+   ```
+   The response includes the `id` and the `parentId`. Sanity-check `parentId` against the Brand Asset Library root (`1E0HtZCvHVv4K0e-Yx9pTqJi0eYNytbOH`) so you're not picking up a same-named folder elsewhere in Drive.
+2. **List assets by parentId.**
+   ```
+   search_files({ query: "parentId = '<subfolder_id>' and mimeType contains 'image/'", pageSize: 25 })
+   ```
+   Pick a file by the filename convention (see "Filename conventions" above).
+3. **Download bytes by fileId.**
+   ```
+   download_file_content({ fileId: "<chosen_id>" })
+   ```
+   Response shape: `{ content: [{ embeddedResource: { contents: { blob, mimeType } } }] }` where `blob` is base64. **For files larger than ~4 MB, the response exceeds the MCP output cap and is saved to a tool-results file on disk — the error message includes the path.** When that happens, extract and decode via shell:
+   ```bash
+   jq -r '.content[0].embeddedResource.contents.blob' <saved.txt> | base64 -d > /tmp/asset.png
+   ```
+4. **Apply to Figma.** `figma_set_image_fill` takes the `/tmp` file path directly (preferred for large images — avoids parameter truncation). It may report `"Image fill applied to 0 node(s)"` due to a known plugin quirk — **the returned `imageHash` is still valid.** Apply it manually in `figma_execute`:
+   ```javascript
+   rect.fills = [{ type: 'IMAGE', imageHash: '<returned hash>', scaleMode: 'FILL' }];
+   ```
+5. **Reuse within the session.** The `imageHash` is now cached for the rest of the session — see "Within a Figma session: reuse by `imageHash`" below.
 
 ### Filename conventions
 
