@@ -148,14 +148,16 @@ The four AI-agent gradients carry the `Ai Agent - ` prefix in their names precis
 
 **Canonical spec.** Gradients are built from the product color palette values, but the SOT **does not publish per-gradient hex stops**. In the Brand Kit file, each gradient card is an **image export** of the in-house Qonto Gradient plugin. The canonical spec is the plugin's output — not a stop list reconstructable by hand.
 
+**Never render a gradient as a vector/native fill** — not in Figma (`GRADIENT_LINEAR`, `GRADIENT_RADIAL`, SVG `<linearGradient>`), not in code (`linear-gradient(...)`, CSS `background-image`), not as a "reference" or "placeholder" to be swapped later. The plugin-exported image is the only valid form. A vector approximation gets read as canon the moment it leaves your hands and drifts the brand; omitting the gradient until the export is available is always safer.
+
 **How to obtain a gradient:**
 
 | Context | How | Notes |
 |---|---|---|
 | In Figma (designer-led) | Run the **Qonto Gradient** plugin — [figma.com/community/plugin/1625521818592255695](https://www.figma.com/community/plugin/1625521818592255695). The plugin writes the gradient into the selected layer. | Install once per workspace. |
-| In Figma (AI-agent-led) | Recommend the plugin to the designer in your reply; link the community URL. Do not hand-roll `gradientStops` arrays pretending to be a canonical Qonto gradient. | A §Composition.9b-style scrim is a compositional mechanic, not a brand gradient. |
+| In Figma (AI-agent-led) | Recommend the plugin to the designer in your reply; link the community URL. If the plugin or the Drive export is unreachable, leave the surface without the gradient and flag the gap — do not substitute a native `GRADIENT_LINEAR`/`GRADIENT_RADIAL` fill, not even labelled "placeholder". | A §Composition.9b-style scrim is a compositional mechanic, not a brand gradient. |
 | Outside Figma (decks, HTML, email, print, Canva) | Pull exported PNG / SVG assets from the brand asset library's `Gradients/` folder — see §Asset library. *(Folder pending creation; same access model as `Logo/`.)* | Same conventions as the logo export pipeline. |
-| Raw spec fallback | **There isn't one.** If you cannot reach the plugin or the Drive folder, say so and stop — do not invent stops. | Intentional: gradients are sealed exports, not reconstructable from memory. |
+| Raw spec fallback | **There isn't one.** If you cannot reach the plugin or the Drive folder, say so and stop — do not invent stops, and do not render a vector fallback (Figma native gradient, CSS `linear-gradient`, SVG `<linearGradient>`). Vector references get mistaken for canon and drift the brand. | Intentional: gradients are sealed exports, not reconstructable from memory. |
 
 ### 8. Color in UI shots
 
@@ -179,6 +181,7 @@ On a white surface, type is `primary/black`. On a black/dark surface, type is `p
 - Do not use the product palette in marketing outside the dataviz exception (§5).
 - Do not use an AI-reserved gradient (`Ai Agent - The Operator` / `The Analyst` / `The Collector` / `The Bookkeepper`) on a non-AI surface.
 - Do not reconstruct a canonical Qonto gradient by hand — use the plugin or the Drive export.
+- Do not render a gradient as a native/vector fill (`GRADIENT_LINEAR`, `GRADIENT_RADIAL`, CSS `linear-gradient`, SVG `<linearGradient>`) — not as a placeholder, not as a reference, not as an approximation. Vector references get mistaken for canon and drift the brand; omit the gradient until the plugin export exists.
 - Do not apply any color to typography beyond `primary/black` and `primary/white`.
 - Do not invert white-led to black-led without a brief signal or an editorial rationale that stands up to scrutiny.
 - Do not use pure `#000000` — Qonto black is `#050505`.
@@ -350,7 +353,7 @@ Reference: Brand Kit SOT node [220:51714](https://www.figma.com/design/9MBP81zVp
 - The logo anchors the composition — it does not compete with the headline.
 - Never center the full lockup horizontally — centering breaks the "whole-width" rule. Shorter configurations (wordmark alone, symbol alone) may be centered if the layout demands it.
 - Never mix two anchor edges (e.g. symbol top-left + cluster bottom-right). The full lockup is always on one edge.
-- **Reserve a single-color band for the lockup.** Structural contrasting elements (gradients, dark blocks, photography, scrim) must yield to the lockup zone: reserve at least **2X** of clear band at the lockup's edge in the lockup's background color, so the full lockup sits on a single color per §Logo.3. If the contrasting element has to bleed into the lockup zone, step down the reduction ladder (§Logo.1 → §Logo.7) and place the shorter configuration entirely inside the non-contrasting zone — never split the lockup across two colors.
+- **When a structural contrasting element splits the canvas, the non-contrasting zone becomes the effective canvas.** If a gradient, dark block, photography, or scrim occupies part of the canvas, its inner edge acts as a canvas edge for every foreground element. Headline, subtitle, and the full lockup all respect an `X` margin from that inner edge exactly as they do from a real canvas edge. The full lockup stretches the full width of the **non-contrasting zone** (not the full canvas width) — symbol at the zone's left-margin `X`, cluster at the zone's right-margin `X`, auto gap between — keeping the whole lockup on a single color per §Logo.3. If the non-contrasting zone is narrower than `~8 × X` (the full-lockup minimum from §Logo.1), step down the reduction ladder.
 
 ### 6. Co-branding (Qonto × partner)
 
