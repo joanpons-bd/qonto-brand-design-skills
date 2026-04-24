@@ -27,8 +27,8 @@ Qonto is the European leader in business finance management for SMEs and freelan
 - **Always attentive** — empathetic, contextually aware.
 
 **The marketing / product split** — the most important architectural rule:
-- **Marketing & brand communications** use black, white, and gray only. Restraint is the strategy.
-- **Product** uses the full expressive palette (Blueberry, Mint, Plum, Sakura, Peach, Mustard) plus semantic UI colors.
+- **Marketing & brand communications** — white-led, black-secondary, grayscale for content hierarchy. No product palette except in dataviz. See §Color.
+- **Product** — full expressive palette (Blueberry, Mint, Plum, Sakura, Peach, Mustard) plus semantic status families (Success, Warning, Error). See §Color.
 
 When unclear which context applies, ask.
 
@@ -40,7 +40,158 @@ When unclear which context applies, ask.
 - Available weights: **Light, Regular, Semi Bold, Bold, Black** (there is **no Medium** weight — using `style: 'Medium'` in Figma will fail to load). Default weight: Regular (400). Headlines: Bold. Sentence case only — never ALL CAPS.
 - Minimum body size: 14px.
 - Generous whitespace. Rounded corners (16–24px) on cards and containers.
-- Never use pure `#000000` — Qonto's black is `#050505` (token `primary/black`).
+- Never use pure `#000000` — Qonto's black is `#050505` (token `primary/black`). See §Color for the full palette.
+
+---
+
+## Color
+
+Qonto marketing is **black and white**, with **grayscale for content hierarchy**. The **product palette** lives inside product UI, not in marketing — the one exception is dataviz. **Gradients** are the strategic pop of color that complements the black-and-white frame without anchoring it. This section is the canonical source for every color decision in any Qonto output.
+
+**DS vs SOT.** All hex values below are pulled directly from the Brand Kit SOT Color page ([node 2:18028](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=2-18028)). The design system is mid-migration to match these values — until it completes, the hex in this file wins over a conflicting DS token. Flag the drift to the brand team; do not silently pick one.
+
+### 1. The black-and-white principle
+
+**Qonto is a white-and-black brand, in that order.** White is the primary surface; black is the secondary. Every composition starts on a white surface unless the brief demands otherwise. Inversion (black-led) is possible — nocturnal campaigns, dark product contexts, specific editorial tones — but it is the exception, not an equal-weight alternative. The trigger for inversion is **both** an explicit brief signal *and* editorial judgement: if the brief does not ask for dark and no editorial rationale stands up to scrutiny, default to light. When in doubt, ask.
+
+Why: the SOT states *"our palette is deliberately reduced to black and white. This isn't a limitation — it's a statement. It lets our product, photography, and content do the talking without introducing color."* Light-led keeps product and content as the protagonists; dark-led pulls the frame itself forward and should only happen when that is the intent.
+
+### 2. Primary tokens — white and black
+
+| Token | Hex | Role |
+|---|---|---|
+| `primary/white` | `#FFFFFF` | Primary surface; primary ink on dark backgrounds |
+| `primary/black` | `#050505` | Secondary surface; primary ink on light backgrounds |
+
+Never use pure `#000000`. Qonto black is `#050505` — a near-black that reads richer against photography and print. Same token §Logo.3 uses for the wordmark.
+
+### 3. Grayscale — structure without color
+
+Grayscale exists to **enhance content hierarchy**, not to introduce color. Per the SOT: *"these neutral grays provide the range needed for UI hierarchy, borders, disabled states, and secondary text — without introducing color. Use these values to ensure sufficient contrast ratios across all touchpoints. They extend our black-and-white foundation into the functional details where nuance matters."*
+
+**The scale — 11 steps:**
+
+| Token | Hex | Typical use (descriptive, not prescriptive) |
+|---|---|---|
+| `neutral/900` | `#1A1A1A` | Near-black ink; heavy text on light |
+| `neutral/800` | `#262626` | Dark ink |
+| `neutral/700` | `#3D3D3D` | Dark ink |
+| `neutral/600` | `#616161` | Secondary text, meta |
+| `neutral/500` | `#8F8F8F` | Tertiary text, captions |
+| `neutral/400` | `#B8B8B8` | Disabled states |
+| `neutral/300` | `#CCCCCC` | Borders, dividers |
+| `neutral/200` | `#E0E0E0` | Subtle borders |
+| `neutral/100` | `#E8E8E8` | Fills, container backgrounds |
+| `neutral/50`  | `#F5F5F5` | Section backgrounds |
+| `neutral/25`  | `#F9F9F9` | Page-chrome backgrounds |
+
+The "typical use" column is descriptive — the SOT does not hard-assign each step to a role. Use the scale as a continuous resource: closer steps = subtler hierarchy, further apart = stronger contrast. Honour WCAG contrast for any text step against its background.
+
+### 4. Product color palette — product only
+
+The product palette is designed for product UI: semantic states (success, warning, error), categorical distinctions in charts and dashboards, and interface signals. **It does not appear in marketing or brand communications.** The one exception is dataviz (§5).
+
+**The matrix — 9 hue families × 5 weights:**
+
+| Family | 1000 | 900 | 800 | 100 | 50 |
+|---|---|---|---|---|---|
+| **Blueberry** | `#163470` | `#2450B0` | `#3468D8` | `#9CB8EC` | `#E0EAFB` |
+| **Mint**      | `#085C58` | `#0E9088` | `#18BEB0` | `#70DCD0` | `#D0F2EE` |
+| **Plum**      | `#441E80` | `#6A34BB` | `#8C52E0` | `#C49CE4` | `#EEE0FA` |
+| **Sakura**    | `#7C1232` | `#B82050` | `#E03868` | `#F098B4` | `#FAE0E8` |
+| **Peach**     | `#7C3600` | `#B85000` | `#E06808` | `#F0AD68` | `#FAE6D2` |
+| **Mustard**   | `#686000` | `#A89800` | `#D0C000` | `#E4DC58` | `#F8F5C8` |
+| **Success**   | `#086430` | `#0E964A` | `#1CC060` | `#68DC9C` | `#D0F4DE` |
+| **Warning**   | `#704806` | `#B06A04` | `#E08A10` | `#F0C468` | `#FAF0DA` |
+| **Error**     | `#7C1C14` | `#BA2C22` | `#E44038` | `#F09890` | `#FAE0DC` |
+
+**Expressive** (categorical, non-semantic): Blueberry, Mint, Plum, Sakura, Peach, Mustard.
+**Semantic** (status): Success, Warning, Error.
+
+Weights are discrete roles, not a smooth scale: **1000 / 900 / 800** cover dark-to-base, **100 / 50** cover soft-to-wash. Mid-tones (200–700) are deliberately absent from the product palette — use them only from the grayscale (§3).
+
+### 5. Dataviz exception
+
+Charts, infographics, and any chart-like surface **may** use the product palette in marketing — that is why the palette's categorical families exist. Rules of thumb:
+
+- Lead with the expressive families (Blueberry, Mint, Plum, Sakura, Peach, Mustard) for categorical distinctions.
+- Use semantic families (Success, Warning, Error) only for status data (gains/losses, pass/fail, risk tiers) — not as decorative colors.
+- Chart axes, legends, labels, and any type stay `primary/black` on light or `primary/white` on dark per §8. The data carries the color; the scaffolding does not.
+- One palette per chart — do not mix expressive and semantic families in a single series unless the data semantics require it.
+
+Every other marketing surface (hero imagery, typography, UI in lifestyle comps, editorial layouts) stays black-and-white plus grayscale.
+
+### 6. Accent color
+
+There is one accent color: **Blueberry 800 `#3468D8`**. Per the SOT: *"accent color should only be used in key hero moments that truly define the Qonto experience, like when completing a transfer or when typing a specific amount."*
+
+Accent is a product moment, not a marketing tool. If a marketing surface feels like it needs the accent, reach for a gradient (§7) or rework the composition — do not drop Blueberry 800 onto a flyer.
+
+### 7. Gradients
+
+Gradients are the brand's pop of color — the one place marketing borrows from the product palette. Per the SOT: *"gradients are the perfect complement of a pure black and white brand framework, they provide a pop of color without anchoring the brand with any specific hex value. They should be used strategically and always as a supporting element."*
+
+**The eight canonical gradients:**
+
+| Name | Usage |
+|---|---|
+| Golden Hour | General brand / marketing |
+| Lavender Rise | General brand / marketing |
+| Morning Veil | General brand / marketing |
+| Daybreak | General brand / marketing |
+| Ai Agent - The Operator | **Qonto AI / AI agents only** |
+| Ai Agent - The Analyst | **Qonto AI / AI agents only** |
+| Ai Agent - The Collector | **Qonto AI / AI agents only** |
+| Ai Agent - The Bookkeepper | **Qonto AI / AI agents only** |
+
+The four AI-agent gradients carry the `Ai Agent - ` prefix in their names precisely so the scope is visible at the point of use — that transparency is deliberate. Per the SOT: *"they should be used strategically and always as a supporting element."* Treat the AI-agent scope as a hard rule — do not drop one onto a campaign surface, and do not invent new gradient names.
+
+**Canonical spec.** Gradients are built from the product color palette values, but the SOT **does not publish per-gradient hex stops**. In the Brand Kit file, each gradient card is an **image export** of the in-house Qonto Gradient plugin. The canonical spec is the plugin's output — not a stop list reconstructable by hand.
+
+**How to obtain a gradient:**
+
+| Context | How | Notes |
+|---|---|---|
+| In Figma (designer-led) | Run the **Qonto Gradient** plugin — [figma.com/community/plugin/1625521818592255695](https://www.figma.com/community/plugin/1625521818592255695). The plugin writes the gradient into the selected layer. | Install once per workspace. |
+| In Figma (AI-agent-led) | Recommend the plugin to the designer in your reply; link the community URL. Do not hand-roll `gradientStops` arrays pretending to be a canonical Qonto gradient. | A §Composition.9b-style scrim is a compositional mechanic, not a brand gradient. |
+| Outside Figma (decks, HTML, email, print, Canva) | Pull exported PNG / SVG assets from the brand asset library's `Gradients/` folder — see §Asset library. *(Folder pending creation; same access model as `Logo/`.)* | Same conventions as the logo export pipeline. |
+| Raw spec fallback | **There isn't one.** If you cannot reach the plugin or the Drive folder, say so and stop — do not invent stops. | Intentional: gradients are sealed exports, not reconstructable from memory. |
+
+### 8. Color in UI shots
+
+When a marketing composition includes an illustrated or rendered product UI (dashboards, transfer screens, card views), **keep the UI's real colors**. Per the SOT: *"illustrations are representing specific UI components and flows, we should stay true to the actual experience instead of inventing abstract conventions. Color should follow the same direction sticking to the source components. Embrace black, white and grayscale, status colors when needed, and use gradient to drive attention to any specific element."*
+
+Practically: if the real product screen shows Success 800 on a confirmed-transfer state, the marketing render shows Success 800. If the real screen is grayscale until the user interacts, the render is grayscale. Do not abstract product colors away to force the marketing black-and-white rule onto a UI shot — that misrepresents the product.
+
+### 9. Color in typography
+
+**Typography is black or white. Never any other color.** Per the SOT: *"always black or white, never use any other color in typography."*
+
+- No colored headlines, no colored callouts, no colored pull-quotes.
+- No product palette colors in type, even in dataviz — chart axes, legends, and labels stay black/white/gray; the data bars/points/areas carry the color.
+- Any semantic-color type (Success, Warning, Error text) is a product-UI concern governed by the DS — not a brand tool.
+
+On a white surface, type is `primary/black`. On a black/dark surface, type is `primary/white`. On intermediate grayscale surfaces, pick whichever of the two gives WCAG contrast.
+
+### 10. Anti-patterns
+
+- Do not pick a color from memory. Every hex comes from the tables above or via a Figma variable reference.
+- Do not use the product palette in marketing outside the dataviz exception (§5).
+- Do not use an AI-reserved gradient (First Light, Solstice, Dusk Bloom, Afterglow) on a non-AI surface.
+- Do not reconstruct a canonical Qonto gradient by hand — use the plugin or the Drive export.
+- Do not apply any color to typography beyond `primary/black` and `primary/white`.
+- Do not invert white-led to black-led without a brief signal or an editorial rationale that stands up to scrutiny.
+- Do not use pure `#000000` — Qonto black is `#050505`.
+
+### 11. For AI agents — color checklist
+
+Before applying color to any output, walk this list:
+
+1. **Marketing or product?** Marketing → black + white + grayscale. Product → full palette available. Ambiguous → ask.
+2. **If marketing and color appears** — is it dataviz or a UI shot? Yes → narrow exception (§5 or §8) applies. No → strip the color.
+3. **If using a gradient** — is the surface Qonto AI / agent-related? Then First Light / Solstice / Dusk Bloom / Afterglow are candidates. Otherwise use Golden Hour / Lavender Rise / Morning Veil / Daybreak. Acquire via the plugin or the Drive export, never by hand-rolling stops.
+4. **In Figma** — prefer variable references (`primary/black`, `neutral/500`, etc.) over raw hex when the library is linked. If a DS token value disagrees with a hex here, use the hex and flag the drift.
+5. **Outside Figma** (HTML, SVG, print) — use the hex values from the tables above verbatim.
 
 ---
 
@@ -651,12 +802,11 @@ Beyond the headline/subtitle tiers, any additional type in a composition (captio
 
 See [`references/photography.md`](references/photography.md) for AI generation prompts and photo-selection rules. For approved shots, pull from `Photography [Self-server]/` in the [Asset library](#asset-library) — any image in that folder is cleared for use.
 
-<!-- Expansion territories (to be nailed next, same approach as logo + composition: pull from SOT, write concrete specs, test against Figma library components):
-     - Color
+<!-- Expansion territories (to be nailed next, same approach as logo + composition + color: pull from SOT, write concrete specs, test against Figma library components):
      - Typography (full type system beyond headline/subtitle)
      - Tone of voice
      - Iconography
-     - Object style (3D, gradients, cards)
+     - Object style (sharp structure / rounded content, shadows, cards)
      - UI snapshots (product in marketing)
      - Motion
 -->
