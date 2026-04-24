@@ -505,7 +505,7 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 | **A. Stack — text then visual** | Text band top → `1X` → visual band → `2X` → lockup | Message-first product announcements, feature reveals |
 | **B. Stack — visual then text** | Visual band top → `1X` → text band → `2X` → lockup | "Look at this, here's why" — visual sells, headline punctuates |
 | **C. Split — text ↔ visual** | Landscape: text one half, visual other half. Portrait: collapses to A or B. The **visual side also ends at `lockupY − 2X`** — the 2X clearance before the lockup applies to every last band, including the visual half of a split (never let a photo run into the lockup strip). | KPI + supporting image, testimonial + face, equal-weight pairs |
-| **D. Overlay — text on full-bleed image** | Image bleeds edge-to-edge; text block + lockup sit on top within `X` margins. **Dark-background recipe:** use the `color=white` logo variants and apply a `1px` white stroke to the symbol (per §Logo.3). Verify contrast: headline and lockup must read cleanly against the busiest region of the photo, not just the calm edge. | Atmospheric, photo-led campaigns |
+| **D. Overlay — text on full-bleed image** | Image bleeds edge-to-edge; text block + lockup sit on top within `X` margins. **Dark-background recipe:** use the `color=white` logo variants and apply a `1px` white stroke to the symbol (per §Logo.3). Verify contrast: headline and lockup must read cleanly against the busiest region of the photo, not just the calm edge. When the photo's text zone isn't reliably dark, add a scrim — see §Composition.9b for the full Figma build recipe. | Atmospheric, photo-led campaigns |
 | **E. Overlay — text card on bleed image** | Image full-bleed; solid-colour card (usually white) with headline + lockup, card honours `X` margin and `X` internal padding. Card uses **sharp corners** (`cornerRadius = 0`) — rounded corners are not Qonto-native. | Photo + crisp readable message, landing-page hero |
 | **F. Layered — floating objects + text** | Text at top → `2X` → three overlapping cascading objects (§Composition.2 floating-object rule) → `2X` → lockup | Editorial, object-of-the-week, feature-rich storytelling |
 
@@ -594,6 +594,52 @@ subtitle.y = headline.y + headline.height + Math.round(X * 0.5);
 
 // Logo — use §Logo.8 full-lockup recipe at the bottom.
 ```
+
+### 9b. Figma build recipe — archetype D (full-bleed photo with scrim)
+
+Extends §9 and §Logo.8 for archetype D (full-bleed photo hero). Adds a black linear scrim so white copy stays legible regardless of what the photo is doing under the text zone. Use when the photo's upper region isn't uniformly dark enough to guarantee headline contrast.
+
+```javascript
+// Assumes the frame, photo, and full lockup already exist per §9 and §Logo.8.
+// Photo applied via imageHash from figma_set_image_fill (see §Asset library).
+const canvasW = 1920;
+const canvasH = 1080;
+const X = Math.round(Math.min(canvasW, canvasH) * 0.05);   // 54
+
+// 1. Scrim — linear gradient, black at top, transparent at bottom.
+//    Sits above the photo, below every text and logo element.
+const scrim = figma.createRectangle();
+scrim.name = 'scrim';
+scrim.resize(canvasW, canvasH);
+scrim.x = 0;
+scrim.y = 0;
+scrim.fills = [{
+  type: 'GRADIENT_LINEAR',
+  gradientTransform: [[0, 1, 0], [-1, 0, 1]],              // top→bottom
+  gradientStops: [
+    { position: 0, color: { r: 0, g: 0, b: 0, a: 0 } },    // transparent at bottom
+    { position: 1, color: { r: 0, g: 0, b: 0, a: 0.7 } },  // 70% black at top
+  ],
+}];
+frame.insertChild(1, scrim);                               // index 1 = just above photo
+
+// 2. Headline + subtitle — copy from §9 with bgIsDark = true (inkRGB = white).
+//    Position top-left at X margin; subtitle X/2 below headline.
+
+// 3. Full lockup — run §Logo.8 with bgIsDark = true.
+//    Symbol stays color=black with a 1px INSIDE white stroke on its inner `square` frame.
+//    Wordmark uses color=white. Divider + entry points inherit inkRGB = white.
+```
+
+**Why a scrim.** Photo-archetype fit (§Composition.7) requires tonal uniformity in the text zones. Real photos rarely give that — a scrim enforces the condition without darkening the subject. The top-down gradient keeps the photo's subject (typically mid-frame) fully saturated while the upper text zone gains a reliable dark backing. The lockup at the bottom sits on near-original photo tones; the white variant + symbol stroke handle local contrast.
+
+**Scrim opacity.** `0.7` at the top is the default for medium-luminance photos. Push to `0.85` for very bright photos; drop to `0.5` for already-dark photos. Don't exceed `0.85` — the photo starts disappearing and you'd be better off with archetype A or E.
+
+**When to skip the scrim.** If the photo's top strip is already uniformly dark with headroom for `X` margins, the scrim is optional. When in doubt, add it.
+
+**Still broken?** If even with a scrim the composition feels fought — busy photo, subject crosses the headline zone, no place the lockup reads — the photo isn't right for archetype D. Fall back to C (split) or B (visual above text), per §Composition.7's photo-archetype fit rule.
+
+*Empirically validated on `Thomas Tech Office Laptop Front.png` at 1920×1080 (file `mNVOGF8yvrXXMXTVt6cKkr`, frame 62:464).*
 
 ### 10. Body copy and other type sizes
 
