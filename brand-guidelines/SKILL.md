@@ -177,11 +177,12 @@ On a white surface, type is `primary/black`. On a black/dark surface, type is `p
 
 - Do not pick a color from memory. Every hex comes from the tables above or via a Figma variable reference.
 - Do not use the product palette in marketing outside the dataviz exception (§5).
-- Do not use an AI-reserved gradient (First Light, Solstice, Dusk Bloom, Afterglow) on a non-AI surface.
+- Do not use an AI-reserved gradient (`Ai Agent - The Operator` / `The Analyst` / `The Collector` / `The Bookkeepper`) on a non-AI surface.
 - Do not reconstruct a canonical Qonto gradient by hand — use the plugin or the Drive export.
 - Do not apply any color to typography beyond `primary/black` and `primary/white`.
 - Do not invert white-led to black-led without a brief signal or an editorial rationale that stands up to scrutiny.
 - Do not use pure `#000000` — Qonto black is `#050505`.
+- Do not let a structural color element (gradient, dark block, photography, scrim) bleed into the bottom 2X band where the full lockup sits. The lockup must rest on a single color — see §Logo.5.
 
 ### 11. For AI agents — color checklist
 
@@ -189,7 +190,7 @@ Before applying color to any output, walk this list:
 
 1. **Marketing or product?** Marketing → black + white + grayscale. Product → full palette available. Ambiguous → ask.
 2. **If marketing and color appears** — is it dataviz or a UI shot? Yes → narrow exception (§5 or §8) applies. No → strip the color.
-3. **If using a gradient** — is the surface Qonto AI / agent-related? Then First Light / Solstice / Dusk Bloom / Afterglow are candidates. Otherwise use Golden Hour / Lavender Rise / Morning Veil / Daybreak. Acquire via the plugin or the Drive export, never by hand-rolling stops.
+3. **If using a gradient** — is the surface Qonto AI / agent-related? Then the four `Ai Agent - *` gradients are candidates. Otherwise use Golden Hour / Lavender Rise / Morning Veil / Daybreak. Acquire via the plugin or the Drive export, never by hand-rolling stops.
 4. **In Figma** — prefer variable references (`primary/black`, `neutral/500`, etc.) over raw hex when the library is linked. If a DS token value disagrees with a hex here, use the hex and flag the drift.
 5. **Outside Figma** (HTML, SVG, print) — use the hex values from the tables above verbatim.
 
@@ -349,6 +350,7 @@ Reference: Brand Kit SOT node [220:51714](https://www.figma.com/design/9MBP81zVp
 - The logo anchors the composition — it does not compete with the headline.
 - Never center the full lockup horizontally — centering breaks the "whole-width" rule. Shorter configurations (wordmark alone, symbol alone) may be centered if the layout demands it.
 - Never mix two anchor edges (e.g. symbol top-left + cluster bottom-right). The full lockup is always on one edge.
+- **Reserve a single-color band for the lockup.** Structural contrasting elements (gradients, dark blocks, photography, scrim) must yield to the lockup zone: reserve at least **2X** of clear band at the lockup's edge in the lockup's background color, so the full lockup sits on a single color per §Logo.3. If the contrasting element has to bleed into the lockup zone, step down the reduction ladder (§Logo.1 → §Logo.7) and place the shorter configuration entirely inside the non-contrasting zone — never split the lockup across two colors.
 
 ### 6. Co-branding (Qonto × partner)
 
