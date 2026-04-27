@@ -795,7 +795,7 @@ frame.insertChild(1, scrim);                               // index 1 = just abo
 
 **Still broken?** If even with a scrim the composition feels fought — busy photo, subject crosses the headline zone, no place the lockup reads — the photo isn't right for archetype D. Fall back to C (split) or B (visual above text), per §Composition.7's photo-archetype fit rule.
 
-*Empirically validated on `Thomas Tech Office Laptop Front.png` at 1920×1080 (file `mNVOGF8yvrXXMXTVt6cKkr`, frame 62:464).*
+*Empirically validated on `Thomas Tech Office Laptop Front.png` at 1920×1080 (file `mNVOGF8yvrXXMXTVt6cKkr`, page "Composition Test", frame 62:464).*
 
 ### 10. Body copy and other type sizes
 
