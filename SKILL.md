@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.5
+version: 2.6
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.5 · Last updated: 2026-04-27 · Status: living document
+> Version: 2.6 · Last updated: 2026-04-27 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -933,9 +933,8 @@ Qonto operates across France, Germany, Italy, Spain, and the Netherlands today, 
 
 **This exception is for script coverage only.** It does not licence SF Pro / Inter / Helvetica as a Latin substitute when Qonto Sans is simply unavailable — that case stays governed by §Typography.9 (`Qonto Sans → Manrope → Arial`). The two rules compose: script-coverage fallback applies to the non-Latin **run** inside a piece of copy; the surrounding Latin text still follows the Qonto Sans / Manrope / Arial stack.
 
-<!-- Expansion territories (to be nailed next, same approach as logo + composition + color + typography: pull from SOT, write concrete specs, test against Figma library components):
+<!-- Expansion territories (to be nailed next, same approach as logo + composition + color + typography + object-styles + iconography: pull from SOT, write concrete specs, test against Figma library components):
      - Tone of voice
-     - Iconography
      - UI snapshots (product in marketing)
      - Motion
 -->
@@ -1225,6 +1224,119 @@ canvas.appendChild(logo);
 **Blur visibility caveat.** `BACKGROUND_BLUR` needs partial transparency on the object's fill to render. A fully opaque or fully empty fill produces no visible frosted-glass effect. Use a semi-transparent fill (`opacity: 0.2–0.3` for blur-white over a light scene; a similar low-opacity dark for blur-black). The SOT calls this a "transparent fill" — in Figma terms, that means translucent, not zero-alpha.
 
 *Empirically validated at `1080×1350` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Object Styles Test", section "Archetype F — Object Styles". Screenshot verified every radius, shadow layer, blur radius, and margin against the expected values in §Object styles.1–6 and §Composition.7.*
+
+---
+
+## Iconography
+
+Reference: SOT "Iconography" ([node 2:18056](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=2-18056)), curated iconset at [node 541:5259](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=541-5259).
+
+Icons in Qonto marketing are pulled from a single library, locked to a single style, sized from a single scale, and inked black or white only. The discipline is "no improvisation" — never edit a glyph, never invent a colour, never mix families. When Material doesn't ship the right icon for a Qonto-specific action, the brand team produces an in-house asset; that asset lives next to the Material exports in the library and is reached the same way.
+
+**Scope.** This section governs **marketing surfaces**: posters, social, decks, OOH, landing pages, emails, print. Product UI has its own iconography rules in the design system; for product work, defer to the DS — not to this file.
+
+### 1. Library — Material Symbols, plus in-house overrides
+
+The base icon set is **[Google Material Symbols](https://fonts.google.com/icons)** (the modern variable-axis family — *not* the legacy fixed Material Icons). Per the SOT: *"We use Google Material Icons as our standard icon set. They're open, widely supported, and visually consistent with Qonto Sans's clean geometry."*
+
+**In-house overrides.** When a Qonto-key action has no fitting Material design, or Material's stock glyph doesn't carry the right meaning for a Qonto context, the brand team produces an in-house asset and ships it into the library. The override wins for that action — don't fall back to a near-match Material icon when an in-house version exists.
+
+Both Material exports and in-house overrides live in `Icons/` in the [Asset library](#asset-library). When sourcing for any non-Figma surface, fetch from there; in Figma, the curated SOT iconset (284 glyphs at 20 × 20, [node 541:5259](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=541-5259)) is the canonical drop-in.
+
+### 2. Style axes — fixed values
+
+Material Symbols is a variable font with four axes plus a family choice. For Qonto marketing, all five are pinned:
+
+| Axis | Value | Why |
+|---|---|---|
+| Family | **Outlined** | The lightweight, modern feel the SOT calls for. Never the Rounded or Sharp families. |
+| Fill | **`0`** (off) | Outline-led. Filled variants exist as named exceptions only — see §3 below. |
+| Weight | **`300`** | Quiet next to Qonto Sans Bold headlines, still legible at 16 px. |
+| Grade | **`0`** (Normal) | Per the SOT. |
+| Optical size | **matches render size** | The whole point of the variable-axis modern set — picking the right optical-size stop gives correct stroke proportions at the rendered size. Don't ship an icon at, say, 48 px with optical size set to 20. |
+
+**Fill exceptions.** The SOT's curated iconset includes filled variants for a small, named set of glyphs (status dots, bullets, primary nav marks, lightning bolts, etc. — see [node 541:5259](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=541-5259)). When the SOT ships a `_filled` variant alongside the `_outlined` one, the filled is licensed for that specific glyph. **Don't generalise** — adding fill to an arbitrary outlined glyph is an edit, and edits are anti-pattern (§7).
+
+### 3. Sizing scale for marketing
+
+Five canonical sizes, mapped to Material's optical-size stops where the variable font has tested proportions:
+
+| Size | Optical size stop | Use for |
+|---|---|---|
+| **16 px** | `20` | Body-inline glyphs at small ratios — bullet markers, inline annotations |
+| **24 px** | `24` | Standard marketing inline — captions, list bullets, footers |
+| **40 px** | `40` | Card / feature glyph — paired with body or short label |
+| **48 px** | `48` | Large feature glyph — hero accent |
+| **64 px** | `48` (Material caps at 48) | Empty-state, oversized decorative callout, large feature mark |
+
+**Anchor in `X` when in a composition.** The icon size shouldn't float free of the layout's X-system. Common ratios on a portrait `1080 × 1350` canvas (`X = 54`):
+
+- `16 px ≈ 0.30 X` (body-inline)
+- `24 px ≈ 0.45 X` (standard)
+- `40 px ≈ 0.74 X` (card/feature)
+- `48 px ≈ 0.89 X` (hero accent)
+- `64 px ≈ 1.19 X` (oversized)
+
+Pick the size from the scale first; verify it sits within `0.3 X – 1.2 X`; if it doesn't, your composition probably wants a different tier (§Composition.1) rather than a custom icon size.
+
+**Pairing with type.** When an icon sits inline with a text run, match the icon's box height to the type's cap height — visually, that means **icon = `0.85 × type-fontSize`**. So a `16 pt` body run takes a `~14 px` icon, a `40 pt` subtitle takes a `~34 px` icon. The 16/24/40/48 stops cover this range — round to the nearest stop.
+
+### 4. Color and contrast
+
+Per the SOT: *"Use them in black or white only, matching the surrounding context."*
+
+- **Black** (`#050505`, token `primary/black`) on light surfaces.
+- **White** (`#FFFFFF`, token `primary/white`) on dark surfaces.
+- **Nothing else.** No greys (icons match type ink, type ink is binary — see §Typography.4 / §Color.9). No brand palette colours. No gradients. No semantic-status hues — those belong to product UI, not marketing.
+
+The icon's ink follows the surrounding type's ink. If the type is white, the icon is white; if the type is black, the icon is black. This rule short-circuits any debate about "what colour should this status icon be on a dark hero" — same colour as the headline next to it.
+
+### 5. Bounding box — optional, per §Object styles
+
+Per the SOT: *"In product we can frame icons within a light gray bounding box, which we can also use in Marketing materials."*
+
+When a marketing icon needs a frame for contrast or hierarchy, wrap it in an **app-square** per [§Object styles.1](#object-styles) — the same shape language as small content tiles. Two practical rules:
+
+- **Icon-to-box ratio = `0.5 ×`.** A 16 px icon sits in a 32 px box; a 24 px icon in a 48 px; a 40 px icon in an 80 px. (Borrowed from eBay's playbook; aligns with the §Object styles app-square radius math without needing its own scale.)
+- **Box fill: light grey or transparent.** Light grey uses `neutral/200` (or the visually equivalent token in your surface). Transparent works when the box is just for spacing and the surface itself provides the contrast. Black or white box backgrounds: don't — that's the floating-tile treatment from [§Object styles.6](#object-styles), not an icon frame.
+- **Box geometry follows §Object styles.** `cornerRadius = 0.14 × short_side`, `cornerSmoothing = 0`. So a 32 px box has `r = 4.5 → 5`; a 48 px box has `r = 7`; an 80 px box has `r = 11`.
+
+A bounding box is **never required** in marketing — it's a tool for hierarchy when an icon would otherwise read as a floating glyph against a busy backing. When in doubt, skip the box.
+
+### 6. Asset library handoff
+
+For non-Figma surfaces (decks, HTML, email, print, Canva), source icons from `Icons/` in the [Asset library](#asset-library) — same fetch flow as every other asset (raw URL pattern, percent-encoded paths, browse the gallery if you don't know the filename).
+
+**Naming convention** (observed in the live library):
+
+- **Material Symbols exports** — `<material-icon-name>-300.svg` (the `-300` reflects the locked weight; if the convention drifts, the brand team owns the change).
+- **In-house overrides** — named by the Qonto action they represent (no `-300` suffix). When you see a stem name with no weight suffix in `Icons/`, that's the in-house version and it wins over the Material match for that action.
+
+**Don't redraw an icon in CSS, inline SVG, or as a Figma vector** when the canonical asset exists in the library. If the library doesn't have what you need, name the gap to the brand team and stop — don't substitute a near-match.
+
+### 7. Anti-patterns
+
+- **Don't edit, recolour outside black/white, rotate for purpose, distort, or stylise** an icon. The Material set + in-house overrides are sealed assets — eBay's rule applies cleanly: *"As a general rule, do not alter or edit icons."*
+- **Don't mix Material families** within a composition (Outlined ↔ Rounded ↔ Sharp). One family per surface. Outlined is Qonto's.
+- **Don't use a weight other than `300`** outside named in-house exceptions. Material's variable axis tempts ad-hoc adjustment; resist.
+- **Don't fill an outlined glyph** unless a `_filled` variant exists in the SOT iconset (§2 fill exceptions). Adding fill where none was sanctioned is an edit.
+- **Don't use grey or brand-palette colours** on icon strokes. Black or white only.
+- **Don't use a circle, pill, or sharp square as the icon frame.** The frame is an app-square (§Object styles.1). Circles belong to avatars.
+- **Don't break the `0.5 ×` icon-to-box ratio.** A 16 px icon in a 24 px box looks cramped; in a 64 px box it looks lost.
+- **Don't ship an icon at one size with optical-size axis set for another.** A 48 px render with optical size `20` produces incorrect stroke proportions — the variable axis exists precisely to prevent this.
+- **Don't generate a "Qonto-style" icon from a model.** If the action needs a custom glyph, the brand team produces it as an in-house override; agents don't.
+
+### 8. For AI agents — icon decision ladder
+
+Walk top-down. Stop at the first rule that resolves.
+
+1. **Is this a Qonto-key action with a likely in-house override?** (e.g. an action specific to Qonto's product flows or brand voice) → check `Icons/` in [§Asset library](#asset-library) for an asset whose stem name matches the action and has *no* `-300` suffix. If present, use it. Stop.
+2. **Is there a Material Symbols glyph that fits semantically?** → use it via the curated SOT iconset ([node 541:5259](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=541-5259)) inside Figma, or via `Icons/<name>-300.svg` from the asset library outside Figma. Style axes locked: Outlined / Fill `0` / Weight `300` / Grade `0` / Optical size matches render size.
+3. **Pick the render size from the scale** (§3): 16 / 24 / 40 / 48 / 64. Verify against `X` and against the type the icon sits next to.
+4. **Pick the ink** (§4): black on light, white on dark. Match the surrounding type's ink.
+5. **Does the icon need a frame?** → wrap in an app-square per §Object styles.1; box at `2 ×` icon size; fill light grey or transparent; box `cornerRadius = 0.14 × short_side`, `cornerSmoothing = 0`.
+6. **Outside Figma?** → fetch the asset from `Icons/` in the asset library; never hand-roll the SVG.
+7. **Material doesn't fit and there's no in-house override?** → say so, name the gap to the user, and stop. Don't generate a substitute.
 
 ---
 
