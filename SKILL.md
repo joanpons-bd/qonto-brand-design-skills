@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.4
+version: 2.5
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.4 · Last updated: 2026-04-24 · Status: living document
+> Version: 2.5 · Last updated: 2026-04-27 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -155,9 +155,9 @@ The four AI-agent gradients carry the `Ai Agent - ` prefix in their names precis
 | Context | How | Notes |
 |---|---|---|
 | In Figma (designer-led) | Run the **Qonto Gradient** plugin — [figma.com/community/plugin/1625521818592255695](https://www.figma.com/community/plugin/1625521818592255695). The plugin writes the gradient into the selected layer. | Install once per workspace. |
-| In Figma (AI-agent-led) | Recommend the plugin to the designer in your reply; link the community URL. If the plugin or the Drive export is unreachable, leave the surface without the gradient and flag the gap — do not substitute a native `GRADIENT_LINEAR`/`GRADIENT_RADIAL` fill, not even labelled "placeholder". | A §Composition.9b-style scrim is a compositional mechanic, not a brand gradient. |
-| Outside Figma (decks, HTML, email, print, Canva) | Pull exported PNG / SVG assets from the brand asset library's `Gradients/` folder — see §Asset library. *(Folder pending creation; same access model as `Logo/`.)* | Same conventions as the logo export pipeline. |
-| Raw spec fallback | **There isn't one.** If you cannot reach the plugin or the Drive folder, say so and stop — do not invent stops, and do not render a vector fallback (Figma native gradient, CSS `linear-gradient`, SVG `<linearGradient>`). Vector references get mistaken for canon and drift the brand. | Intentional: gradients are sealed exports, not reconstructable from memory. |
+| In Figma (AI-agent-led) | Recommend the plugin to the designer in your reply; link the community URL. If the plugin or the asset-library export is unreachable, leave the surface without the gradient and flag the gap — do not substitute a native `GRADIENT_LINEAR`/`GRADIENT_RADIAL` fill, not even labelled "placeholder". | A §Composition.9b-style scrim is a compositional mechanic, not a brand gradient. |
+| Outside Figma (decks, HTML, email, print, Canva) | Pull exported PNG / SVG assets from the brand asset library's `Gradients/` folder — see §Asset library. *(Folder pending; until it lands, gradients have no outside-Figma export — say so and stop.)* | Same conventions as the logo export pipeline. |
+| Raw spec fallback | **There isn't one.** If you cannot reach the plugin or the asset library, say so and stop — do not invent stops, and do not render a vector fallback (Figma native gradient, CSS `linear-gradient`, SVG `<linearGradient>`). Vector references get mistaken for canon and drift the brand. | Intentional: gradients are sealed exports, not reconstructable from memory. |
 
 ### 8. Color in UI shots
 
@@ -180,7 +180,7 @@ On a white surface, type is `primary/black`. On a black/dark surface, type is `p
 - Do not pick a color from memory. Every hex comes from the tables above or via a Figma variable reference.
 - Do not use the product palette in marketing outside the dataviz exception (§5).
 - Do not use an AI-reserved gradient (`Ai Agent - The Operator` / `The Analyst` / `The Collector` / `The Bookkeepper`) on a non-AI surface.
-- Do not reconstruct a canonical Qonto gradient by hand — use the plugin or the Drive export.
+- Do not reconstruct a canonical Qonto gradient by hand — use the plugin or the asset-library export.
 - Do not render a gradient as a native/vector fill (`GRADIENT_LINEAR`, `GRADIENT_RADIAL`, CSS `linear-gradient`, SVG `<linearGradient>`) — not as a placeholder, not as a reference, not as an approximation. Vector references get mistaken for canon and drift the brand; omit the gradient until the plugin export exists.
 - Do not apply any color to typography beyond `primary/black` and `primary/white`.
 - Do not invert white-led to black-led without a brief signal or an editorial rationale that stands up to scrutiny.
@@ -193,7 +193,7 @@ Before applying color to any output, walk this list:
 
 1. **Marketing or product?** Marketing → black + white + grayscale. Product → full palette available. Ambiguous → ask.
 2. **If marketing and color appears** — is it dataviz or a UI shot? Yes → narrow exception (§5 or §8) applies. No → strip the color.
-3. **If using a gradient** — is the surface Qonto AI / agent-related? Then the four `Ai Agent - *` gradients are candidates. Otherwise use Golden Hour / Lavender Rise / Morning Veil / Daybreak. Acquire via the plugin or the Drive export, never by hand-rolling stops.
+3. **If using a gradient** — is the surface Qonto AI / agent-related? Then the four `Ai Agent - *` gradients are candidates. Otherwise use Golden Hour / Lavender Rise / Morning Veil / Daybreak. Acquire via the plugin or the asset-library export, never by hand-rolling stops.
 4. **In Figma** — prefer variable references (`primary/black`, `neutral/500`, etc.) over raw hex when the library is linked. If a DS token value disagrees with a hex here, use the hex and flag the drift.
 5. **Outside Figma** (HTML, SVG, print) — use the hex values from the tables above verbatim.
 
@@ -676,7 +676,7 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 **Rules shared across all archetypes:**
 
 - Outer margin `X` on all sides (§Composition.2), except for full-bleed images in D and E, which bleed past the margin but never the text block or the lockup.
-- **Photography comes from `Photography [Self-server]/` in the [Asset library](#asset-library)** — don't generate or swap in arbitrary imagery for archetypes B, C, D, E.
+- **Photography comes from `Photography/` in the [Asset library](#asset-library)** — don't generate or swap in arbitrary imagery for archetypes B, C, D, E.
 - **Photo-archetype fit.** D and E place text *over* the photo, so they require shots with generous negative space and tonal uniformity in the text zones (upper-left for headline, lower-X strip for lockup). If the provided photo is activity-dense, crops tightly onto subjects, or has no calm region for text to breathe, **propose switching to A, B, or C** — where the photo gets its own dedicated band and doesn't fight the text. Don't force-fit a busy photo into D or E. This applies even when the user explicitly asks for D/E: name the mismatch and recommend the better archetype.
 - Lockup sits at the bottom X strip (§Logo.5). In archetype E it sits inside the card, not at the canvas bottom.
 - **Every last content band ends at `lockupY − 2X`**, not at the canvas bottom. This holds for text bands (A), visual bands (B), both halves of a split (C), overlay text blocks (D), and cards (E). The 2X breathing room before the lockup is non-negotiable.
@@ -1230,7 +1230,7 @@ canvas.appendChild(logo);
 
 ## Photography
 
-See [`references/photography.md`](references/photography.md) for AI generation prompts and photo-selection rules. For approved shots, pull from `Photography [Self-server]/` in the [Asset library](#asset-library) — any image in that folder is cleared for use.
+See [`references/photography.md`](references/photography.md) for AI generation prompts and photo-selection rules. For approved shots, pull from `Photography/` in the [Asset library](#asset-library) — any image in that folder is cleared for use.
 
 ---
 
@@ -1238,46 +1238,70 @@ See [`references/photography.md`](references/photography.md) for AI generation p
 
 Canonical exports of the SOT for any context that isn't Figma — decks, docs, email, Canva, Notion, landing pages, social tools.
 
-**Where it lives:** [Qonto Brand Asset Library](https://drive.google.com/drive/folders/1E0HtZCvHVv4K0e-Yx9pTqJi0eYNytbOH) on Google Drive.
+**Where it lives:** [Qonto Brand Asset Library](https://qontobrandassetlibrary.netlify.app/) — public web app backed by AWS S3, hosted on Netlify. No auth required.
 
-**Source vs export.** The Figma SOT is the source of truth; the Drive library is the export pipeline's output. If an asset exists in both, Drive mirrors Figma — if they disagree, Figma wins and the Drive copy is stale. Flag the mismatch to the brand team rather than working around it.
+**Migrated from Google Drive (2026-04-27).** The library moved off Drive onto AWS S3 with a Next.js front-end. Folder structure mirrors the prior Drive 1:1, so cross-references in earlier sections still resolve. New asset categories (Gradients, Motion, etc.) land here, not back on Drive — flag the brand team if you see a stray Drive link in any rule.
 
-| Folder | What's in it | Use for | Source / cross-link |
-|---|---|---|---|
-| `Logo/` | SVG and PNG exports of every canonical logo configuration | Any non-Figma surface that needs a logo | SOT [node 399:548](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=399-548) · §Logo |
-| `Icons/` | Qonto icon set (single system for marketing and product) | Iconography in any surface | SOT [node 399:1333](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=399-1333) · (full §Iconography rules to come) |
-| `Photography [Self-server]/` | Approved photography pool — no gate, self-serve | Full-bleed backgrounds, card imagery (§Composition.7 archetypes D, E) | §Photography |
-| `Card Assets/` | Product-card renders | Feature and product-announcement compositions | — |
-| `Trustpilot/` | Rating badges and visuals | Social-proof placements | — |
-| `UI Snapshots/` | Approved product screenshots | Product-story compositions in marketing | — |
+**Source vs export.** The Figma SOT is the source of truth; the asset library is the export pipeline's output. If an asset exists in both, the library mirrors Figma — if they disagree, Figma wins and the library copy is stale. Flag the mismatch to the brand team rather than working around it.
+
+| Folder | What's in it | Files | Use for | Source / cross-link |
+|---|---|---|---|---|
+| `Logo/` | SVG and PNG exports of every canonical logo configuration | 28 | Any non-Figma surface that needs a logo | SOT [node 399:548](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=399-548) · §Logo |
+| `Icons/` | Material Symbols Outlined exports + in-house overrides for Qonto-key actions | 220 | Iconography on any non-Figma surface | SOT [node 2:18056](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=2-18056) · §Iconography |
+| `Photography/` | Approved photography pool — no gate, self-serve | 49 | Full-bleed backgrounds, card imagery (§Composition.7 archetypes D, E) | §Photography |
+| `Card Assets/` | Product-card renders | 66 | Feature and product-announcement compositions | — |
+| `Trustpilot/` | Rating badges and visuals | 7 | Social-proof placements | — |
+| `UI Snapshots/` | Approved product screenshots | 323 | Product-story compositions in marketing | — |
+
+(*Total `693` files at the time of migration. A `Gradients/` folder is on the roadmap and will land here when the Qonto Gradient plugin's export pipeline is wired up — until then, gradients come from the plugin in Figma and don't have an outside-Figma export. See §Color.7.*)
 
 ### How the agent reaches it
 
-- **With a Google Drive connector** (Claude Desktop, Claude Code with the Drive MCP, Cursor with Drive access): fetch programmatically — see the validated pattern below.
-- **Without a connector**: ask the user for **the specific file** — either a drop into the chat, or a public share link to a single file ("Anyone with the link can view"). Quote the folder path + filename pattern so the user finds it fast. **Do not accept a folder link** as the asset handoff — Google Drive folders require auth to enumerate and WebFetch will hit the login wall; you won't be able to pick the right file yourself.
-- **Never invent or redraw a brand asset** when the canonical export exists in the library. If you think an asset is missing, say so — don't improvise.
+The library is a **public web app with no auth** — any agent with `WebFetch` (or any HTTP fetch primitive) and a URL can read it. Two flows depending on whether you know the filename or not:
 
-### Validated fetch pattern — with a Google Drive connector
+- **Filename known** (you saved it from a previous session, the user gave it to you, or you derived it from the convention): fetch directly via the **raw asset URL pattern** below. Skip the gallery.
+- **Filename unknown**: `WebFetch` the homepage (`https://qontobrandassetlibrary.netlify.app/`) and ask the model to enumerate the gallery — every file in every category is listed there. Pick the match for the user's intent, then fetch by raw URL.
 
-End-to-end recipe, tested against the Qonto Brand Asset Library. Tool names are from the Google Drive MCP (`search_files`, `download_file_content`) — other connectors may use different names but the steps map 1:1.
+**Never invent or redraw a brand asset** when the canonical export exists in the library. If you think an asset is missing, say so — don't improvise.
 
-1. **Resolve the subfolder ID.** Do not paste a Drive folder URL as a query argument; the connector won't match it. Query by title and mimeType instead:
+### Raw asset URL pattern
+
+```
+https://qontobrandassetlibrary.netlify.app/api/assets/raw/<Category>/<Filename>
+```
+
+- Path is **case-sensitive** — `Card Assets` (capital `C`, capital `A`, single space).
+- Spaces in the category or filename must be **percent-encoded** as `%20`.
+- Hitting a category root (e.g. `/api/assets/raw/Logo`) returns `500`, not a directory listing — the bucket has no listing endpoint exposed. Browse the homepage gallery instead.
+- An unknown filename also returns `500`. **Always confirm the filename via the gallery first if you're not 100 % sure.**
+
+**Example** — fetching the wordmark:
+```
+GET https://qontobrandassetlibrary.netlify.app/api/assets/raw/Logo/qonto-wordmark.svg
+```
+
+**Example** — Card Asset with a space in the category:
+```
+GET https://qontobrandassetlibrary.netlify.app/api/assets/raw/Card%20Assets/plus-black.png
+```
+
+**Don't use the Next.js image-optimized URL** (`/_next/image?url=…&w=…&q=…`) — that path is for the front-end gallery's previews. Always fetch the raw path; the bytes round-trip cleanly into Figma, decks, or HTML.
+
+### Validated fetch pattern — agent flow
+
+End-to-end recipe, tested against the live library. Works with any tool that can issue an HTTP GET (Claude Code with `WebFetch` + `Bash`, Cursor, Claude Desktop, custom agents) — no MCP connector required.
+
+1. **Browse the gallery** to enumerate filenames for the category you need:
    ```
-   search_files({ query: "title contains 'Photography' and mimeType = 'application/vnd.google-apps.folder'" })
+   WebFetch({
+     url: 'https://qontobrandassetlibrary.netlify.app/',
+     prompt: 'List every file in the Photography category — return filenames only, one per line.'
+   })
    ```
-   The response includes the `id` and the `parentId`. Sanity-check `parentId` against the Brand Asset Library root (`1E0HtZCvHVv4K0e-Yx9pTqJi0eYNytbOH`) so you're not picking up a same-named folder elsewhere in Drive.
-2. **List assets by parentId.**
-   ```
-   search_files({ query: "parentId = '<subfolder_id>' and mimeType contains 'image/'", pageSize: 25 })
-   ```
-   Pick a file by the filename convention (see "Filename conventions" above).
-3. **Download bytes by fileId.**
-   ```
-   download_file_content({ fileId: "<chosen_id>" })
-   ```
-   Response shape: `{ content: [{ embeddedResource: { contents: { blob, mimeType } } }] }` where `blob` is base64. **For files larger than ~4 MB, the response exceeds the MCP output cap and is saved to a tool-results file on disk — the error message includes the path.** When that happens, extract and decode via shell:
+2. **Pick a filename** by the convention (see below).
+3. **Fetch the raw bytes**:
    ```bash
-   jq -r '.content[0].embeddedResource.contents.blob' <saved.txt> | base64 -d > /tmp/asset.png
+   curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Photography/<filename>" -o /tmp/asset.png
    ```
 4. **Apply to Figma.** `figma_set_image_fill` takes the `/tmp` file path directly (preferred for large images — avoids parameter truncation). It may report `"Image fill applied to 0 node(s)"` due to a known plugin quirk — **the returned `imageHash` is still valid.** Apply it manually in `figma_execute`:
    ```javascript
@@ -1287,7 +1311,14 @@ End-to-end recipe, tested against the Qonto Brand Asset Library. Tool names are 
 
 ### Filename conventions
 
-Observed library convention: `{Subject} {Scene/Theme} {Mood}.png` — e.g., `Thomas Tech Office Action.png`. When asking a user for a specific photo, request by mood and scene keywords (e.g., "a calm, wide shot with negative space in the upper-left" rather than a specific filename) — the user will find the match faster than the agent can guess.
+Observed in the live library (sample):
+
+- **`Logo/`** — `qonto-<configuration>-<colour>.svg` / `.png` (wordmark, full lockup, badge, square, symbol).
+- **`Icons/`** — Material Symbols exports follow `<material-icon-name>-<weight>.svg` (weight `300`, see §Iconography). In-house override icons are named by their action (`<qonto-action>.svg`), distinguishable by absence of a Material weight suffix.
+- **`Photography/`** — `{Subject} {Scene/Theme} {Mood}.png` — e.g. `Thomas Tech Office Action.png` (carried forward from the Drive era).
+- **`Card Assets/`** — `<feature>-<colour>-<modifier>.png` — e.g. `plus-purple-embossed-front.png`, `virtual-blueberry.png`, `x-graphiteblack-print-back.png`.
+
+When asking a user for a specific photo, request by mood and scene keywords ("a calm, wide shot with negative space in the upper-left") rather than a guessed filename — the user finds the match faster than the agent can. The gallery's also browsable in any browser, so a link to the homepage with a category nudge is often the cleanest hand-off.
 
 ### Within a Figma session: reuse by `imageHash`
 
