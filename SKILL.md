@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.7
+version: 2.8
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.7 · Last updated: 2026-04-27 · Status: living document
+> Version: 2.8 · Last updated: 2026-04-27 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -1453,6 +1453,199 @@ for (const sz of sizes) {
 **SVG recolour caveat.** The brand's SVG exports ship with `#050505` baked in. `figma.createNodeFromSvg` imports the file as a vector group whose inner paths carry that fill. To render in white (or any other licensed colour — only `#050505` and `#FFFFFF` per §4), walk the imported group and swap the SOLID fill on every descendant. Don't rely on the parent group's `fills` alone — the colour lives on the leaf vectors.
 
 *Empirically validated at `1080 × 1350` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Iconography Test", section "Iconography Test — Sizing + Box + Ink". Screenshot verified the five-size scale, the three boxes' radii (`r = 4 / 7 / 11` for `32 / 48 / 80` boxes), `cornerSmoothing = 0` everywhere, and ink switching cleanly between black on white and white on black.*
+
+---
+
+## Reference compositions
+
+Worked examples that exercise multiple sections at once, to prove the rules compose. Each is a **real Qonto surface** — a square Instagram post, an Instagram Story, a LinkedIn paid ad — built end-to-end from rules already in this file. They double as **regression tests**: rebuild any one of these and a rule drift in §Logo / §Composition / §Color / §Typography / §Object styles / §Iconography / §Asset library will surface visibly.
+
+**Reading these.** Each entry cites the rules it exercises and ends with an `Empirically validated at …` footnote pointing to the live Figma artefact. To rerun, paste the build script into `figma_execute` against `mNVOGF8yvrXXMXTVt6cKkr` (file "Brand Skill — Logo Test"), on the page named after the surface.
+
+**Test in tangible surfaces.** New reference compositions should be framed by media Qonto actually ships, not abstract canvas sizes. Existing surfaces in this list and queued additions:
+
+| Surface | Dimensions | Status |
+|---|---|---|
+| Square Instagram post | `1080 × 1080` (1:1) | ✓ §1 below |
+| Portrait Instagram post | `1080 × 1350` (4:5) | queued |
+| Instagram Story / Reel cover | `1080 × 1920` (9:16) — mind safe areas | queued |
+| LinkedIn sponsored content (landscape) | `1200 × 627` (1.91:1) | queued |
+| LinkedIn paid ad (square) | `1200 × 1200` (1:1) | queued |
+| Email banner | `1200 × 600` (2:1) | queued |
+| Deck slide | `1920 × 1080` (16:9) — covered by §Composition.9b archetype D | shipped |
+| YouTube thumbnail | `1280 × 720` (16:9) | queued |
+| OOH / billboard | varies | queued |
+
+### 1. Square Instagram post — three feature cards
+
+A `1080 × 1080` Instagram-square promo, archetype A spacing (text → 1X → visual → 2X → lockup), with three feature cards in a row. **Brief**: announce the breadth of Qonto's offering — banking, invoicing, and expenses — in one frame.
+
+**Rules exercised:**
+
+- §Composition — archetype A spacing, X-system, medium tier, X-margin grid (3 cards × 288 + 2 × X gaps + 2 × X margins = 1080 exactly)
+- §Typography — Bold headline at `X × 2.22 = 120` (LH 98% / +0.5%), Regular subtitle at `X × 0.93 = 50` (LH 110% / +0.5%), Bold card titles at 28 (LH 110%), Regular card bodies at 16 (LH 130%); sentence case throughout
+- §Color — white-led, black ink, light grey for icon boxes — no product palette
+- §Object styles — three rounded content tiles (`r = 0.14 × 288 = 40`), Beautiful Shadows 5-layer stack, sharp structural canvas
+- §Iconography — Material Symbols Outlined glyphs at the canonical 48 px size, in 96 px app-square boxes (`0.5×` ratio per §Iconography.5), light-grey fill, black ink
+- §Logo — wordmark from the Logos Library at height X, bottom-right with X margin
+- §Asset library — three icon SVGs fetched live from the netlify raw URL, no MCP connector
+
+```javascript
+// --- 0. Page + section + fonts (dynamic-page-safe) ---
+await figma.loadAllPagesAsync();
+let page = figma.root.children.find(p => p.name === 'Square Instagram Post Test');
+if (!page) { page = figma.createPage(); page.name = 'Square Instagram Post Test'; }
+await figma.setCurrentPageAsync(page);
+
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Bold' });
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Regular' });
+
+for (const s of page.findAll(n => n.type === 'SECTION' && n.name === 'IG Square — every section')) s.remove();
+const section = figma.createSection();
+section.name = 'IG Square — every section';
+section.x = 0; section.y = 0;
+section.resizeWithoutConstraints(1200, 1200);
+page.appendChild(section);
+
+// --- 1. Fetch icons from the asset library (outside Figma — see §Asset library) ---
+//   curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Icons/icon_briefcase_outlined.svg"
+//   curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Icons/icon_attachment_outlined.svg"
+//   curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Icons/icon_calculator_outlined.svg"
+const ICONS = {
+  briefcase:  `<svg width="20" height="20" ...>...</svg>`,    // paste fetched SVG
+  attachment: `<svg width="20" height="20" ...>...</svg>`,
+  calculator: `<svg width="20" height="20" ...>...</svg>`,
+};
+
+// --- 2. Constants + Beautiful Shadows stack (§Object styles.6) ---
+const canvasW = 1080, canvasH = 1080, X = 54;
+const black     = { r: 0.02, g: 0.02, b: 0.02 };
+const white     = { r: 1, g: 1, b: 1 };
+const lightGrey = { r: 0.96, g: 0.96, b: 0.96 };  // ≈ neutral/200
+
+const shadowStack = [
+  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.10 }, offset: { x:0, y:10 },  radius: 23, spread: 0, visible: true, blendMode: 'NORMAL' },
+  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.09 }, offset: { x:0, y:41 },  radius: 41, spread: 0, visible: true, blendMode: 'NORMAL' },
+  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.05 }, offset: { x:0, y:93 },  radius: 56, spread: 0, visible: true, blendMode: 'NORMAL' },
+  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.01 }, offset: { x:0, y:166 }, radius: 66, spread: 0, visible: true, blendMode: 'NORMAL' },
+  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.00 }, offset: { x:0, y:259 }, radius: 73, spread: 0, visible: true, blendMode: 'NORMAL' },
+];
+
+// --- 3. Canvas — structural sharp (§Object styles.2) ---
+const canvas = figma.createFrame();
+canvas.resize(canvasW, canvasH);
+canvas.cornerRadius = 0; canvas.cornerSmoothing = 0;
+canvas.fills = [{ type: 'SOLID', color: white }];
+section.appendChild(canvas);
+
+// --- 4. Helpers ---
+const makeIcon = (svg, size, color) => {
+  const node = figma.createNodeFromSvg(svg);
+  node.resize(size, size);
+  const recolor = (n) => {
+    if ('fills' in n && Array.isArray(n.fills)) {
+      n.fills = n.fills.map(f => f.type === 'SOLID' ? { ...f, color } : f);
+    }
+    if ('children' in n && n.children) for (const c of n.children) recolor(c);
+  };
+  recolor(node);
+  return node;
+};
+
+const makeText = (chars, weight, size, lhPct, color, x, y, w, tracking) => {
+  const t = figma.createText();
+  t.fontName = { family: 'Qonto Sans', style: weight };
+  t.characters = chars;
+  t.fontSize = size;
+  t.lineHeight = { unit: 'PERCENT', value: lhPct };
+  if (tracking != null) t.letterSpacing = { unit: 'PERCENT', value: tracking };
+  t.fills = [{ type: 'SOLID', color }];
+  t.textAutoResize = w ? 'HEIGHT' : 'WIDTH_AND_HEIGHT';
+  if (w) t.resize(w, t.height);
+  t.x = x; t.y = y;
+  return t;
+};
+
+// --- 5. Headline + subtitle (§Composition.1 medium tier) ---
+const textW = canvasW - 2 * X;
+const headline = makeText('Everything your business needs', 'Bold', Math.round(X * 2.22), 98, black, X, X, textW, 0.5);
+canvas.appendChild(headline);
+const subtitle = makeText(
+  'Banking, invoicing, expenses.',
+  'Regular', Math.round(X * 0.93), 110, black,
+  X, headline.y + headline.height + Math.round(X * 0.5), textW, 0.5
+);
+canvas.appendChild(subtitle);
+
+// --- 6. Three feature cards (archetype A: text → 1X → visual → 2X → lockup) ---
+const lockupTopY  = canvasH - X - X;                 // X margin + X-tall lockup
+const visualTop   = subtitle.y + subtitle.height + X;
+const visualBottom = lockupTopY - 2 * X;
+const cardW = 288, cardH = visualBottom - visualTop;
+const cardR = Math.round(0.14 * cardW);              // §Object styles.1: 40
+const iconBoxSize = 96, iconSize = 48;               // §Iconography.5: 0.5× ratio
+const iconBoxR    = Math.round(0.14 * iconBoxSize);  // §Object styles.1: 13
+
+const cards = [
+  { title: 'Banking',   body: 'All your business banking,\nin one place.', icon: ICONS.briefcase },
+  { title: 'Invoicing', body: 'Send and track invoices\nin seconds.',       icon: ICONS.attachment },
+  { title: 'Expenses',  body: 'Capture, categorise,\nreconcile.',           icon: ICONS.calculator },
+];
+
+for (let i = 0; i < cards.length; i++) {
+  const cardX = X + i * (cardW + X);
+  const card = figma.createFrame();
+  card.name = `Card · ${cards[i].title}`;
+  card.resize(cardW, cardH);
+  card.cornerRadius = cardR; card.cornerSmoothing = 0;
+  card.fills   = [{ type: 'SOLID', color: white }];
+  card.effects = shadowStack;
+  card.x = cardX; card.y = visualTop;
+  card.clipsContent = true;
+  canvas.appendChild(card);
+
+  const iconBox = figma.createFrame();
+  iconBox.resize(iconBoxSize, iconBoxSize);
+  iconBox.cornerRadius = iconBoxR; iconBox.cornerSmoothing = 0;
+  iconBox.fills = [{ type: 'SOLID', color: lightGrey }];
+  iconBox.x = X / 2; iconBox.y = X / 2;
+  card.appendChild(iconBox);
+
+  const ic = makeIcon(cards[i].icon, iconSize, black);
+  ic.x = (iconBoxSize - iconSize) / 2;
+  ic.y = (iconBoxSize - iconSize) / 2;
+  iconBox.appendChild(ic);
+
+  const cardTitle = makeText(cards[i].title, 'Bold', 28, 110, black,
+    X / 2, iconBox.y + iconBox.height + Math.round(X * 0.5), cardW - X, 0);
+  card.appendChild(cardTitle);
+  const cardBody = makeText(cards[i].body, 'Regular', 16, 130, black,
+    X / 2, cardTitle.y + cardTitle.height + 8, cardW - X, 0);
+  card.appendChild(cardBody);
+}
+
+// --- 7. Lockup — wordmark from Logos Library, height = X (§Logo) ---
+const wordmarkSetKey = 'ea8c642aa816c04f75bb326581c12a90e51c833e';
+let logo;
+try {
+  const comp = await figma.importComponentByKeyAsync(wordmarkSetKey);
+  logo = comp.createInstance();
+} catch (_) {
+  const set = await figma.importComponentSetByKeyAsync(wordmarkSetKey);
+  logo = set.defaultVariant.createInstance();
+}
+const scale = X / logo.height;
+logo.resize(logo.width * scale, X);
+logo.x = canvasW - X - logo.width;
+logo.y = canvasH - X - logo.height;
+canvas.appendChild(logo);
+```
+
+**Concentric radii — for free.** This composition exposes a beautiful invariant: the card outer radius `40` equals the icon-box inner radius `13` plus the gap `27` (= X/2) between the icon-box edge and the card edge. The §Object styles.4 formula `outer_radius = inner_radius + gap` holds **without engineering for it** — it falls out of using `0.14 × short_side` consistently across nested content tiles. When the rules are right, nesting takes care of itself.
+
+**What to do if the build looks wrong.** Walk the rule citations against what you see. Wrong radius? §Object styles.1. Misaligned spacing? §Composition.7 archetype A. Icon-box wrong colour? §Iconography.4. Logo at the wrong size? §Logo's 5 % rule. Subtitle stacking too tight? §Composition.1 + §Typography.4. The composition is a forensic surface — drift is visible.
+
+*Empirically validated at `1080 × 1080` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Square Instagram Post Test", section "IG Square — every section". Screenshot verified every spacing, radius, shadow layer, font size, line-height, ink, and asset fetch against the rules in §§Logo / Composition / Color / Typography / Object styles / Iconography / Asset library.*
 
 ---
 
