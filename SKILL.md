@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.6
+version: 2.7
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.6 · Last updated: 2026-04-27 · Status: living document
+> Version: 2.7 · Last updated: 2026-04-27 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -1307,10 +1307,7 @@ A bounding box is **never required** in marketing — it's a tool for hierarchy 
 
 For non-Figma surfaces (decks, HTML, email, print, Canva), source icons from `Icons/` in the [Asset library](#asset-library) — same fetch flow as every other asset (raw URL pattern, percent-encoded paths, browse the gallery if you don't know the filename).
 
-**Naming convention** (observed in the live library):
-
-- **Material Symbols exports** — `<material-icon-name>-300.svg` (the `-300` reflects the locked weight; if the convention drifts, the brand team owns the change).
-- **In-house overrides** — named by the Qonto action they represent (no `-300` suffix). When you see a stem name with no weight suffix in `Icons/`, that's the in-house version and it wins over the Material match for that action.
+**Naming convention** (observed in the live library): `icon_<name>_<style>.svg` — e.g. `icon_lightbulb_outlined.svg`, `icon_chat_filled.svg`, `icon_arrow_right_outlined.svg`. The brand team wraps both Material exports and in-house overrides into this single scheme, so the filename alone doesn't disclose the source — the brand decides; agents fetch by name. `_outlined` is the default `<style>`; `_filled` is reserved for the SOT-named fill exceptions (§2).
 
 **Don't redraw an icon in CSS, inline SVG, or as a Figma vector** when the canonical asset exists in the library. If the library doesn't have what you need, name the gap to the brand team and stop — don't substitute a near-match.
 
@@ -1330,13 +1327,132 @@ For non-Figma surfaces (decks, HTML, email, print, Canva), source icons from `Ic
 
 Walk top-down. Stop at the first rule that resolves.
 
-1. **Is this a Qonto-key action with a likely in-house override?** (e.g. an action specific to Qonto's product flows or brand voice) → check `Icons/` in [§Asset library](#asset-library) for an asset whose stem name matches the action and has *no* `-300` suffix. If present, use it. Stop.
-2. **Is there a Material Symbols glyph that fits semantically?** → use it via the curated SOT iconset ([node 541:5259](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=541-5259)) inside Figma, or via `Icons/<name>-300.svg` from the asset library outside Figma. Style axes locked: Outlined / Fill `0` / Weight `300` / Grade `0` / Optical size matches render size.
+1. **Look up the icon in `Icons/`** by composing the filename `icon_<action>_outlined.svg` (or `_filled` if the SOT-named fill exception applies). If the file exists, use it — it's already the brand-correct version, whether sourced from Material or produced in-house. Style axes are baked in; no agent-side adjustment.
+2. **Filename doesn't resolve?** Browse the gallery to find the closest semantic match. Material's full library is mirrored into Qonto naming; if no Qonto-named version exists, the action probably isn't covered yet — name the gap (step 7) rather than substituting.
 3. **Pick the render size from the scale** (§3): 16 / 24 / 40 / 48 / 64. Verify against `X` and against the type the icon sits next to.
 4. **Pick the ink** (§4): black on light, white on dark. Match the surrounding type's ink.
 5. **Does the icon need a frame?** → wrap in an app-square per §Object styles.1; box at `2 ×` icon size; fill light grey or transparent; box `cornerRadius = 0.14 × short_side`, `cornerSmoothing = 0`.
 6. **Outside Figma?** → fetch the asset from `Icons/` in the asset library; never hand-roll the SVG.
 7. **Material doesn't fit and there's no in-house override?** → say so, name the gap to the user, and stop. Don't generate a substitute.
+
+### 9. Figma build recipe — sizing scale + bounding box + ink
+
+End-to-end recipe that exercises every rule in §Iconography.1–6 plus the §Object styles.2 sharp-structural convention. Three rows on a `1080 × 1350` canvas: the five-size scale on white, the app-square bounding box at `0.5×` ratio with light-grey fill, and the same scale on a sharp black backing with white ink. Side-effect: the asset-library fetch flow gets exercised too.
+
+```javascript
+// --- 0. Page + section (dynamic-page-safe, see §Object styles.9 gotchas) ---
+await figma.loadAllPagesAsync();
+let page = figma.root.children.find(p => p.name === 'Iconography Test');
+if (!page) { page = figma.createPage(); page.name = 'Iconography Test'; }
+await figma.setCurrentPageAsync(page);
+
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Bold' });
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Regular' });
+
+for (const s of page.findAll(n => n.type === 'SECTION' && n.name === 'Iconography Test')) s.remove();
+const section = figma.createSection();
+section.name = 'Iconography Test';
+section.x = 0; section.y = 0;
+section.resizeWithoutConstraints(1200, 1500);
+page.appendChild(section);
+
+// --- 1. Fetch icon SVG from the asset library ---
+// Outside Figma: do this with curl/WebFetch, not figma_execute.
+//   curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Icons/icon_lightbulb_outlined.svg"
+// Inside the recipe we paste the SVG string verbatim — figma.createNodeFromSvg
+// imports it as a vector group with the brand's #050505 fill baked in.
+const SVG = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" ...>...</svg>`;
+
+// --- 2. Canvas (white, sharp — structural per §Object styles.2) ---
+const canvasW = 1080, canvasH = 1350, X = 54;
+const black = { r: 0.02, g: 0.02, b: 0.02 };
+const white = { r: 1, g: 1, b: 1 };
+const lightGrey = { r: 0.96, g: 0.96, b: 0.96 };           // ≈ neutral/200
+
+const canvas = figma.createFrame();
+canvas.resize(canvasW, canvasH);
+canvas.cornerRadius = 0; canvas.cornerSmoothing = 0;
+canvas.fills = [{ type: 'SOLID', color: white }];
+section.appendChild(canvas);
+
+// --- 3. Helpers ---
+// Recolor every SOLID fill in the imported SVG tree — the export ships with
+// #050505 baked in; for white-on-dark we walk the children and swap the colour.
+const makeIcon = (size, color) => {
+  const node = figma.createNodeFromSvg(SVG);
+  node.resize(size, size);
+  const recolor = (n) => {
+    if ('fills' in n && Array.isArray(n.fills)) {
+      n.fills = n.fills.map(f => f.type === 'SOLID' ? { ...f, color } : f);
+    }
+    if ('children' in n && n.children) for (const c of n.children) recolor(c);
+  };
+  recolor(node);
+  return node;
+};
+
+// --- 4. Row 1: Sizing scale (no box, black on white) ---
+const sizes = [16, 24, 40, 48, 64];                          // §Iconography.3
+const r1Top = 200;
+const r1Baseline = r1Top + 40 + 64;                          // bottom-align row at the largest icon
+const gap = 64;
+const totalW = sizes.reduce((s, sz) => s + sz, 0) + gap * (sizes.length - 1);
+let x = X + Math.round((canvasW - 2 * X - totalW) / 2);
+for (const sz of sizes) {
+  const ic = makeIcon(sz, black);
+  ic.x = x; ic.y = r1Baseline - sz;
+  canvas.appendChild(ic);
+  x += sz + gap;
+}
+
+// --- 5. Row 2: App-square bounding box · 0.5× ratio · light-grey fill ---
+// Box geometry follows §Object styles.1: cornerRadius = 0.14 × short_side, cornerSmoothing = 0.
+const boxIconSizes = [16, 24, 40];                           // boxes will be 32, 48, 80
+const r2Baseline = 400;
+const r2TotalW = boxIconSizes.reduce((s, sz) => s + sz * 2, 0) + gap * (boxIconSizes.length - 1);
+let r2X = X + Math.round((canvasW - 2 * X - r2TotalW) / 2);
+for (const iconSz of boxIconSizes) {
+  const boxSz = iconSz * 2;                                  // §Iconography.5: 0.5× ratio
+  const box = figma.createFrame();
+  box.resize(boxSz, boxSz);
+  box.cornerRadius = Math.round(0.14 * boxSz);               // §Object styles.1 app-square
+  box.cornerSmoothing = 0;                                   // §Object styles.5
+  box.fills = [{ type: 'SOLID', color: lightGrey }];
+  box.x = r2X;
+  box.y = r2Baseline + (80 - boxSz);                         // bottom-align all boxes
+  canvas.appendChild(box);
+  const ic = makeIcon(iconSz, black);
+  ic.x = (boxSz - iconSz) / 2;
+  ic.y = (boxSz - iconSz) / 2;
+  box.appendChild(ic);
+  r2X += boxSz + gap;
+}
+
+// --- 6. Row 3: Black surface · white ink (no box) ---
+// Backing rectangle is structural — sharp per §Object styles.2.
+const r3BackingY = 580;
+const r3Backing = figma.createRectangle();
+r3Backing.resize(canvasW - 2 * X, 200);
+r3Backing.cornerRadius = 0; r3Backing.cornerSmoothing = 0;   // structural
+r3Backing.fills = [{ type: 'SOLID', color: black }];
+r3Backing.x = X; r3Backing.y = r3BackingY;
+canvas.appendChild(r3Backing);
+
+const r3Baseline = r3BackingY + 40 + 64;
+let r3X = X + Math.round((canvasW - 2 * X - totalW) / 2);
+for (const sz of sizes) {
+  const ic = makeIcon(sz, white);                            // §Iconography.4 white on dark
+  ic.x = r3X; ic.y = r3Baseline - sz;
+  canvas.appendChild(ic);
+  r3X += sz + gap;
+}
+```
+
+**Rule coverage.** Library fetch (§1, §6) via the asset-library raw URL; sizing scale (§3) — all five stops rendered; bounding box (§5) — three boxes at the 0.5× ratio with `0.14 × short_side` radius; ink (§4) — black on white and white on black, never grey; structural sharp on the black backing (§Object styles.2). The recipe also indirectly tests the asset-library fetch flow (§Asset library) — the icon is pulled from the live library and dropped into Figma without a Drive MCP.
+
+**SVG recolour caveat.** The brand's SVG exports ship with `#050505` baked in. `figma.createNodeFromSvg` imports the file as a vector group whose inner paths carry that fill. To render in white (or any other licensed colour — only `#050505` and `#FFFFFF` per §4), walk the imported group and swap the SOLID fill on every descendant. Don't rely on the parent group's `fills` alone — the colour lives on the leaf vectors.
+
+*Empirically validated at `1080 × 1350` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Iconography Test", section "Iconography Test — Sizing + Box + Ink". Screenshot verified the five-size scale, the three boxes' radii (`r = 4 / 7 / 11` for `32 / 48 / 80` boxes), `cornerSmoothing = 0` everywhere, and ink switching cleanly between black on white and white on black.*
 
 ---
 
@@ -1426,7 +1542,7 @@ End-to-end recipe, tested against the live library. Works with any tool that can
 Observed in the live library (sample):
 
 - **`Logo/`** — `qonto-<configuration>-<colour>.svg` / `.png` (wordmark, full lockup, badge, square, symbol).
-- **`Icons/`** — Material Symbols exports follow `<material-icon-name>-<weight>.svg` (weight `300`, see §Iconography). In-house override icons are named by their action (`<qonto-action>.svg`), distinguishable by absence of a Material weight suffix.
+- **`Icons/`** — `icon_<name>_<style>.svg` for every glyph (Material exports + in-house overrides share the scheme). `<style>` is `outlined` by default, `filled` for the SOT-named fill exceptions. See §Iconography for the rules.
 - **`Photography/`** — `{Subject} {Scene/Theme} {Mood}.png` — e.g. `Thomas Tech Office Action.png` (carried forward from the Drive era).
 - **`Card Assets/`** — `<feature>-<colour>-<modifier>.png` — e.g. `plus-purple-embossed-front.png`, `virtual-blueberry.png`, `x-graphiteblack-print-back.png`.
 
