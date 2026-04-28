@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.8
+version: 2.10
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.8 · Last updated: 2026-04-27 · Status: living document
+> Version: 2.10 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -933,8 +933,7 @@ Qonto operates across France, Germany, Italy, Spain, and the Netherlands today, 
 
 **This exception is for script coverage only.** It does not licence SF Pro / Inter / Helvetica as a Latin substitute when Qonto Sans is simply unavailable — that case stays governed by §Typography.9 (`Qonto Sans → Manrope → Arial`). The two rules compose: script-coverage fallback applies to the non-Latin **run** inside a piece of copy; the surrounding Latin text still follows the Qonto Sans / Manrope / Arial stack.
 
-<!-- Expansion territories (to be nailed next, same approach as logo + composition + color + typography + object-styles + iconography: pull from SOT, write concrete specs, test against Figma library components):
-     - Tone of voice
+<!-- Expansion territories (to be nailed next, same approach as logo + composition + color + typography + object-styles + iconography + tone-of-voice: pull from SOT, write concrete specs, test against Figma library components):
      - UI snapshots (product in marketing)
      - Motion
 -->
@@ -1456,6 +1455,119 @@ for (const sz of sizes) {
 
 ---
 
+## Tone of voice
+
+Reference: SOT "Tone of voice" ([node 2:18027](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=2-18027)).
+
+> *"Our Tone of Voice defines how we speak to the world. It builds on our brand strategy to reflect our unique personality."* — SOT
+
+Tone of voice is how Qonto sounds in writing — the words, the rhythm, the shape of sentences. Four principles govern every line of copy, marketing or otherwise. They map onto §Brand identity's personality traits but refine them for written language: identity is who we are; tone is how we speak. When the two disagree on a line of copy, the principles below win for word choice; identity stays in charge of strategy.
+
+**Scope.** This section governs **all customer-facing copy** — headlines, subtitles, bodies, CTAs, captions, ad copy, emails, OOH, voice-overs. Internal-comms tone is broadly aligned but not strictly bound by this file.
+
+### 1. The four principles at a glance
+
+| Principle | One-liner | Mirrors in §Brand identity |
+|---|---|---|
+| **To the point** | We know our customers are busy, so we deliver our message in the most efficient way possible. | "To the point" |
+| **Playful but polished** | We prove our added value through playful, innovative, and crystal-clear language. | "Playful and spirited" |
+| **In tune** | We meet each audience on their own wavelength, in terms that resonate with them personally. | "Always attentive" |
+| **At your service** | We enable success from the sidelines, keeping our customers centre stage. | "At ease" |
+
+Every piece of copy should pass all four. They aren't a pick-one menu — they compose. A LinkedIn ad and an Instagram Story sound different (per "In tune"), but both are still to-the-point, playful-but-polished, and at-your-service.
+
+### 2. To the point
+
+> *"We know our customers are time-poor, so we get straight to the point. No fluff, no BS."* — SOT
+
+Concision is **efficiency, not brevity**. Don't use 30 words if 15 better words do the job; equally, don't crush a thought into 5 words just to be short. The test is whether the reader gets what they need to act. Mirrors the product's *delightfully efficient* behaviour: every line is a function call, not decoration.
+
+| ✅ Aim for | ❌ Avoid |
+|---|---|
+| Direct | Cold |
+| Concise | Dismissive |
+| Purposeful | Simplistic |
+
+### 3. Playful but polished
+
+> *"We delight our customers and bring a smile to their faces with copy that's playful and sharp, warm and approachable."* — SOT
+
+Wit and charm come naturally — but **clever wordplay never gets in the way of clarity**. Polished ≠ intellectual; we impress by making the message shine, not by setting a record Scrabble score. Reliability shows in consistency and faultless attention to detail; the playful twist comes when it adds, not when it's owed.
+
+| ✅ Aim for | ❌ Avoid |
+|---|---|
+| Quick-witted | Pretentious |
+| Confident | Sloppy |
+| Friendly yet professional | Bland and unimaginative |
+
+### 4. In tune
+
+> *"Every customer is different, so we tailor our language to each of our audiences. We don't do 'one-size-fits-all' copy."* — SOT
+
+Anna on TikTok, John on LinkedIn, Richard via email — same brand, different registers. Audience-tune by **vocabulary, sentence length, and reference points**, never by abandoning the other three principles. Internally too: language stays inclusive of every Qontoer.
+
+| ✅ Aim for | ❌ Avoid |
+|---|---|
+| Astute | Presumptuous |
+| Inclusive | Generic |
+| Relatable | Obscure |
+
+### 5. At your service
+
+> *"We genuinely love to help businesses get things done and succeed. So, in our copy, the customer is the star of the show."* — SOT
+
+We **enable**, we don't **lead**. The customer is the protagonist; Qonto sits in the wings. Avoid hyperbole and self-aggrandising — we don't say "best," "incredible," "revolutionary," "world-class" without specific evidence backing them. Frame outcomes as opportunities and possibilities for the reader, not credit for us.
+
+**Pronoun discipline.**
+- **`you`** = the customer / reader, always.
+- **`we`** = collective — Qonto and the audience, together. *Never* "we = Qonto alone, look how great we are."
+
+| ✅ Aim for | ❌ Avoid |
+|---|---|
+| Supportive | Boastful |
+| Understated | Pushy |
+| Proactive | Overfamiliar |
+
+### 6. Practical writing rules
+
+Surface-agnostic rules every Qonto line should follow:
+
+- **Pronouns.** `you` = customer (always). `we` = us + customer (collective). Don't use `we` to mean Qonto-only in self-promoting contexts (§5).
+- **Length.** Efficient, not minimal. Trim until trimming would lose meaning. The 45–75 ch line-length rule from §Typography.7 sets the physical bound; the ToV equivalent is *every word earns its place*.
+- **Sentence case.** No ALL CAPS for emphasis (§Typography.5). No decorative capitalisation of common nouns. Brand and product names retain their canonical casing (`Qonto`, `Material Symbols`, `Beautiful Shadows`).
+- **No jargon.** No "leverage," "synergise," "frictionless paradigm shift." Plain language over branded vocabulary, every time. The agent test: would the reader's friend-from-a-different-job understand the line? If no, rewrite.
+- **No hyperbole without evidence.** Don't claim "best," "fastest," "most-loved" without a citation in the same surface. Concrete numbers and outcomes beat adjectives — *"500,000+ businesses across 5 markets"* over *"trusted by countless customers."*
+- **Positivity framing.** Where possible, present problems as opportunities and outcomes as possibilities. *"Reduce admin time by 80 %"* lands warmer than *"Stop wasting time on admin."*
+- **Audience tuning.** Pick vocabulary, register, and reference points to match the surface (TikTok ≠ LinkedIn ≠ email; agency client ≠ freelancer ≠ Qontoer). The other three principles still hold underneath.
+- **Inclusivity.** Use language that includes every Qontoer and every audience member — gender, neurotype, geography, ability. Avoid metaphors that don't translate across the FR / DE / IT / ES / NL audience floor (sports references, US-pop-culture in-jokes, gendered defaults).
+- **Brand-name discipline.** Always title-case `Qonto`. Never `qonto`, never `QONTO`, never stylised variants. Sub-brands (Qonto Facturation, Qonto Création) follow their canonical case.
+
+### 7. Anti-patterns
+
+- **No fluff or filler.** "In order to" → "to"; "due to the fact that" → "because"; "at this moment in time" → "now." Every word earns its place.
+- **No hyperbole or self-promotion without evidence.** "Best," "incredible," "world-class," "revolutionary" don't ship in marketing copy unless the same surface backs them with a citation.
+- **No `we` as Qonto-alone in self-aggrandising context.** *"We've built the best banking app"* ❌ → *"Banking that just works"* ✅ or *"Built for fast-moving businesses"* ✅.
+- **No one-size-fits-all copy.** Same line on a LinkedIn ad and a TikTok caption is a sign neither is right. Pick the surface, write for it.
+- **No clever wordplay that obscures meaning.** Playful is great; cryptic is not. If the reader has to re-read, the wordplay lost.
+- **No ALL CAPS for emphasis, no decorative tracking, no italics for shouting** (§Typography.10).
+- **No jargon or internal-speak.** Terms only the team knows (`pipeline`, `runway`, `ARR` outside finance audiences) shouldn't appear in customer-facing copy unless we know the reader speaks them.
+- **No exclusionary metaphors.** Test against the FR / DE / IT / ES / NL audience floor.
+- **No `qonto`, `QONTO`, or stylised brand-name variants** — always `Qonto`. (Crosses with §Logo's wordmark rule, but applies to typed copy too.)
+
+### 8. For AI agents — copy decision ladder
+
+Walk this top-down for any line of customer-facing copy.
+
+1. **Does the line read clearly in ≤ 12 seconds?** No → trim until it does. Test "to the point."
+2. **Can the line carry warmth or wit without losing clarity?** Yes → add it. No (regulatory copy, error states) → leave plain. Test "playful but polished."
+3. **Does the register match the surface?** Check against the audience for that surface — IG Story (fast, casual, emotive) vs LinkedIn (calm, evidenced, professional) vs email (warm, reasoned). Adjust vocabulary, never the principles. Test "in tune."
+4. **Who's the protagonist?** The customer should be `you`. `we` should be collective. If the line reads as Qonto bragging, rewrite. Test "at your service."
+5. **Run the practical rules** (§6): no jargon, no hyperbole-without-evidence, sentence case, inclusive metaphors, brand-name discipline.
+6. **Cross-check against §Brand identity** if the line carries strategic weight — voice and identity should agree. If they don't, ask the brand team; don't paper over.
+7. **In doubt about tone for a specific audience?** Don't ship — flag, propose two variants, and let a human pick.
+
+---
+
 ## Reference compositions
 
 Worked examples that exercise multiple sections at once, to prove the rules compose. Each is a **real Qonto surface** — a square Instagram post, an Instagram Story, a LinkedIn paid ad — built end-to-end from rules already in this file. They double as **regression tests**: rebuild any one of these and a rule drift in §Logo / §Composition / §Color / §Typography / §Object styles / §Iconography / §Asset library will surface visibly.
@@ -1467,9 +1579,9 @@ Worked examples that exercise multiple sections at once, to prove the rules comp
 | Surface | Dimensions | Status |
 |---|---|---|
 | Square Instagram post | `1080 × 1080` (1:1) | ✓ §1 below |
+| Instagram Story / Reel cover | `1080 × 1920` (9:16) — mind safe areas | ✓ §2 below |
+| LinkedIn sponsored content (landscape) | `1200 × 627` (1.91:1) | ✓ §3 below |
 | Portrait Instagram post | `1080 × 1350` (4:5) | queued |
-| Instagram Story / Reel cover | `1080 × 1920` (9:16) — mind safe areas | queued |
-| LinkedIn sponsored content (landscape) | `1200 × 627` (1.91:1) | queued |
 | LinkedIn paid ad (square) | `1200 × 1200` (1:1) | queued |
 | Email banner | `1200 × 600` (2:1) | queued |
 | Deck slide | `1920 × 1080` (16:9) — covered by §Composition.9b archetype D | shipped |
@@ -1646,6 +1758,194 @@ canvas.appendChild(logo);
 **What to do if the build looks wrong.** Walk the rule citations against what you see. Wrong radius? §Object styles.1. Misaligned spacing? §Composition.7 archetype A. Icon-box wrong colour? §Iconography.4. Logo at the wrong size? §Logo's 5 % rule. Subtitle stacking too tight? §Composition.1 + §Typography.4. The composition is a forensic surface — drift is visible.
 
 *Empirically validated at `1080 × 1080` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Square Instagram Post Test", section "IG Square — every section". Screenshot verified every spacing, radius, shadow layer, font size, line-height, ink, and asset fetch against the rules in §§Logo / Composition / Color / Typography / Object styles / Iconography / Asset library.*
+
+### 2. Instagram Story — copy-led, ToV-driven
+
+A `1080 × 1920` 9:16 Story, copy-led, **demonstrating §Tone of voice** in the casual-but-warm IG register. **Brief**: communicate Qonto's value proposition in one screen-time of scroll-stopping copy.
+
+**Rules exercised:**
+
+- §Tone of voice — *"To the point"* (parallel-structure 4-word headline), *"Playful but polished"* (the "boring bits" wink without losing clarity), *"At your service"* ("so **you** can do the work that matters" — customer is the protagonist), and "In tune" (the register is fast, casual, emotive — fits IG, doesn't sound like LinkedIn). Demonstrates that ToV scales register without losing brand voice — see §3 below for the same brand at a different audience pitch.
+- §Composition — large tier (X × 2.76 = 149 px headline, X × 1.37 = 74 px subtitle) for big-format presence, X-margin grid, lockup at the bottom of useful canvas with X clearance to safe area.
+- §Typography — Bold headline LH 98 / +0.5%, Regular subtitle LH 110 / +0.5%, sentence case throughout, black ink only.
+- §Color — white surface, black ink, no product palette.
+- §Logo — wordmark at height X (5% rule), bottom-right with X margin **above the bottom safe area** (Instagram's UI overlays would otherwise occlude it).
+- §Asset library — wordmark SVG fetched live from `Logo/qonto-wordmark-black.svg` and imported via `figma.createNodeFromSvg`.
+
+**Story safe areas.** Instagram overlays the top ~250 px (status bar, profile chrome) and the bottom ~350 px (caption, reaction tray, share). Treat those as **no-go zones** — the lockup, headline, and any critical copy must sit inside `[250, 1570]` vertically. The build below renders faint guides in those zones for visual sanity-check.
+
+```javascript
+// --- 0. Page + section + fonts ---
+await figma.loadAllPagesAsync();
+let page = figma.root.children.find(p => p.name === 'Instagram Story Test');
+if (!page) { page = figma.createPage(); page.name = 'Instagram Story Test'; }
+await figma.setCurrentPageAsync(page);
+
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Bold' });
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Regular' });
+
+for (const s of page.findAll(n => n.type === 'SECTION' && n.name === 'IG Story — ToV showcase')) s.remove();
+const section = figma.createSection();
+section.name = 'IG Story — ToV showcase';
+section.x = 0; section.y = 0;
+section.resizeWithoutConstraints(1200, 2080);
+page.appendChild(section);
+
+// --- 1. Constants ---
+const canvasW = 1080, canvasH = 1920, X = 54;       // 5% of min dim
+const topSafe = 250, bottomSafe = 350;              // Instagram UI overlays
+const black = { r: 0.02, g: 0.02, b: 0.02 };
+const white = { r: 1, g: 1, b: 1 };
+const lightGrey = { r: 0.96, g: 0.96, b: 0.96 };
+
+// --- 2. Canvas (white, structural sharp) ---
+const canvas = figma.createFrame();
+canvas.resize(canvasW, canvasH);
+canvas.cornerRadius = 0; canvas.cornerSmoothing = 0;
+canvas.fills = [{ type: 'SOLID', color: white }];
+section.appendChild(canvas);
+
+// --- 3. Faint safe-area guides (visual sanity, not part of the final composition) ---
+const topGuide = figma.createRectangle();
+topGuide.resize(canvasW, topSafe);
+topGuide.fills = [{ type: 'SOLID', color: lightGrey, opacity: 0.5 }];
+canvas.appendChild(topGuide);
+const bottomGuide = figma.createRectangle();
+bottomGuide.resize(canvasW, bottomSafe);
+bottomGuide.y = canvasH - bottomSafe;
+bottomGuide.fills = [{ type: 'SOLID', color: lightGrey, opacity: 0.5 }];
+canvas.appendChild(bottomGuide);
+
+// --- 4. Helper ---
+const makeText = (chars, weight, size, lhPct, color, x, y, w, tracking) => {
+  const t = figma.createText();
+  t.fontName = { family: 'Qonto Sans', style: weight };
+  t.characters = chars; t.fontSize = size;
+  t.lineHeight = { unit: 'PERCENT', value: lhPct };
+  if (tracking != null) t.letterSpacing = { unit: 'PERCENT', value: tracking };
+  t.fills = [{ type: 'SOLID', color }];
+  t.textAutoResize = w ? 'HEIGHT' : 'WIDTH_AND_HEIGHT';
+  if (w) t.resize(w, t.height);
+  t.x = x; t.y = y;
+  return t;
+};
+
+// --- 5. Headline + subtitle (large tier per §Composition.1; copy per §Tone of voice) ---
+// "Less admin. More business." — parallel structure, sentence case, no hyperbole, you-implicit.
+const textW = canvasW - 2 * X;
+const headline = makeText('Less admin.\nMore business.',
+  'Bold', Math.round(X * 2.76), 98, black, X, topSafe + X, textW, 0.5);
+canvas.appendChild(headline);
+
+// Subtitle — "you" focus + playful wink ("the boring bits") without sacrificing clarity.
+const subtitle = makeText(
+  'Banking that handles invoicing, expenses, and the boring bits — so you can do the work that matters.',
+  'Regular', Math.round(X * 1.37), 110, black,
+  X, headline.y + headline.height + Math.round(X * 0.5), textW, 0.5
+);
+canvas.appendChild(subtitle);
+
+// --- 6. Lockup — wordmark fetched from the asset library ---
+//   curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Logo/qonto-wordmark-black.svg"
+const WORDMARK_SVG = `<svg width="82" height="24" ...>...</svg>`;  // paste fetched bytes
+const wordmark = figma.createNodeFromSvg(WORDMARK_SVG);
+const wScale = X / 24;                              // wordmark viewBox is 82 × 24 → height X
+wordmark.resize(82 * wScale, X);
+wordmark.x = canvasW - X - wordmark.width;          // bottom-right with X margin
+wordmark.y = canvasH - bottomSafe - X - wordmark.height;  // X clearance above bottom safe area
+canvas.appendChild(wordmark);
+```
+
+**Bridge timeout caveat.** During this build's run, `importComponentByKeyAsync` and `importComponentSetByKeyAsync` against the Logos Library both timed out at 25 s. Falling back to the asset-library SVG worked first try — and is in fact the more agent-friendly path because it doesn't require the Figma library to be subscribed to the target file. **Recommend the asset-library SVG fetch as the default lockup-import flow**; the library-component path stays as the canonical alternative when you specifically need the component (instances, swap-ability, future variant updates).
+
+*Empirically validated at `1080 × 1920` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Instagram Story Test", section "IG Story — ToV showcase". Screenshot verified the parallel-structure headline at large tier, "you"-focused subtitle, lockup `185 × 54` at `(842, 1462)` — sitting `X = 54` above the bottom safe-area boundary at `y = 1570`.*
+
+### 3. LinkedIn paid ad (sponsored content, landscape) — ToV in formal register
+
+A `1200 × 627` (LinkedIn sponsored-content default), **same brand** as §2 above but with the audience pitched up to professional B2B. **Demonstrates §Tone of voice "In tune"**: same four governing principles, very different vocabulary and rhythm. Read §2 and §3 side-by-side to see the principle land.
+
+**Rules exercised:**
+
+- §Tone of voice — *"In tune"* register adaptation: descriptive single-sentence headline ("Banking purpose-built for European SMEs.") instead of IG's parallel imperative. Vocabulary leans formal (`purpose-built`, `SMEs`, `trust`) rather than casual (`admin`, `boring bits`). *"At your service"* via concrete evidence: 500,000 + businesses, five named markets — no "best", "world-class", or hyperbole. *"To the point"* and *"Playful but polished"* still hold underneath.
+- §Composition — small canvas forces medium-tier headline (X × 2.22 = 69 px); subtitle width capped at 70% of textW so the sentence breaks at meaning, not arbitrarily.
+- §Typography — Bold headline LH 98, Regular subtitle LH 110, both with +0.5% tracking; sentence case.
+- §Color — white surface, black ink.
+- §Logo — wordmark at height X (= 31 on this small canvas, `0.05 × 627`), bottom-right.
+- §Asset library — same wordmark SVG as §2 above (the SVG scales — refetching is unnecessary if it's already cached in the session).
+
+```javascript
+// --- 0. Page + section + fonts (same pattern as §2) ---
+await figma.loadAllPagesAsync();
+let page = figma.root.children.find(p => p.name === 'LinkedIn Paid Ad Test');
+if (!page) { page = figma.createPage(); page.name = 'LinkedIn Paid Ad Test'; }
+await figma.setCurrentPageAsync(page);
+
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Bold' });
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Regular' });
+
+for (const s of page.findAll(n => n.type === 'SECTION' && n.name === 'LinkedIn ad — ToV in formal register')) s.remove();
+const section = figma.createSection();
+section.name = 'LinkedIn ad — ToV in formal register';
+section.x = 0; section.y = 0;
+section.resizeWithoutConstraints(1320, 800);
+page.appendChild(section);
+
+// --- 1. Constants ---
+// X = 0.05 × min(1200, 627) = 31. Smaller than the IG canvases — every dimension scales down.
+const canvasW = 1200, canvasH = 627;
+const X = Math.round(Math.min(canvasW, canvasH) * 0.05);   // 31
+const black = { r: 0.02, g: 0.02, b: 0.02 };
+const white = { r: 1, g: 1, b: 1 };
+
+// --- 2. Canvas (structural sharp) ---
+const canvas = figma.createFrame();
+canvas.resize(canvasW, canvasH);
+canvas.cornerRadius = 0; canvas.cornerSmoothing = 0;
+canvas.fills = [{ type: 'SOLID', color: white }];
+section.appendChild(canvas);
+
+// --- 3. Helper (same as §2) ---
+const makeText = (chars, weight, size, lhPct, color, x, y, w, tracking) => {
+  const t = figma.createText();
+  t.fontName = { family: 'Qonto Sans', style: weight };
+  t.characters = chars; t.fontSize = size;
+  t.lineHeight = { unit: 'PERCENT', value: lhPct };
+  if (tracking != null) t.letterSpacing = { unit: 'PERCENT', value: tracking };
+  t.fills = [{ type: 'SOLID', color }];
+  t.textAutoResize = w ? 'HEIGHT' : 'WIDTH_AND_HEIGHT';
+  if (w) t.resize(w, t.height);
+  t.x = x; t.y = y;
+  return t;
+};
+
+// --- 4. Headline + subtitle (medium tier per §Composition.1; ToV formal register) ---
+const textW = canvasW - 2 * X;
+const headline = makeText('Banking purpose-built for European SMEs.',
+  'Bold', Math.round(X * 2.22), 98, black, X, X, textW, 0.5);
+canvas.appendChild(headline);
+
+// Subtitle width capped at 70% of textW so the line breaks at sense, not at the canvas edge.
+// Concrete numbers and named markets — §Tone of voice "no hyperbole without evidence".
+const subtitle = makeText(
+  '500,000+ businesses across France, Germany, Italy, Spain, and the Netherlands trust Qonto for banking, invoicing, and finance management.',
+  'Regular', Math.round(X * 0.93), 110, black,
+  X, headline.y + headline.height + Math.round(X * 0.5), Math.round(textW * 0.7), 0.5
+);
+canvas.appendChild(subtitle);
+
+// --- 5. Lockup — same WORDMARK_SVG as §2; the SVG scales cleanly to the smaller X ---
+const WORDMARK_SVG = `<svg width="82" height="24" ...>...</svg>`;
+const wordmark = figma.createNodeFromSvg(WORDMARK_SVG);
+const wScale = X / 24;
+wordmark.resize(82 * wScale, X);                     // ~106 × 31 here (vs 185 × 54 on the IG canvases)
+wordmark.x = canvasW - X - wordmark.width;
+wordmark.y = canvasH - X - wordmark.height;
+canvas.appendChild(wordmark);
+```
+
+**Side-by-side reading.** Open §2 and §3 next to each other. Same brand, same colours, same Qonto Sans, same lockup logic — but the **register and rhythm are visibly different**, because §Tone of voice "In tune" adapted vocabulary and structure to the audience. That's the principle proving itself in production.
+
+*Empirically validated at `1200 × 627` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "LinkedIn Paid Ad Test", section "LinkedIn ad — ToV in formal register". Screenshot verified medium-tier headline at `69 px`, subtitle at `29 px` capped at 70% width, lockup `106 × 31` at `(1063, 565)` — bottom-right with X margin all sides.*
 
 ---
 
