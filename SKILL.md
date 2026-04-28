@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.16
+version: 2.17
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.16 · Last updated: 2026-04-28 · Status: living document
+> Version: 2.17 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -1208,12 +1208,24 @@ When you've decided an object is content (per §Object styles.2) and needs a rad
 
 | Object role | Shape | Notes |
 |---|---|---|
-| Product cover, small image float, icon bounding box, editorial tile | **App-square** | Use the `0.14 × short_side` ratio; round to integer |
+| Product cover, small image float, icon bounding box, editorial tile | **App-square** | Use the X-bracketed scale below |
 | Avatar, circular badge, dot marker | **Circle** | Radius ≥ half the short side; Figma clamps |
 | Chip, tag, metric bar, pill button, CTA | **Pill** | Radius ≥ half the short axis; stadium shape |
 | Backing card, scrim, band, hero image | **Square** | Structural — sharp, per §Object styles.2 |
 
-**Uniform stack vs scaled stack.** When multiple tiles sit together at the same visual scale (a grid of product covers, a row of thumbnails), all tiles use the **same radius** — not the `0.14×` of each individual tile's short side, but a single radius picked from the largest tile and applied across. This keeps the set reading as one family. When tiles sit at different scales (a hero tile + a couple of thumbnails), let each tile compute its own `0.14×` radius — different sizes, same ratio, optically consistent.
+**The X-bracketed scale for app-square tiles.** At composition scale the radius is a **discrete multiple of X** (the canvas-derived step from §Composition.2 / §Logo.4), not a continuous function of the tile's own pixel width. Pick from three brackets by role:
+
+| Bracket | Radius | Use |
+|---|---|---|
+| **Small** | `X / 4` | Nested accents — icon bounding boxes inside cards, badges, small floating tiles within an editorial cluster |
+| **Default** | `X / 2` | Default content tile in marketing — product cards, image floats, two-up / three-up grid cells |
+| **Large** | `X` | Hero-scale rounded tile that dominates the composition — rare; reserved for content that fills > 70 % of canvas |
+
+The brackets work like eBay's bracketed scale: discrete steps stop the radius drifting with each tile's exact pixel width, and tie corner geometry to the X system that already governs type, gutters, and lockup. **Two tiles with the same role share the same bracket.**
+
+**Why bracketed-X rather than `0.14 × short_side`.** The `0.14×` ratio (SOT atomic origin, §Object styles.1) describes the canonical 294-tile and tracks well at small sizes — at a `135` short-side it returns `19`, indistinguishable from `X / 4` on a typical canvas. Applied verbatim to a 459 px card on a 1080 canvas, however, it returns `64` — visually too aggressive, and decoupled from the X system. The two scales agree up to about `3.5 X` (where `0.14 × 3.5 X ≈ X / 2`) and diverge as tiles grow. Use `0.14×` only as a *visual sanity check* on isolated tiles outside an X-governed canvas (e.g., a standalone product render on a transparent surface). Inside marketing comps, the bracketed X scale wins.
+
+**Uniform stack vs scaled stack.** When multiple tiles share a role (a row of feature cards, a grid of product covers), all tiles use the **same bracket** — uniform radius across the set, regardless of small width differences. When tiles play different roles in the same composition (a hero tile + accent thumbnails nested inside it), let each tile pick its own bracket: hero at `X / 2`, accents at `X / 4` — and the concentric rule of §4 will resolve them cleanly.
 
 ### 4. Nesting — concentric radii
 
@@ -1228,6 +1240,16 @@ outer_radius = inner_radius + gap_between_frames
 ```
 
 **Worked example** (from the SOT diagram): inner element `16 px` radius, gap `40 px` between inner and middle frame → middle frame `16 + 40 = 56 px` — the SOT shows this labelled as `16 + 40 px`. Add another frame with a `16 px` gap to the middle → outer `56 + 16 = 72 px`. Triple-nested, optically parallel corners at every level.
+
+**Worked example — icon bounding box inside a content card** (the canonical marketing case). On an IG-square canvas at `X = 54`:
+
+- The card is a default content tile per §Object styles.3 → `card_r = X / 2 = 27`
+- The icon-box is a nested accent → small bracket → `iconBox_r = X / 4 ≈ 13`
+- The gap (icon-box inset from card edge) follows from the concentric formula: `gap = card_r − iconBox_r = X / 2 − X / 4 = X / 4 ≈ 14`
+
+So padding the icon-box at `X / 4` from the card edge resolves both the X-bracketed radii **and** the concentric rule simultaneously — the card and icon-box read as a single nested system, with corners optically parallel. Without this derivation the radii drift apart visually (e.g., `card_r = 64` from `0.14 × short_side` on a `459` card with `iconBox_r = 20` from `0.14 × 144` on a `144` icon box and an arbitrary `27` inset gives `card_r − inset = 37 ≠ 20` — corners aren't concentric).
+
+**The shortcut for nested marketing tiles.** When a content tile contains a smaller content tile (icon-box-in-card, badge-in-card, thumbnail-in-feature-card), default to: **outer at `X / 2`, gap at `X / 4`, inner at `X / 4`**. All three values are X-bracketed and the concentric formula holds. Other content inside the same card (text, body copy) keeps its own padding from §Composition.2 — the concentric rule governs the *nested rounded tile only*, not every inner element.
 
 **Does not apply when the outer is structural.** If the outer frame is a backing card / scrim / section band (sharp, `cornerRadius = 0` per §Object styles.2), the rule stops — the sharp outer doesn't need to match the rounded inner. The rule governs *rounded inside rounded*, not *rounded inside sharp*. A sharp backing card can perfectly hold a rounded content tile.
 
@@ -1821,7 +1843,7 @@ A `1080 × 1080` Instagram-square promo, archetype A spacing (text → 1X → vi
 - §Composition — archetype A spacing, X-system, medium tier headline. **Two cards per row** per §Composition.3 mobile rule (each card ≈ 459 px wide instead of the cramped 288 px three-card layout). X-margin grid.
 - §Typography — Bold headline at `X × 2.22 = 120` (LH 98% / +0.5%), Regular subtitle at `X × 0.93 = 50` (LH 110% / +0.5%), card titles at `max(22, X × 0.65) = 35` (LH 110%), bodies at `max(16, X × 0.45) = 24` (LH 130%). Sentence case throughout.
 - §Color — white-led, black ink, light grey for the icon box — no product palette.
-- §Object styles — two rounded content tiles (`r = 0.14 × 459 = 64`), Beautiful Shadows 5-layer stack, sharp structural canvas. Card 2's icon box at `r = 0.14 × 144 = 20`. Concentric `outer = inner + gap` holds with the larger card width too.
+- §Object styles — two rounded content tiles at the **default X-bracketed radius (`X / 2 = 27`)** per §Object styles.3, Beautiful Shadows 5-layer stack, sharp structural canvas. Card 2's icon box at the **small bracket (`X / 4 = 13`)** with a matching `X / 4 = 14` inset — the concentric `outer = inner + gap` formula resolves both radii and the gap simultaneously per §Object styles.4. Two cards in the same role share the same bracket (uniform stack rule).
 - §Iconography — Material Symbols Outlined glyph at the canonical 72 px size (scales up with the bigger card) in a 144 px app-square box (0.5× ratio), light-grey fill, black ink.
 - §Photography — Sarah Freelancer Studio Portrait at full card width × 60 % height, scaleMode FILL.
 - §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between. Cluster rendered at **`h = X × 1.125 = 61`** so the wordmark glyph inside lands at exactly `X = 54` per §Logo.4. Symbol at `X × X = 54 × 54`.
@@ -1914,24 +1936,23 @@ const subtitle = makeText(
 );
 canvas.appendChild(subtitle);
 
-// --- 6. Three feature cards (archetype A: text → 1X → visual → 2X → lockup) ---
-const lockupTopY  = canvasH - X - X;                 // X margin + X-tall lockup
+// --- 6. Two feature cards (archetype A: text → 1X → visual → 2X → lockup) ---
+//   §Composition.3 mobile rule: 1080-class canvases cap at 2 cells per row.
+//   Card width = (canvasW − 2X margins − 1X gutter) / 2 = (1080 − 162) / 2 = 459.
+const lockupTopY  = canvasH - X - X;                       // X margin + X-tall lockup
 const visualTop   = subtitle.y + subtitle.height + X;
 const visualBottom = lockupTopY - 2 * X;
-const cardW = 288, cardH = visualBottom - visualTop;
-const cardR = Math.round(0.14 * cardW);              // §Object styles.1: 40
-const iconBoxSize = 96, iconSize = 48;               // §Iconography.5: 0.5× ratio
-const iconBoxR    = Math.round(0.14 * iconBoxSize);  // §Object styles.1: 13
+const cardW = 459, cardH = visualBottom - visualTop;
+
+// X-bracketed radii per §Object styles.3 + concentric per §Object styles.4
+const cardR       = X / 2;                                 // 27 — default content tile bracket
+const iconInset   = X / 4;                                 // 14 — gap, doubles as inner padding
+const iconBoxR    = cardR - iconInset;                     // 13 — small bracket, ≡ X/4
+const iconBoxSize = 144, iconSize = 72;                    // §Iconography.5: 0.5× ratio
 
 // X-anchored type sizes (§Typography.4)
-const cardTitleSize = Math.max(22, Math.round(X * 0.65));   // 35
-const bodySize      = Math.max(16, Math.round(X * 0.45));   // 24
-
-// Two-card layout per §Composition.3 mobile rule. Card width = (canvasW − 2X − 1 gap) / 2 = 459.
-const cardW = 459;
-const cardR = Math.round(0.14 * cardW);                     // 64
-const iconBoxSize = 144, iconSize = 72;                      // 0.5× ratio (bigger card → bigger icon box)
-const iconBoxR    = Math.round(0.14 * iconBoxSize);          // 20
+const cardTitleSize = Math.max(22, Math.round(X * 0.65));  // 35
+const bodySize      = Math.max(16, Math.round(X * 0.45));  // 24
 
 // Card 1 — photo + title + body (top 60% of card is photo, bottom 40% is text)
 const card1 = figma.createFrame();
@@ -1974,7 +1995,7 @@ const iconBox = figma.createFrame();
 iconBox.resize(iconBoxSize, iconBoxSize);
 iconBox.cornerRadius = iconBoxR; iconBox.cornerSmoothing = 0;
 iconBox.fills = [{ type: 'SOLID', color: lightGrey }];
-iconBox.x = X / 2; iconBox.y = X / 2;
+iconBox.x = iconInset; iconBox.y = iconInset;             // X/4 inset → concentric per §Object styles.4
 card2.appendChild(iconBox);
 
 const ic = makeIcon(ICONS.attachment, iconSize, black);
