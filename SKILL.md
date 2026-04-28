@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.11
+version: 2.12
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.11 · Last updated: 2026-04-28 · Status: living document
+> Version: 2.12 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -343,10 +343,21 @@ Reference: Brand Kit SOT node [220:51714](https://www.figma.com/design/9MBP81zVp
 
 **Also valid.** All other placements in the SOT Placement section ([node 220:52561](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=220-52561)) are acceptable when the priority placement does not serve the composition. They follow the same rules — `X` margin on all sides, height `X`, tight cluster, auto gap when both symbol and cluster appear:
 
-- **Top edge-anchored, full width.** Mirror of the priority: symbol top-left, cluster top-right. For headers and editorial.
-- **Bottom-right cluster only** (no symbol). Use when the wordmark or wordmark+entry configuration is chosen.
+- **Top edge-anchored, full width.** **Cluster (wordmark / wordmark + entry points) top-LEFT, symbol top-RIGHT** — *reversed* from the priority bottom placement. Reading-path rationale: when the lockup is at the top, the eye lands on the cluster first and travels right to the symbol, mirroring how readers scan a page top-to-bottom and left-to-right. The symbol becomes the trailing "punctuation," not the lead. Auto gap between cluster's right edge and symbol's left edge fills the canvas width. Use this whenever the canvas's bottom is occupied by the brief's primary subject — full-bleed photography (archetype D) where the subject sits in the lower two-thirds, busy compositions where the bottom strip is unavailable, or any layout where the brand needs to read before the content rather than after.
+- **Bottom-right cluster only** (no symbol). Use when the wordmark or wordmark + entry-points configuration is chosen and the symbol is dropped per the §Logo.1 reduction ladder.
 - **Bottom-left cluster only** (no symbol). Mirror of the above.
-- **Top-right / top-left cluster only.** Same, anchored to the top edge.
+- **Top-right / top-left cluster only.** Same, anchored to the top edge — when no symbol is used, the cluster anchors to whichever corner the composition needs.
+
+### 5b. Lockup orientation — horizontal default; vertical for end frames
+
+The asset library ships the wordmark + entry-points lockup in two orientations:
+
+- **Horizontal** (viewBox `965 × 162`, ratio `≈ 5.96 : 1`). Three asset variants: `horizontal-left-<LANG>` puts entry-points on the left of the divider, wordmark on the right; `horizontal-right-<LANG>` is mirrored (wordmark on the left, entry-points on the right); the bottom-anchored full-lockup composition uses one of these depending on which side the symbol sits. **Use horizontal everywhere by default** — bottom placements, top placements (paired with a separate symbol per §Logo.5), inline footers, anywhere the lockup sits inside a populated composition.
+- **Vertical** (viewBox `492 × 359`, ratio `≈ 1.37 : 1`). One asset variant: `vertical-left-<LANG>` stacks the wordmark over the entry-points. **Reserve vertical for edge / end-frame use only** — closing slides of a video, logo-only OOH placements, splash screens, anywhere the lockup is the **only element on the canvas**. The vertical orientation reads as "this is where the brand bows out"; using it inside a populated marketing composition pulls focus disproportionately and conflicts with the priority bottom-right placement geometry above.
+
+**Decision rule.** "Is the lockup the only element on this canvas?" Yes → vertical. No (any content surrounds the lockup) → horizontal.
+
+**Picking horizontal-left vs horizontal-right.** The `-left` / `-right` suffix in the asset filename denotes which side **the entry-points text** sits on relative to the wordmark. For top placement under §Logo.5's reversed rule (cluster top-LEFT, symbol top-RIGHT), use **horizontal-right** so the wordmark anchors the canvas's left margin and the entry-points read as a justified appendage running toward the centre. For bottom placement under the priority rule, **horizontal-left** keeps entry-points adjacent to the centre auto-gap and the wordmark on the canvas's right margin.
 
 **Rules that apply to all placements:**
 - Margin on every canvas edge = `X`.
@@ -500,18 +511,20 @@ For other configurations (wordmark + entry points, flower symbol) instantiate th
 - **Print / PDF**: embed the SVG or a high-res PNG (from `Logo/` in the [Asset library](#asset-library)) at the computed size; respect the 5% margin rule relative to the trim box.
 - **Social exports**: compute `X` from the export dimensions, not from the design canvas.
 
-**Picking the right asset-library file (lockup configuration outside Figma).** §Logo.1's preference order applies, but only the configurations below ship as **single, pre-composed asset-library files** — the full lockup (symbol + entry points + divider + wordmark) is composed in Figma per §Logo.8 and has no single SVG export. Default to `wordmark + entry points` for most marketing surfaces; fall back to `wordmark` only when the canvas is too tight or audience already has full brand context. The full lockup itself is achievable only in Figma.
+**Picking the right asset-library file (lockup configuration outside Figma).** §Logo.1's preference order applies, but only the configurations below ship as **single, pre-composed asset-library files** — the full lockup (symbol + entry points + divider + wordmark) is composed in Figma per §Logo.8 and has no single SVG export. Default to `wordmark + entry points horizontal` for most marketing surfaces; fall back to `wordmark` only when the canvas is too tight or audience already has full brand context. The full lockup itself is achievable only in Figma. **The vertical lockup is reserved for edge / end-frame use** per §Logo.5b — do not pick it for inline marketing placements.
 
-| Configuration | Asset-library filename | Notes |
+| Configuration | Asset-library filename | When to pick |
 |---|---|---|
-| **Wordmark + entry points (horizontal-left)** — closest single-asset to the full lockup; **default for marketing surfaces** | `Logo/qonto-logo-category-entry-points-horizontal-left-<LANG>.svg` | viewBox `965 × 162` (≈ 5.96 : 1). `<LANG>` = `EN` / `FR` / `DE` / `IT` / `ES` / `NL` (plus combined locales). |
-| **Wordmark + entry points (horizontal-right)** | `Logo/qonto-logo-category-entry-points-horizontal-right-<LANG>.svg` | Same dimensions, mirrored composition. |
-| **Wordmark + entry points (vertical-left)** | `Logo/qonto-logo-category-entry-points-vertical-left-<LANG>.svg` | viewBox `492 × 359` (≈ 1.37 : 1). For tall / portrait surfaces. |
-| **Wordmark alone** | `Logo/qonto-wordmark-black.svg` · `Logo/qonto-wordmark-white.svg` | viewBox `82 × 24` (≈ 3.42 : 1). Black or white — ink switches by file, not by recolour. |
-| **Symbol multiplier** (squircle container) | `Logo/qonto-symbol-multiplier-black.svg` · `Logo/qonto-symbol-multiplier-white.svg` | For compact / functional contexts. |
+| **Wordmark + entry points — horizontal-left** | `Logo/qonto-logo-category-entry-points-horizontal-left-<LANG>.svg` | viewBox `965 × 162` (≈ 5.96 : 1). **Bottom placement** under §Logo.5 priority (cluster bottom-right with symbol bottom-left auto-spaced). |
+| **Wordmark + entry points — horizontal-right** | `Logo/qonto-logo-category-entry-points-horizontal-right-<LANG>.svg` | viewBox `965 × 162`, mirrored. **Top placement** under §Logo.5 reversed rule (cluster top-left with symbol top-right auto-spaced). |
+| **Wordmark + entry points — vertical-left** | `Logo/qonto-logo-category-entry-points-vertical-left-<LANG>.svg` | viewBox `492 × 359` (≈ 1.37 : 1). **End frames / logo-only canvases** per §Logo.5b — closing slides, splash screens, logo-only OOH. **Not for inline marketing comps.** |
+| **Wordmark alone** | `Logo/qonto-wordmark-black.svg` · `Logo/qonto-wordmark-white.svg` | viewBox `82 × 24` (≈ 3.42 : 1). When entry-points can't reach 12 px or the audience has full brand context. Black or white — ink switches by file, not by recolour. |
+| **Symbol multiplier** (squircle container) | `Logo/qonto-symbol-multiplier-black.svg` · `Logo/qonto-symbol-multiplier-white.svg` | viewBox `138 × 138` square. For compact / functional contexts, **and as the right-side symbol when paired with a horizontal-right cluster on top placement** (§Logo.5). |
 | **Full lockup** (symbol + entry points + divider + wordmark) | *(no single asset)* | Compose in Figma per §Logo.8. |
 
 **Localisation.** `<LANG>` matches the audience's primary market — pick `EN` for international or English-speaking surfaces, `FR` / `DE` / `IT` / `ES` / `NL` for in-market campaigns. Combined-locale variants (`EN-DE`, `EN-NL`) exist for bilingual contexts. When in doubt, ship `EN` and ask the brand team.
+
+**Ink colour.** The horizontal entry-points lockups ship only in the brand black (`#050505`). For dark / photo-overlay surfaces, generate the white variant locally with one substitution and re-rasterise: `sed 's/#050505/#FFFFFF/g' input.svg > white.svg && sips -s format png …`. The symbol-multiplier and wordmark assets ship in both black and white — ink switches by file.
 
 ---
 
@@ -583,6 +596,18 @@ Reference: SOT "Grid" ([node 450:51608](https://www.figma.com/design/9MBP81zVpoj
 | **Square / portrait** | `≤ 1.5` | **4** | 1080×1080, 1080×1350, A4 portrait |
 | **Landscape** | `1.5 < ratio ≤ 2.5` | **8** | 1920×1080 deck, 2048×1152 |
 | **Ultra-wide / banner** | `> 2.5` | **12** | 2844×460 web banners, billboards |
+
+**Content columns ≠ grid columns — content cells react to canvas size.** The grid above is a positioning **lattice**: it tells you where things can snap, not how many things to put across the row. The number of **content cells** (cards, tiles, feature blocks) sitting side-by-side reacts to the canvas's real size, not just its aspect ratio:
+
+| Canvas size (`min(W, H)`) | Max content cells per row | Why |
+|---|---|---|
+| **`≤ 1080`** (mobile / social — IG square, IG portrait, IG Story) | **2** | At 1080 px wide, three cells with X-margins and X-gap collapse each cell to ≈ 288 px. Card body copy and imagery both crush below comfortable scale on a phone — even with §Typography.4's X-anchored sizes. Two cells gives ≈ 459 px per cell, which carries headlines, photos, and bodies cleanly. |
+| **`1081–1920`** (desktop / deck slides / standard landscape) | **3** | Per-cell width ≈ 600 px. Comfortable for a feature-card row with photo + title + body. |
+| **`> 1920`** (OOH / hero banners / print) | **4+** | Up to the grid ladder. Larger canvases buy proportionally more horizontal room, so wider rows of cells become legitimate. |
+
+**Practical reading.** Three feature cards on a `1080 × 1080` IG post is over-dense — Joan's review (2026-04-28). Pick two cards instead, give each ~459 px, and let the row breathe. On a `1920 × 1080` deck slide three cards work; four start to crowd. On OOH / billboard scale four-plus is fine.
+
+**The grid is still the underlying ruler.** A 2-card row on a 1080-wide canvas with 4-column grid means each card spans 2 grid columns plus the inter-column gutter. The grid doesn't disappear — it becomes the unit you snap card edges to.
 
 **Column width formula:**
 
@@ -674,7 +699,7 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 | **A. Stack — text then visual** | Text band top → `1X` → visual band → `2X` → lockup | Message-first product announcements, feature reveals |
 | **B. Stack — visual then text** | Visual band top → `1X` → text band → `2X` → lockup | "Look at this, here's why" — visual sells, headline punctuates |
 | **C. Split — text ↔ visual** | Landscape: text one half, visual other half. Portrait: collapses to A or B. The **visual side also ends at `lockupY − 2X`** — the 2X clearance before the lockup applies to every last band, including the visual half of a split (never let a photo run into the lockup strip). | KPI + supporting image, testimonial + face, equal-weight pairs |
-| **D. Overlay — text on full-bleed image** | Image bleeds edge-to-edge; text block + lockup sit on top within `X` margins. **Dark-background recipe:** use the `color=white` logo variants and apply a `1px` white stroke to the symbol (per §Logo.3). Verify contrast: headline and lockup must read cleanly against the busiest region of the photo, not just the calm edge. When the photo's text zone isn't reliably dark, add a scrim — see §Composition.9b for the full Figma build recipe. | Atmospheric, photo-led campaigns |
+| **D. Overlay — text on full-bleed image** | Image bleeds edge-to-edge; text block + lockup sit on top within `X` margins. **Dark-background recipe:** use the `color=white` logo variants and apply a `1px` white stroke to the symbol (per §Logo.3). Verify contrast: headline and lockup must read cleanly against the busiest region of the photo, not just the calm edge. When the photo's text zone isn't reliably dark, add a scrim — see §Composition.9b for the full Figma build recipe. **Subject-aware copy placement** (§Composition.7 archetype D notes below): copy never crosses a recognisable face. **Two layout variants:** (i) classic — copy at the top + lockup at the bottom, used when the subject sits in the lower two-thirds; (ii) reversed — **lockup at the top (per §Logo.5 reversed-top placement) + copy at the bottom**, used when the subject's face occupies the upper or middle of the frame and putting copy there would land on the face. | Atmospheric, photo-led campaigns; portraits with strong subject presence |
 | **E. Overlay — text card on bleed image** | Image full-bleed; solid-colour card (usually white) with headline + lockup, card honours `X` margin and `X` internal padding. The card is **structural** — it provides the composition's spine, so `cornerRadius = 0` (see §Object styles.2). | Photo + crisp readable message, landing-page hero |
 | **F. Layered — floating objects + text** | Text at top → `2X` → three overlapping cascading objects (§Composition.2 floating-object rule) → `2X` → lockup | Editorial, object-of-the-week, feature-rich storytelling |
 
@@ -697,8 +722,28 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 - Headline tier (§Composition.1) picked for the archetype, not per element.
 - Grid (§Composition.3) as a reference, especially when splitting (C) or sizing the text card (E).
 - **Sharp grounds, rounded accents.** Structural objects (backing cards, scrims, bands, hero images, full-bleed rectangles) are always sharp (`cornerRadius = 0`). Rounded corners belong to content-scale objects that float *inside* the structure — product covers, small image tiles, icon bounding boxes, avatars, chips — picked from the four atomic shapes in §Object styles.1. Full rules in §Object styles.
+- **Copy never crosses a recognisable face** (archetype D, and any photo-overlay variant). When the subject's face occupies the canvas zone where copy would naturally land, do not let the copy cross it — pivot to archetype D's reversed variant (**lockup at the top per §Logo.5 reversed-top placement, copy at the bottom**) or move to archetype B / C where text and image have their own bands. The photo subject is the brief's protagonist; the copy supports them, never obscures them.
 
-**Not a cage.** These six archetypes cover the vast majority of Qonto touch points, but a genuinely novel composition can exist if every underlying rule (X-scaled type, X-margin, band-gap, alignment, colour) holds. If you need a new archetype, measure it against the SOT and propose it as an addition to this section rather than a one-off.
+### 7b. Archetype D variants — subject-aware photo placement
+
+Archetype D ships in two layouts depending on where the subject sits in the photo. Read the photo first; pick the variant that keeps copy off the face.
+
+| Variant | Subject sits in… | Layout | Lockup |
+|---|---|---|---|
+| **D-classic** (priority) | the lower two-thirds of the photo (subject's face is below the headline zone) | Copy at the **top** (headline + subtitle within `X` margins, dark scrim per §9b for contrast). Subject occupies the bottom. | Bottom-right per §Logo.5 priority. |
+| **D-reversed** | the upper two-thirds of the photo (subject's face is in the headline zone) | **Lockup at the top** per §Logo.5 reversed-top placement (cluster top-LEFT, symbol top-RIGHT). Copy at the **bottom** of the useful canvas (above the bottom safe area on social, above the bottom margin elsewhere). Subject occupies the middle. | Top, reversed-placement variant. |
+
+**The subject-detection step is the rule, not the variant choice.** Look at the photo before deciding D-classic vs D-reversed:
+
+- Crop the photo to the canvas's aspect ratio mentally.
+- Locate the subject's face (or strongest focal point) in the cropped frame.
+- If the face sits in the **upper third** of the cropped frame → **D-reversed**.
+- If the face sits in the **lower two-thirds** → **D-classic**.
+- If the face crosses the **centre line** of the canvas (typical for portrait photos on portrait canvases): D-reversed wins, because top placement gives the lockup the upper margin and copy gets the bottom band — neither lands on the face.
+
+**Both variants honour §Composition.7 shared rules** — `X` margins, `2X` clearance from the last content band to the lockup, photo from `Photography/`, white ink + scrim per §Logo.3 / §9b. The only thing that flips is the placement of the lockup and copy relative to the subject.
+
+**Not a cage.** These six archetypes (with the D-reversed variant) cover the vast majority of Qonto touch points, but a genuinely novel composition can exist if every underlying rule (X-scaled type, X-margin, band-gap, alignment, colour) holds. If you need a new archetype, measure it against the SOT and propose it as an addition to this section rather than a one-off.
 
 ### 8. Anti-patterns
 
@@ -1615,20 +1660,20 @@ Worked examples that exercise multiple sections at once, to prove the rules comp
 | YouTube thumbnail | `1280 × 720` (16:9) | queued |
 | OOH / billboard | varies | queued |
 
-### 1. Square Instagram post — three feature cards (mixed-media)
+### 1. Square Instagram post — two-card row + full horizontal lockup
 
-A `1080 × 1080` Instagram-square promo, archetype A spacing (text → 1X → visual → 2X → lockup), with three feature cards. **One photo card + two icon cards** so the composition demonstrates §Photography in the same frame as §Iconography. **Brief**: announce the breadth of Qonto's offering — banking, invoicing, expenses — in one warm, mobile-readable frame.
+A `1080 × 1080` Instagram-square promo, archetype A spacing (text → 1X → visual → 2X → lockup), with **two** feature cards (per §Composition.3's mobile content-cell rule — three cards on a 1080 canvas crush imagery and copy). **One photo card + one icon card** so the composition demonstrates §Photography next to §Iconography. **Brief**: announce the breadth of Qonto's offering with breathing room and full-lockup brand presence.
 
 **Rules exercised:**
 
-- §Composition — archetype A spacing, X-system, medium tier, X-margin grid (3 cards × 288 + 2 × X gaps + 2 × X margins = 1080 exactly)
-- §Typography — Bold headline at `X × 2.22 = 120` (LH 98% / +0.5%), Regular subtitle at `X × 0.93 = 50` (LH 110% / +0.5%), **card titles at `max(22, X × 0.65) = 35`** (LH 110%), **bodies at `max(16, X × 0.45) = 24`** (LH 130%) — the X-anchored sizes from §Typography.4 keep card body legible at IG mobile scale
-- §Color — white-led, black ink, light grey for icon boxes — no product palette
-- §Object styles — three rounded content tiles (`r = 0.14 × 288 = 40`), Beautiful Shadows 5-layer stack, sharp structural canvas; concentric `outer = inner + gap` holds for free (40 = 13 + X/2)
-- §Iconography — Material Symbols Outlined glyphs at 48 px in 96 px app-square boxes (0.5× ratio), light-grey fill, black ink — in cards 2 & 3
-- §Photography — one photo card (Sarah Freelancer Studio Portrait) at the top of card 1, demonstrating mixed-media inside a content tile
-- §Logo — **wordmark + entry points** vertical lockup (per §Logo.1 / §Logo.9 — the closest single-asset to the full lockup), rendered at total height `≈ 4 × X` so the wordmark portion sits at the canonical X height
-- §Asset library — both the icons and the photo and the lockup come from the netlify library; the lockup SVG is rasterised with `sips` since the entry-points paths are too long to inline reliably (see "Lockup-as-image caveat" below)
+- §Composition — archetype A spacing, X-system, medium tier headline. **Two cards per row** per §Composition.3 mobile rule (each card ≈ 459 px wide instead of the cramped 288 px three-card layout). X-margin grid.
+- §Typography — Bold headline at `X × 2.22 = 120` (LH 98% / +0.5%), Regular subtitle at `X × 0.93 = 50` (LH 110% / +0.5%), card titles at `max(22, X × 0.65) = 35` (LH 110%), bodies at `max(16, X × 0.45) = 24` (LH 130%). Sentence case throughout.
+- §Color — white-led, black ink, light grey for the icon box — no product palette.
+- §Object styles — two rounded content tiles (`r = 0.14 × 459 = 64`), Beautiful Shadows 5-layer stack, sharp structural canvas. Card 2's icon box at `r = 0.14 × 144 = 20`. Concentric `outer = inner + gap` holds with the larger card width too.
+- §Iconography — Material Symbols Outlined glyph at the canonical 72 px size (scales up with the bigger card) in a 144 px app-square box (0.5× ratio), light-grey fill, black ink.
+- §Photography — Sarah Freelancer Studio Portrait at full card width × 60 % height, scaleMode FILL.
+- §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between. Cluster rendered at height 100 px (small-canvas compromise — entry-points slightly under the §Logo.4 12 px target, but they remain legible on phone scale; the alternative is to drop entry-points entirely per §Logo.1).
+- §Asset library — photo, horizontal cluster lockup, and symbol-multiplier all fetched from the netlify library. SVGs rasterised with `sips` and applied via `figma_set_image_fill`.
 
 ```javascript
 // --- 0. Page + section + fonts (dynamic-page-safe) ---
@@ -1730,127 +1775,144 @@ const iconBoxR    = Math.round(0.14 * iconBoxSize);  // §Object styles.1: 13
 const cardTitleSize = Math.max(22, Math.round(X * 0.65));   // 35
 const bodySize      = Math.max(16, Math.round(X * 0.45));   // 24
 
-const cards = [
-  // Card 1 — photo backing in top half (no icon box)
-  { type: 'photo', title: 'Banking',   body: 'Banking made simple.', photoFile: '/tmp/q-photo-sarah.png' },
-  // Cards 2 & 3 — icon + text
-  { type: 'icon',  title: 'Invoicing', body: 'Send and track invoices\nin seconds.', icon: ICONS.attachment },
-  { type: 'icon',  title: 'Expenses',  body: 'Capture, categorise,\nreconcile.',     icon: ICONS.calculator },
-];
+// Two-card layout per §Composition.3 mobile rule. Card width = (canvasW − 2X − 1 gap) / 2 = 459.
+const cardW = 459;
+const cardR = Math.round(0.14 * cardW);                     // 64
+const iconBoxSize = 144, iconSize = 72;                      // 0.5× ratio (bigger card → bigger icon box)
+const iconBoxR    = Math.round(0.14 * iconBoxSize);          // 20
 
-const photoPlaceholderIds = [];          // collected so figma_set_image_fill can target them after the build
-for (let i = 0; i < cards.length; i++) {
-  const c = cards[i];
-  const cardX = X + i * (cardW + X);
-  const card = figma.createFrame();
-  card.name = `Card · ${c.title}`;
-  card.resize(cardW, cardH);
-  card.cornerRadius = cardR; card.cornerSmoothing = 0;
-  card.fills   = [{ type: 'SOLID', color: white }];
-  card.effects = shadowStack;
-  card.x = cardX; card.y = visualTop;
-  card.clipsContent = true;                                // rounded card crops the photo's top corners
-  canvas.appendChild(card);
+// Card 1 — photo + title + body (top 60% of card is photo, bottom 40% is text)
+const card1 = figma.createFrame();
+card1.name = 'Card · Banking (photo)';
+card1.resize(cardW, cardH);
+card1.cornerRadius = cardR; card1.cornerSmoothing = 0;
+card1.fills = [{ type: 'SOLID', color: white }];
+card1.effects = shadowStack;
+card1.x = X; card1.y = visualTop;
+card1.clipsContent = true;                                   // rounded card crops the photo
+canvas.appendChild(card1);
 
-  if (c.type === 'photo') {
-    // Photo placeholder rectangle — will be filled via figma_set_image_fill later
-    const photoH = 130;
-    const photoBg = figma.createRectangle();
-    photoBg.name = `Card photo (${c.title})`;
-    photoBg.resize(cardW, photoH);
-    photoBg.fills = [{ type: 'SOLID', color: lightGrey }]; // placeholder until image fill lands
-    card.appendChild(photoBg);
-    photoPlaceholderIds.push(photoBg.id);
+const photoH1 = Math.round(cardH * 0.60);
+const photoBg1 = figma.createRectangle();
+photoBg1.name = 'Card photo (Banking)';
+photoBg1.resize(cardW, photoH1);
+photoBg1.fills = [{ type: 'SOLID', color: lightGrey }];
+card1.appendChild(photoBg1);
+const photoPlaceholderId = photoBg1.id;                       // hand to figma_set_image_fill later
 
-    const cardTitle = makeText(c.title, 'Bold', cardTitleSize, 110, black,
-      X / 2, photoH + Math.round(X * 0.5), cardW - X, 0);
-    card.appendChild(cardTitle);
-    const cardBody = makeText(c.body, 'Regular', bodySize, 130, black,
-      X / 2, cardTitle.y + cardTitle.height + 8, cardW - X, 0);
-    card.appendChild(cardBody);
-  } else {
-    const iconBox = figma.createFrame();
-    iconBox.resize(iconBoxSize, iconBoxSize);
-    iconBox.cornerRadius = iconBoxR; iconBox.cornerSmoothing = 0;
-    iconBox.fills = [{ type: 'SOLID', color: lightGrey }];
-    iconBox.x = X / 2; iconBox.y = X / 2;
-    card.appendChild(iconBox);
-    const ic = makeIcon(c.icon, iconSize, black);
-    ic.x = (iconBoxSize - iconSize) / 2;
-    ic.y = (iconBoxSize - iconSize) / 2;
-    iconBox.appendChild(ic);
+const card1Title = makeText('Banking', 'Bold', cardTitleSize, 110, black,
+  X / 2, photoH1 + Math.round(X * 0.5), cardW - X, 0);
+card1.appendChild(card1Title);
+const card1Body = makeText('Built for fast-moving businesses, in one app.',
+  'Regular', bodySize, 130, black, X / 2, card1Title.y + card1Title.height + 8, cardW - X, 0);
+card1.appendChild(card1Body);
 
-    const cardTitle = makeText(c.title, 'Bold', cardTitleSize, 110, black,
-      X / 2, iconBox.y + iconBox.height + Math.round(X * 0.5), cardW - X, 0);
-    card.appendChild(cardTitle);
-    const cardBody = makeText(c.body, 'Regular', bodySize, 130, black,
-      X / 2, cardTitle.y + cardTitle.height + 8, cardW - X, 0);
-    card.appendChild(cardBody);
-  }
-}
+// Card 2 — icon + title + body
+const card2 = figma.createFrame();
+card2.name = 'Card · Invoicing & expenses (icon)';
+card2.resize(cardW, cardH);
+card2.cornerRadius = cardR; card2.cornerSmoothing = 0;
+card2.fills = [{ type: 'SOLID', color: white }];
+card2.effects = shadowStack;
+card2.x = X + cardW + X; card2.y = visualTop;
+card2.clipsContent = true;
+canvas.appendChild(card2);
 
-// --- 7. Lockup — wordmark + entry points (vertical-left-EN), bottom-right ---
-// The entry-points lockup ships only as SVG. Inlining the full file in figma_execute
-// is fragile (~23 KB, lots of escaping). Instead, rasterise the SVG to PNG locally
-// (sips on macOS, or any SVG→PNG tool) and apply via figma_set_image_fill below.
-//   curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Logo/qonto-logo-category-entry-points-vertical-left-EN.svg" -o /tmp/q-lockup-v-EN.svg
-//   sips -s format png --resampleWidth 2000 /tmp/q-lockup-v-EN.svg --out /tmp/q-lockup-v-EN.png
-// Sizing: viewBox 492×359; render so wordmark portion (100 viewBox units) = X = 54 →
-//   total height = 54 × 359/100 ≈ 194; width = 194 × 492/359 ≈ 266.
-const lockupH = 194, lockupW = 266;
-const lockup = figma.createRectangle();
-lockup.name = 'Qonto wordmark + entry points (vertical-left-EN)';
-lockup.resize(lockupW, lockupH);
-lockup.cornerRadius = 0; lockup.cornerSmoothing = 0;
-lockup.fills = [{ type: 'SOLID', color: lightGrey }];   // placeholder until image fill lands
-lockup.x = canvasW - X - lockup.width;
-lockup.y = canvasH - X - lockup.height;
-canvas.appendChild(lockup);
-// Return photoPlaceholderIds and lockup.id from this script so the next step can fill them.
+const iconBox = figma.createFrame();
+iconBox.resize(iconBoxSize, iconBoxSize);
+iconBox.cornerRadius = iconBoxR; iconBox.cornerSmoothing = 0;
+iconBox.fills = [{ type: 'SOLID', color: lightGrey }];
+iconBox.x = X / 2; iconBox.y = X / 2;
+card2.appendChild(iconBox);
+
+const ic = makeIcon(ICONS.attachment, iconSize, black);
+ic.x = (iconBoxSize - iconSize) / 2;
+ic.y = (iconBoxSize - iconSize) / 2;
+iconBox.appendChild(ic);
+
+const card2Title = makeText('Invoicing & expenses', 'Bold', cardTitleSize, 110, black,
+  X / 2, iconBox.y + iconBox.height + Math.round(X * 0.5), cardW - X, 0);
+card2.appendChild(card2Title);
+const card2Body = makeText('Send, track, capture, categorise — all from one place.',
+  'Regular', bodySize, 130, black, X / 2, card2Title.y + card2Title.height + 8, cardW - X, 0);
+card2.appendChild(card2Body);
+
+// --- 7. Full lockup at bottom: symbol bottom-left + horizontal-left cluster bottom-right ---
+// Per §Logo.5 priority placement. Symbol size X × X. Cluster scaled so it fits the
+// canvas width minus 2X margins minus symbol width minus an auto gap of at least X.
+//   curl -s "…/Logo/qonto-logo-category-entry-points-horizontal-left-EN.svg" -o /tmp/q-lockup-h.svg
+//   curl -s "…/Logo/qonto-symbol-multiplier-black.svg"                       -o /tmp/q-symbol-black.svg
+//   sips -s format png --resampleWidth 2400 /tmp/q-lockup-h.svg     --out /tmp/q-lockup-h.png
+//   sips -s format png --resampleWidth 800  /tmp/q-symbol-black.svg --out /tmp/q-symbol-black.png
+const clusterH = 100;
+const clusterW = Math.round(clusterH * 965 / 162);           // viewBox 965×162 → ≈ 596
+const symbolSize = X;                                         // 54
+
+const lockupCluster = figma.createRectangle();
+lockupCluster.name = 'Qonto wordmark + entry points (horizontal-left-EN) — bottom-right';
+lockupCluster.resize(clusterW, clusterH);
+lockupCluster.fills = [{ type: 'SOLID', color: lightGrey }];
+lockupCluster.x = canvasW - X - lockupCluster.width;
+lockupCluster.y = canvasH - X - lockupCluster.height;
+canvas.appendChild(lockupCluster);
+
+const symbol = figma.createRectangle();
+symbol.name = 'Qonto symbol multiplier (black) — bottom-left';
+symbol.resize(symbolSize, symbolSize);
+symbol.fills = [{ type: 'SOLID', color: lightGrey }];
+symbol.x = X;
+symbol.y = canvasH - X - symbolSize;
+canvas.appendChild(symbol);
+// Return photoPlaceholderId, lockupCluster.id, symbol.id for the figma_set_image_fill calls.
 ```
 
-**Apply image fills (separate calls).** After the build script returns `photoPlaceholderIds` and `lockup.id`, run two `figma_set_image_fill` calls — one per asset — then write the returned `imageHash` back via a small `figma_execute` (the plugin's "Image fill applied to 0 nodes" quirk means the hash is valid but the fill must be re-set explicitly):
+**Apply image fills (three calls — photo, cluster, symbol).** After the build script returns the placeholder IDs, run three `figma_set_image_fill` calls and re-bind each returned `imageHash` via a small `figma_execute` (the plugin's "Image fill applied to 0 nodes" quirk means the hash is valid but the fill must be re-set explicitly):
 
 ```javascript
 // After figma_set_image_fill returns imageHash for each asset:
-photoBg.fills  = [{ type: 'IMAGE', imageHash: '<photo hash>',  scaleMode: 'FILL' }];
-lockup.fills   = [{ type: 'IMAGE', imageHash: '<lockup hash>', scaleMode: 'FIT'  }];
+photoBg.fills      = [{ type: 'IMAGE', imageHash: '<photo hash>',   scaleMode: 'FILL' }];
+lockupCluster.fills = [{ type: 'IMAGE', imageHash: '<cluster hash>', scaleMode: 'FIT'  }];
+symbol.fills        = [{ type: 'IMAGE', imageHash: '<symbol hash>',  scaleMode: 'FIT'  }];
 ```
 
-**Lockup-as-image caveat.** The wordmark + entry-points SVG is too long to embed reliably in `figma_execute` (paths for the entry-points text alone push the script past 23 KB). Until the asset library ships a smaller / pre-composed full-lockup variant, the canonical agent flow is:
+**Lockup-as-image — canonical workflow.** The entry-points SVG is too long to embed reliably in `figma_execute` (paths push past 23 KB). Three steps:
 
-1. Fetch the SVG via `curl` from the asset library.
-2. Rasterise to PNG (`sips -s format png --resampleWidth 2000 …` on macOS preserves the SVG aspect ratio cleanly).
-3. Apply via `figma_set_image_fill` with `scaleMode: 'FIT'` so the lockup centres in its placeholder rectangle without distortion.
+1. Fetch the cluster + symbol SVGs via `curl` from the asset library.
+2. Rasterise to PNG: `sips -s format png --resampleWidth 2400 cluster.svg --out cluster.png` (preserves the SVG aspect ratio cleanly), `sips -s format png --resampleWidth 800 symbol.svg --out symbol.png`.
+3. Apply via `figma_set_image_fill` with `scaleMode: 'FIT'` so each piece centres in its placeholder.
 
-The Logos Library Figma component path (`importComponentByKeyAsync`) remains valid in principle but timed out repeatedly during this validation run; SVG-→-PNG-→-image-fill is the recommended default.
+This is the recommended default. The Logos Library Figma component path (`importComponentByKeyAsync`) remains valid in principle but timed out repeatedly during validation; SVG → PNG → image-fill is faster and more reliable.
 
-**Concentric radii — for free.** Card outer radius `40` = icon-box inner radius `13` + gap `X/2 = 27`. The §Object styles.4 formula `outer = inner + gap` holds without engineering — it falls out of `0.14 × short_side` applied consistently across nested content tiles.
+**Why two cards, not three.** Three feature cards on a `1080 × 1080` canvas crushes each card to ≈ 288 px. Card body falls below comfortable phone-reading scale and photos read as thumbnails. Per §Composition.3's mobile content-cell rule, mobile / social canvases (`min(W, H) ≤ 1080`) cap at 2 cells per row. Two cards at ≈ 459 px give photo and copy room to breathe — empirically validated against Joan's review (2026-04-28).
 
-*Empirically validated at `1080 × 1080` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Square Instagram Post Test", section "IG Square — every section + ToV + photo". Screenshot verified card-title 35 px, body 24 px, photo card warmth, and full vertical lockup with wordmark + entry-points "Business account / Finance management / Company creation" reading cleanly bottom-right.*
+*Empirically validated at `1080 × 1080` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Square Instagram Post Test", section "IG Square — 2-card row + photo + full horizontal lockup". Screenshot verified card-title 35 px, body 24 px, Sarah's portrait warmth at full card width, full lockup with symbol bottom-left and horizontal entry-points cluster "Business account / Finance management / Company creation" bottom-right.*
 
-### 2. Instagram Story — archetype D (full-bleed photo + scrim) + ToV
+### 2. Instagram Story — D-reversed: lockup top, content bottom
 
-A `1080 × 1920` 9:16 Story built on §Composition.7 archetype D — full-bleed photo with a dark gradient scrim, white headline + subtitle overlaid, white lockup at the bottom-right within the safe area. **Brief**: communicate Qonto's value proposition with photographic warmth and scroll-stopping copy.
+A `1080 × 1920` 9:16 Story built on §Composition.7b's **D-reversed** variant — the photo's subject (Chloe Founder, face upper-third) sits where headline copy would normally land, so the lockup goes at the **top** per §Logo.5 reversed-top placement (cluster top-left, symbol top-right) and the headline + subtitle drop to the **bottom** of the useful canvas where the subject's torso provides darker backing. **Brief**: lead with brand presence, let the photo subject anchor the middle, deliver the message at the bottom — without ever crossing the face.
 
 **Rules exercised:**
 
-- §Tone of voice — *"To the point"* (4-word parallel-structure headline), *"Playful but polished"* (the "boring bits" wink), *"At your service"* (`you` focus), *"In tune"* (casual + emotive register fits IG; pitched up to formal in §3 to prove "In tune" works).
-- §Composition — archetype D (full-bleed photo + scrim, see §Composition.9b). Large tier headline (X × 2.76 = 149 px), large-tier subtitle (X × 1.37 = 74 px). Lockup honours bottom safe area with X clearance.
-- §Typography — Bold headline LH 98 / +0.5%, Regular subtitle LH 110 / +0.5%, sentence case throughout, **white ink** (over scrim/photo).
-- §Color — black canvas backstop while the photo loads, then dark scrim over photo for headline contrast — see §Composition.9b for the scrim opacity guidance.
-- §Photography — full-bleed photo (`Chloe Founder Studio Portrait.png`) at `scaleMode: 'FILL'`, served from `Photography/` in the [Asset library](#asset-library).
-- §Logo — **white wordmark + entry points** vertical lockup at total height ≈ 4 × X, bottom-right with X clearance above the bottom safe area. Since the asset library only ships the entry-points lockup in black, the agent generates the white version locally (see "White lockup" below).
-- §Asset library — both photo and lockup come from the netlify library; no MCP connector.
+- §Composition.7b D-reversed — subject-aware photo placement: face occupies upper-third → lockup top, copy bottom. Bottom scrim provides headline contrast over Chloe's torso.
+- §Logo.5 reversed-top placement — **cluster (horizontal-right wordmark + entry-points, white) top-LEFT, symbol-multiplier (white) top-RIGHT**, auto gap between. Reading-path rationale: top placement is read first, left-to-right; cluster reads, then the eye lands on the symbol as the brand "punctuation."
+- §Logo.5b lockup orientation — horizontal lockup (not vertical) because this is an inline marketing surface, not an end frame.
+- §Tone of voice — *"To the point"* (parallel-structure headline), *"Playful but polished"* (the "boring bits" wink, light enough to land), *"At your service"* (subtitle ends with "the boring bits" — wink without obscuring meaning), *"In tune"* (casual emotive register; contrast with §3's formal LinkedIn register).
+- §Composition — large tier headline (X × 2.76 = 149 px), large-tier subtitle (X × 1.37 = 74 px). Subtitle bottom anchored at `canvasH − bottomSafe − X = 1516`; headline stacked above with X/2 gap.
+- §Typography — Bold headline LH 98 / +0.5%, Regular subtitle LH 110 / +0.5%, sentence case, **white ink** over the bottom scrim.
+- §Color — bottom scrim (linear gradient bottom-up, 60 % black) for headline contrast. Top scrim (50 % black, fading down) for lockup contrast against any photo region.
+- §Photography — Chloe Founder Studio Portrait at `scaleMode: 'FILL'` — copy crosses her torso (allowed) but never her face (the rule). 
+- §Asset library — photo + cluster (horizontal-right-EN, white-recoloured locally) + symbol-multiplier-white, all fetched from netlify.
 
 **Story safe areas.** Instagram overlays the top ~250 px (status bar, profile chrome) and the bottom ~350 px (caption, reaction tray, share). Treat those as **no-go zones** — the lockup, headline, and any critical copy must sit inside `[250, 1570]` vertically.
 
-**White lockup — local SVG colour swap.** The entry-points lockup ships only in `#050505`. To produce a white version for dark / photo-overlay surfaces, substitute the fill colour in the SVG and re-rasterise:
+**White lockup + symbol — local SVG colour swap.** The horizontal entry-points lockup ships only in `#050505`. The symbol-multiplier ships in both black and white. For the white cluster, substitute the fill colour and re-rasterise:
 
 ```bash
-curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Logo/qonto-logo-category-entry-points-vertical-left-EN.svg" -o /tmp/q-lockup-v.svg
-sed 's/#050505/#FFFFFF/g' /tmp/q-lockup-v.svg > /tmp/q-lockup-v-white.svg
-sips -s format png --resampleWidth 2000 /tmp/q-lockup-v-white.svg --out /tmp/q-lockup-v-white.png
+curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Logo/qonto-logo-category-entry-points-horizontal-right-EN.svg" -o /tmp/q-lockup-h-right.svg
+curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Logo/qonto-symbol-multiplier-white.svg"                       -o /tmp/q-symbol-white.svg
+sed 's/#050505/#FFFFFF/g' /tmp/q-lockup-h-right.svg > /tmp/q-lockup-h-right-white.svg
+sips -s format png --resampleWidth 2400 /tmp/q-lockup-h-right-white.svg --out /tmp/q-lockup-h-right-white.png
+sips -s format png --resampleWidth 800  /tmp/q-symbol-white.svg          --out /tmp/q-symbol-white.png
 ```
 
 **Build (key excerpts — same helpers as §1):**
@@ -1860,7 +1922,7 @@ const canvasW = 1080, canvasH = 1920, X = 54;
 const topSafe = 250, bottomSafe = 350;
 const white = { r: 1, g: 1, b: 1 };
 
-// Canvas: black backstop while the photo image fills load
+// Canvas: black backstop while the photo image fill loads
 const canvas = figma.createFrame();
 canvas.resize(canvasW, canvasH);
 canvas.cornerRadius = 0; canvas.cornerSmoothing = 0;
@@ -1868,60 +1930,87 @@ canvas.fills = [{ type: 'SOLID', color: { r: 0.02, g: 0.02, b: 0.02 } }];
 canvas.clipsContent = true;
 section.appendChild(canvas);
 
-// Full-bleed photo placeholder — image fill applied separately via figma_set_image_fill
+// Full-bleed photo placeholder
 const photoBg = figma.createRectangle();
 photoBg.resize(canvasW, canvasH);
 photoBg.fills = [{ type: 'SOLID', color: { r: 0.3, g: 0.3, b: 0.3 } }];
 canvas.appendChild(photoBg);
 
-// Scrim — dark linear gradient top-down; covers the upper ~55% so the headline reads
-const scrim = figma.createRectangle();
-scrim.resize(canvasW, Math.round(canvasH * 0.55));
-scrim.fills = [{
+// Bottom scrim — dark gradient bottom-up (covers ~45% of canvas) for headline contrast
+const bottomScrim = figma.createRectangle();
+bottomScrim.resize(canvasW, Math.round(canvasH * 0.45));
+bottomScrim.x = 0; bottomScrim.y = canvasH - Math.round(canvasH * 0.45);
+bottomScrim.fills = [{
   type: 'GRADIENT_LINEAR',
-  gradientTransform: [[0, 1, 0], [-1, 0, 1]],            // top → bottom
+  gradientTransform: [[0, 1, 0], [-1, 0, 1]],
   gradientStops: [
-    { position: 0, color: { r: 0, g: 0, b: 0, a: 0.7 } },
+    { position: 0, color: { r: 0, g: 0, b: 0, a: 0   } },
+    { position: 1, color: { r: 0, g: 0, b: 0, a: 0.6 } },
+  ],
+}];
+canvas.appendChild(bottomScrim);
+
+// Top scrim — dark gradient top-down (covers ~25% of canvas) for lockup contrast
+const topScrim = figma.createRectangle();
+topScrim.resize(canvasW, Math.round(canvasH * 0.25));
+topScrim.fills = [{
+  type: 'GRADIENT_LINEAR',
+  gradientTransform: [[0, 1, 0], [-1, 0, 1]],
+  gradientStops: [
+    { position: 0, color: { r: 0, g: 0, b: 0, a: 0.5 } },
     { position: 1, color: { r: 0, g: 0, b: 0, a: 0   } },
   ],
 }];
-canvas.appendChild(scrim);
+canvas.appendChild(topScrim);
 
-// Headline + subtitle — white ink over scrim, large tier
+// === LOCKUP AT TOP — D-reversed per §Logo.5 / §Composition.7b ===
+// Cluster (horizontal-right-white = wordmark on left, entry-points on right) at top-LEFT
+// Symbol (white) at top-RIGHT
+const lockupTopY = topSafe + X;                    // 304: X clearance below top safe area
+const clusterH = 80;                                // smaller than § 1's 100 — top placement reads as banner
+const clusterW = Math.round(clusterH * 965 / 162);  // 477
+const symbolSize = X;                               // 54 — symbol = X×X per §Logo.4
+
+const cluster = figma.createRectangle();
+cluster.resize(clusterW, clusterH);
+cluster.x = X;                                      // top-left margin
+cluster.y = lockupTopY;
+canvas.appendChild(cluster);
+
+const symbol = figma.createRectangle();
+symbol.resize(symbolSize, symbolSize);
+symbol.x = canvasW - X - symbolSize;                // top-right margin
+symbol.y = lockupTopY + clusterH - symbolSize;      // bottom-align with cluster baseline
+canvas.appendChild(symbol);
+
+// === CONTENT AT BOTTOM — copy never crosses Chloe's face (upper third) ===
 const textW = canvasW - 2 * X;
-const headline = makeText('Less admin.\nMore business.',
-  'Bold', Math.round(X * 2.76), 98, white, X, topSafe + X, textW, 0.5);
-canvas.appendChild(headline);
-const subtitle = makeText(
-  'Banking that handles invoicing, expenses, and the boring bits — so you can do the work that matters.',
-  'Regular', Math.round(X * 1.37), 110, white,
-  X, headline.y + headline.height + Math.round(X * 0.5), textW, 0.5
-);
+const subtitle = makeText('Banking that handles invoicing, expenses, and the boring bits.',
+  'Regular', Math.round(X * 1.37), 110, white, X, 0, textW, 0.5);
 canvas.appendChild(subtitle);
+subtitle.y = canvasH - bottomSafe - X - subtitle.height;   // anchor subtitle bottom to canvasH − bottomSafe − X
 
-// Lockup placeholder (white wordmark + entry points). Same sizing math as §1: viewBox 492×359 → render at h ≈ 4 × X.
-const lockupH = 194, lockupW = 266;
-const lockup = figma.createRectangle();
-lockup.resize(lockupW, lockupH);
-lockup.cornerRadius = 0; lockup.cornerSmoothing = 0;
-lockup.fills = [{ type: 'SOLID', color: { r: 0.3, g: 0.3, b: 0.3 } }];
-lockup.x = canvasW - X - lockup.width;
-lockup.y = canvasH - bottomSafe - X - lockup.height;     // X clearance above bottom safe area
-canvas.appendChild(lockup);
+const headline = makeText('Less admin.\nMore business.',
+  'Bold', Math.round(X * 2.76), 98, white, X, 0, textW, 0.5);
+canvas.appendChild(headline);
+headline.y = subtitle.y - Math.round(X * 0.5) - headline.height;
 ```
 
-**Apply image fills (separate calls, one per asset):**
+**Apply image fills (three calls — photo, cluster, symbol):**
 
 ```bash
-figma_set_image_fill nodeIds=[photoId]  imageData=/tmp/q-photo-chloe-2160.png  scaleMode=FILL
-figma_set_image_fill nodeIds=[lockupId] imageData=/tmp/q-lockup-v-white.png    scaleMode=FIT
+figma_set_image_fill nodeIds=[photoId]   imageData=/tmp/q-photo-chloe-2160.png       scaleMode=FILL
+figma_set_image_fill nodeIds=[clusterId] imageData=/tmp/q-lockup-h-right-white.png   scaleMode=FIT
+figma_set_image_fill nodeIds=[symbolId]  imageData=/tmp/q-symbol-white.png           scaleMode=FIT
 ```
 
-Then write the returned `imageHash` back via `figma_execute` (the "0 nodes filled" plugin quirk is harmless — the hash is valid).
+Then re-bind the returned `imageHash` via `figma_execute` (same plugin quirk).
 
-**Photo size cap.** Figma's `figma_set_image_fill` rejects PNGs above ~4 MP / 4 MB on the first try. Pre-resize photos with `sips --resampleWidth 2160 …` so they land under the cap without a perceptible quality hit at IG-Story-typical zoom levels.
+**Photo size cap.** Figma's `figma_set_image_fill` rejects PNGs above ~4 MP / 4 MB. Pre-resize with `sips --resampleWidth 2160 …`.
 
-*Empirically validated at `1080 × 1920` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Instagram Story Test", section "IG Story — archetype D (full-bleed photo + scrim) + ToV". Screenshot verified Chloe portrait at full-bleed FILL, scrim landing the parallel-structure white headline cleanly, and the white wordmark + entry-points lockup reading bottom-right inside the safe area.*
+**Why D-reversed.** Per §Composition.7b's subject-detection step: Chloe's face occupies the upper third of the cropped canvas. Putting the headline at the top would land it directly on her face (the violation). Putting the lockup at the top instead lets the headline drop to the bottom band where her torso provides darker backing for white type, and the bottom scrim seals the contrast. The face stays clear — the rule.
+
+*Empirically validated at `1080 × 1920` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Instagram Story Test", section "IG Story — D-reversed: lockup top, content bottom". Screenshot verified Chloe's face fully clear of any copy, lockup top-left + symbol top-right with auto gap, headline + subtitle landing on her torso below the face line.*
 
 ### 3. LinkedIn paid ad — archetype C split (text + photo) + ToV in formal register
 
@@ -1934,8 +2023,8 @@ A `1200 × 627` (LinkedIn sponsored-content default) on §Composition.7 archetyp
 - §Typography — Bold headline at `X × 2.22 = 69 px` (LH 98 / +0.5%), Regular subtitle at `X × 0.93 = 29 px` (LH 110 / +0.5%). At this small canvas (X = 31) most of §Typography.4's pixel floors win over the X-multipliers — body / caption sizes hit `16 / 12 px` floors before the ratios kick in.
 - §Color — white left half, photographic right half — no product palette.
 - §Photography — right-half photo (`Lisa Cs Office Action.png`) at `scaleMode: 'FILL'` cropped to the half. Picked for B2B warmth — a real moment of customer-facing work.
-- §Logo — wordmark + entry points (vertical-left-EN) at compact size (`h ≈ 111`, `w ≈ 152` — wordmark at `X = 31`), bottom-left of the left half.
-- §Asset library — photo + lockup both fetched live from netlify; same `sips`-rasterised lockup PNG as §1 (cache-friendly across surfaces).
+- §Logo — **full lockup at bottom of the left half** per §Logo.5 priority + §Logo.5b horizontal orientation. Symbol-multiplier (black, X×X = 31×31) at bottom-left, **horizontal-left** wordmark + entry-points cluster (height 60 px, width ≈ 357) at the bottom-right of the left half, auto gap fills the middle of the left half. The cluster scales to fit under the half's right margin without crossing into the photo on the right.
+- §Asset library — photo + horizontal cluster + symbol all fetched live from netlify; same `sips`-rasterised lockup PNG as §1.
 
 **Build (key excerpts — same helpers as §1):**
 
@@ -1974,31 +2063,40 @@ const subtitle = makeText(
 );
 canvas.appendChild(subtitle);
 
-// Lockup — vertical entry-points compact for the left-half footer.
-// Sizing math: viewBox 492×359, wordmark portion 100/359 → render so wordmark = X = 31:
-//   total height = 31 × 359/100 ≈ 111, width = 111 × 492/359 ≈ 152.
-const lockupH = 111, lockupW = 152;
-const lockup = figma.createRectangle();
-lockup.resize(lockupW, lockupH);
-lockup.cornerRadius = 0; lockup.cornerSmoothing = 0;
-lockup.fills = [{ type: 'SOLID', color: { r: 0.3, g: 0.3, b: 0.3 } }];
-lockup.x = X;                                            // bottom-left of left half
-lockup.y = canvasH - X - lockup.height;
-canvas.appendChild(lockup);
+// Lockup — full lockup at bottom of left half: symbol + horizontal-left cluster.
+// Cluster sized to fit the half's right margin; symbol sized X × X per §Logo.4.
+const clusterH = 60;
+const clusterW = Math.round(clusterH * 965 / 162);   // ≈ 357
+const symbolSize = X;                                 // 31
+
+const cluster = figma.createRectangle();
+cluster.resize(clusterW, clusterH);
+cluster.fills = [{ type: 'SOLID', color: { r: 0.3, g: 0.3, b: 0.3 } }];
+cluster.x = halfW - X - cluster.width;               // bottom-right of left half
+cluster.y = canvasH - X - cluster.height;
+canvas.appendChild(cluster);
+
+const symbol = figma.createRectangle();
+symbol.resize(symbolSize, symbolSize);
+symbol.fills = [{ type: 'SOLID', color: { r: 0.3, g: 0.3, b: 0.3 } }];
+symbol.x = X;                                         // bottom-left of left half
+symbol.y = canvasH - X - symbolSize;
+canvas.appendChild(symbol);
 ```
 
-**Apply image fills (separate calls):**
+**Apply image fills (three calls — photo, cluster, symbol):**
 
 ```bash
-figma_set_image_fill nodeIds=[photoId]  imageData=/tmp/q-photo-lisa-2160.png  scaleMode=FILL
-figma_set_image_fill nodeIds=[lockupId] imageData=/tmp/q-lockup-v-EN.png      scaleMode=FIT
+figma_set_image_fill nodeIds=[photoId]   imageData=/tmp/q-photo-lisa-2160.png  scaleMode=FILL
+figma_set_image_fill nodeIds=[clusterId] imageData=/tmp/q-lockup-h.png         scaleMode=FIT
+figma_set_image_fill nodeIds=[symbolId]  imageData=/tmp/q-symbol-black.png     scaleMode=FIT
 ```
 
 Then re-bind the returned `imageHash` via `figma_execute` (same plugin quirk as §1, §2).
 
 **Side-by-side reading.** Open §2 and §3 next to each other. Same Qonto brand, same colours, same Qonto Sans, same lockup geometry — but the **headline form, vocabulary, register, and rhythm are visibly different**, because §Tone of voice "In tune" adapted those layers to the audience. The principles underneath are unchanged.
 
-*Empirically validated at `1200 × 627` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "LinkedIn Paid Ad Test", section "LinkedIn ad — archetype C split + photo + ToV formal". Screenshot verified medium-tier headline at `69 px`, subtitle at `29 px` capped at 70 % width, Lisa office photo on the right half at FILL, and the compact vertical entry-points lockup `152 × 111` reading bottom-left.*
+*Empirically validated at `1200 × 627` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "LinkedIn Paid Ad Test", section "LinkedIn ad — archetype C split + horizontal lockup". Screenshot verified medium-tier headline at `69 px`, subtitle at `29 px` capped at 70 % width, Lisa office photo on the right half at FILL, and the full lockup with symbol bottom-left + horizontal entry-points cluster bottom-right of the left half (auto gap = 150 px between).*
 
 ---
 
