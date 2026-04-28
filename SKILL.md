@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.14
+version: 2.15
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.14 · Last updated: 2026-04-28 · Status: living document
+> Version: 2.15 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -211,11 +211,24 @@ Qonto has five canonical logo configurations. Decide which applies, then use the
 
 1. **Full lockup** (symbol + entry points + divider + wordmark) — use this by default whenever the canvas has room. It stretches edge-to-edge between the layout margins (see §Logo.5), so the true test is geometry, not aesthetics. Specifically, it fits when:
    - Canvas width ≥ **~8 × X** (canvas margin + symbol + minimum auto gap + entry points + X/2 + divider + X/2 + wordmark + canvas margin), AND
-   - `X` ≥ 54 px on screen (or equivalent — see §Logo.4 scalability floor), AND
-   - The entry-points block can be read at 12 px minimum.
+   - `X` ≥ **49 px** so the entry-points text size `round(X × 0.245)` lands at or above the **12 px floor** per §Logo.4. Equivalently: `min(canvas_w, canvas_h) ≥ 980 px`.
 2. **Wordmark + entry points** — when the full lockup would be forced to collapse its auto gap (symbol and cluster touching the minimum). Keeps the service descriptor; drops the symbol.
-3. **Wordmark alone** — when entry points can no longer fit at 12 px, or when the audience already has full brand context.
+3. **Wordmark alone** — when entry-points fall below the 12 px floor (i.e. **X < 49**, or `min(W, H) < 980`), or when the audience already has full brand context. **This is the canonical move for tight social formats** — `1200 × 627` LinkedIn ads (X = 31), `1080 × 600` email banners (X = 30), most YouTube thumbnails (X = 36). Trying to keep entry-points at sub-floor sizes produces unreadable text and breaks the X-anchored hierarchy.
 4. **Symbol only** (squircle multiplier or circular badge) — compact/functional contexts, or when the canvas is too small for the wordmark at 24 px height.
+
+**Quick decision table — which configuration for which surface:**
+
+| Canvas | X | Entry-points size at X × 0.245 | Configuration |
+|---|---|---|---|
+| `1080 × 1080` IG square / `1080 × 1350` IG portrait / `1080 × 1920` IG Story | 54 | **13 px** ✓ | Full lockup or wordmark + entry points |
+| `1920 × 1080` deck slide / OOH derivatives | 54 | **13 px** ✓ | Full lockup |
+| `2880 × 1620` OOH | 81 | **20 px** ✓ | Full lockup |
+| `1200 × 627` LinkedIn sponsored content | 31 | **8 px** ✗ below floor | **Wordmark alone** (drop entry-points) |
+| `1200 × 600` email banner | 30 | **7 px** ✗ below floor | **Wordmark alone** |
+| `1280 × 720` YouTube thumbnail | 36 | **9 px** ✗ below floor | **Wordmark alone** |
+| `400 × 400` favicon-class | 20 | **5 px** ✗ below floor | **Symbol only** |
+
+**The cluster fit-test, plain.** *"Compute `round(X × 0.245)`. If the result is ≥ 12, ship the entry-points cluster. If it's < 12, drop entry-points and use the wordmark alone (or wordmark + symbol composed manually)."* This is the rule that keeps the lockup legible at every scale Qonto ships. **Do not** try to keep entry-points below 12 px by using a smaller proportion or pushing the lockup oversized — both break the X-anchored hierarchy.
 
 When in doubt, start from §Logo.5 priority placement and fall back to the next configuration only when the geometry breaks.
 
@@ -263,12 +276,27 @@ The logo exists in exactly two color modes:
 
 | Background | Wordmark | Symbol (flower in app-container) |
 |---|---|---|
-| Light (white or near-white) | Fill `primary/black` = `#050505` | Black container, white flower glyph |
-| Dark (`#050505` or near-black) | Fill `primary/white` = `#ffffff` | Black container + **white 1px stroke around the container** |
+| Light (white or near-white) | Fill `primary/black` = `#050505` | Black container, white flower glyph (with the always-on white stroke from below — invisible on light) |
+| Dark (`#050505` or near-black) | Fill `primary/white` = `#ffffff` | Black container, white flower glyph + **1 px white stroke around the container** |
 
-**Do not invert the flower's colors on dark backgrounds.** Keep the `color=black` variant (black container + white glyph) and add a 1 px white stroke around the container to make its edges legible. This is a deliberate brand choice from the SOT. For the Figma code, see the `bgIsDark` branch in §Logo.8's full-lockup recipe — stroke goes on the inner `square` frame, `strokeAlign: 'INSIDE'`.
+**Symbol stroke — always on.** Per the SOT Color spec ([node 220:52555](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=220-52555)): *"We don't invert the multiplier color when used over dark background, instead we add a white stroke around it to delimitate its shape."* The skill's canonical interpretation is to **always apply the 1 px white stroke** to the symbol's outer container. On light surfaces it's invisible (white-on-white); on dark surfaces it delineates the squircle's edge. Keeping it always-on means agents don't need a "is this background dark?" branch — one symbol asset, one stroke setting, robust against the background changing.
 
-No gradients, no brand palette colors, no outlines (except the dark-background stroke rule above), no effects.
+**Do not invert the flower's colors on dark backgrounds.** The `qonto-symbol-multiplier-white.svg` asset (white squircle + black flower) exists in the asset library as a legacy file; **prefer the canonical `qonto-symbol-multiplier-black.svg` (black squircle + white flower) + always-on 1 px white stroke** for every placement. The white-asset is reserved for very specific exception cases (e.g. an embossed-relief OOH treatment) — flag any planned use to the brand team first.
+
+```javascript
+// After figma.createNodeFromSvg(symbolBlackSvg):
+//   Find the outer squircle path (the largest fill-#050505 path)
+//   Add the always-on stroke
+const squirclePath = symbol.findOne(n => n.type === 'VECTOR' &&
+  Array.isArray(n.fills) && n.fills.some(f => f.color && f.color.r < 0.1));
+squirclePath.strokes = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+squirclePath.strokeWeight = 1;
+squirclePath.strokeAlign = 'INSIDE';
+```
+
+The corresponding rule in §Logo.8's full-lockup Figma recipe inverts only the **wordmark** ink on dark backgrounds; the symbol always stays canonical (black squircle + stroke).
+
+No gradients, no brand palette colors, no outlines (except the symbol stroke rule above), no effects.
 
 **Figma color tokens**
 - Primitive (always exact, no theming): `primary/black` (`#050505`), `primary/white` (`#ffffff`) — from `Colors - Library`, collection "Primitive colors".
@@ -1959,25 +1987,23 @@ A `1080 × 1920` 9:16 Story built on §Composition.7b's **D-reversed** variant �
 **Rules exercised:**
 
 - §Composition.7b D-reversed — subject-aware photo placement: face occupies upper-third → lockup top, copy bottom. Bottom scrim provides headline contrast over Chloe's torso.
-- §Logo.5 reversed-top placement — **cluster (horizontal-right wordmark + entry-points, white) top-LEFT, symbol-multiplier (white) top-RIGHT**, auto gap between. Reading-path rationale: top placement is read first, left-to-right; cluster reads, then the eye lands on the symbol as the brand "punctuation."
+- §Logo.5 reversed-top placement — **cluster (horizontal-right wordmark + entry-points, white) top-LEFT, symbol-multiplier (canonical black + always-on white stroke per §Logo.3) top-RIGHT**, auto gap between. Reading-path rationale: top placement is read first, left-to-right; cluster reads, then the eye lands on the symbol as the brand "punctuation." **The symbol is *not* inverted on dark backgrounds** — keep the canonical black squircle with white flower and let the always-on white stroke delineate the squircle's edge against the photo.
 - §Logo.5b lockup orientation — horizontal lockup (not vertical) because this is an inline marketing surface, not an end frame.
 - §Tone of voice — *"To the point"* (parallel-structure headline), *"Playful but polished"* (the "boring bits" wink, light enough to land), *"At your service"* (subtitle ends with "the boring bits" — wink without obscuring meaning), *"In tune"* (casual emotive register; contrast with §3's formal LinkedIn register).
 - §Composition — large tier headline (X × 2.76 = 149 px), large-tier subtitle (X × 1.37 = 74 px). Subtitle bottom anchored at `canvasH − bottomSafe − X = 1516`; headline stacked above with X/2 gap.
 - §Typography — Bold headline LH 98 / +0.5%, Regular subtitle LH 110 / +0.5%, sentence case, **white ink** over the bottom scrim.
 - §Color — bottom scrim (linear gradient bottom-up, 60 % black) for headline contrast. Top scrim (50 % black, fading down) for lockup contrast against any photo region.
 - §Photography — Chloe Founder Studio Portrait at `scaleMode: 'FILL'` — copy crosses her torso (allowed) but never her face (the rule). 
-- §Asset library — photo + cluster (horizontal-right-EN, white-recoloured locally) + symbol-multiplier-white, all fetched from netlify.
+- §Asset library — photo + cluster (horizontal-right-EN, white-recoloured locally) + symbol-multiplier-**black** (canonical), all fetched from netlify. Stroke is added in code, not in the asset.
 
 **Story safe areas.** Instagram overlays the top ~250 px (status bar, profile chrome) and the bottom ~350 px (caption, reaction tray, share). Treat those as **no-go zones** — the lockup, headline, and any critical copy must sit inside `[250, 1570]` vertically.
 
-**White lockup + symbol — local SVG colour swap.** The horizontal entry-points lockup ships only in `#050505`. The symbol-multiplier ships in both black and white. For the white cluster, substitute the fill colour and re-rasterise:
+**White cluster + canonical symbol.** The horizontal entry-points cluster ships only in `#050505`; for the dark photo background, generate the white-fill variant locally with one substitution. **The symbol stays canonical** (black squircle, white flower) — *do not* fetch `qonto-symbol-multiplier-white.svg` (legacy asset that inverts the squircle). Always apply the 1 px white stroke per §Logo.3.
 
 ```bash
 curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Logo/qonto-logo-category-entry-points-horizontal-right-EN.svg" -o /tmp/q-lockup-h-right.svg
-curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Logo/qonto-symbol-multiplier-white.svg"                       -o /tmp/q-symbol-white.svg
+curl -s "https://qontobrandassetlibrary.netlify.app/api/assets/raw/Logo/qonto-symbol-multiplier-black.svg"                       -o /tmp/q-symbol-black.svg
 sed 's/#050505/#FFFFFF/g' /tmp/q-lockup-h-right.svg > /tmp/q-lockup-h-right-white.svg
-sips -s format png --resampleWidth 2400 /tmp/q-lockup-h-right-white.svg --out /tmp/q-lockup-h-right-white.png
-sips -s format png --resampleWidth 800  /tmp/q-symbol-white.svg          --out /tmp/q-symbol-white.png
 ```
 
 **Build (key excerpts — same helpers as §1):**
@@ -2036,16 +2062,29 @@ const clusterH = Math.round(X * 162 / 144);          // 61 — wordmark glyph la
 const clusterW = Math.round(clusterH * 965 / 162);   // 363
 const symbolSize = X;                               // 54 — symbol = X×X per §Logo.4
 
-const cluster = figma.createRectangle();
+// Cluster — vector, white-recoloured horizontal-right SVG
+const CLUSTER_SVG_WHITE = `<svg width="965" height="162" …>…</svg>`;   // sed-recoloured to #FFFFFF
+const cluster = figma.createNodeFromSvg(CLUSTER_SVG_WHITE);
 cluster.resize(clusterW, clusterH);
 cluster.x = X;                                      // top-left margin
 cluster.y = lockupTopY;
 canvas.appendChild(cluster);
 
-const symbol = figma.createRectangle();
+// Symbol — black canonical (NOT the white-asset inversion) + always-on white stroke
+const SYMBOL_BLACK = `<svg width="138" height="138" …>…</svg>`;        // black squircle, white flower
+const symbol = figma.createNodeFromSvg(SYMBOL_BLACK);
 symbol.resize(symbolSize, symbolSize);
 symbol.x = canvasW - X - symbolSize;                // top-right margin
 symbol.y = lockupTopY + clusterH - symbolSize;      // bottom-align with cluster baseline
+// Always-on 1 px white stroke around the squircle (per §Logo.3) —
+// invisible on light surfaces, delineates the squircle on dark/photo
+const dark = (n) => Array.isArray(n.fills) && n.fills.some(f => f.type === 'SOLID' && f.color.r < 0.1);
+const all = symbol.findAll(n => n.type === 'VECTOR' && dark(n));
+all.sort((a, b) => (b.width * b.height) - (a.width * a.height));
+const squirclePath = all[0];
+squirclePath.strokes = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+squirclePath.strokeWeight = 1;
+squirclePath.strokeAlign = 'INSIDE';
 canvas.appendChild(symbol);
 
 // === CONTENT AT BOTTOM — copy never crosses Chloe's face (upper third) ===
@@ -2061,12 +2100,10 @@ canvas.appendChild(headline);
 headline.y = subtitle.y - Math.round(X * 0.5) - headline.height;
 ```
 
-**Apply image fills (three calls — photo, cluster, symbol):**
+**Apply image fill (photo only — logos are vector per §Logo.9b):**
 
 ```bash
 figma_set_image_fill nodeIds=[photoId]   imageData=/tmp/q-photo-chloe-2160.png       scaleMode=FILL
-figma_set_image_fill nodeIds=[clusterId] imageData=/tmp/q-lockup-h-right-white.png   scaleMode=FIT
-figma_set_image_fill nodeIds=[symbolId]  imageData=/tmp/q-symbol-white.png           scaleMode=FIT
 ```
 
 Then re-bind the returned `imageHash` via `figma_execute` (same plugin quirk).
@@ -2088,8 +2125,8 @@ A `1200 × 627` (LinkedIn sponsored-content default) on §Composition.7 archetyp
 - §Typography — Bold headline at `X × 2.22 = 69 px` (LH 98 / +0.5%), Regular subtitle at `X × 0.93 = 29 px` (LH 110 / +0.5%). At this small canvas (X = 31) most of §Typography.4's pixel floors win over the X-multipliers — body / caption sizes hit `16 / 12 px` floors before the ratios kick in.
 - §Color — white left half, photographic right half — no product palette.
 - §Photography — right-half photo (`Lisa Cs Office Action.png`) at `scaleMode: 'FILL'` cropped to the half. Picked for B2B warmth — a real moment of customer-facing work.
-- §Logo — **full lockup at bottom of the left half** per §Logo.5 priority + §Logo.5b horizontal orientation. Symbol-multiplier (black, X×X = 31×31) at bottom-left, **horizontal-left** wordmark + entry-points cluster (height 60 px, width ≈ 357) at the bottom-right of the left half, auto gap fills the middle of the left half. The cluster scales to fit under the half's right margin without crossing into the photo on the right.
-- §Asset library — photo + horizontal cluster + symbol all fetched live from netlify; same `sips`-rasterised lockup PNG as §1.
+- §Logo — **wordmark alone at the bottom of the left half**, *not* the full lockup. Per §Logo.1's reduction ladder, this canvas's `X = 31` produces entry-points text at `X × 0.245 ≈ 8 px`, which falls below the **12 px floor**. Cluster is dropped; the wordmark-alone variant ships instead. Symbol-multiplier (black, `X × X = 31 × 31`, **always-on white stroke** per §Logo.3) at bottom-left, wordmark-alone (height `X = 31`, width `X × 82/24 ≈ 106`) at bottom-right of the left half, auto gap between.
+- §Asset library — photo + standalone wordmark SVG + symbol-multiplier-black SVG, all imported via `figma.createNodeFromSvg` (vector — see §Logo.9b).
 
 **Build (key excerpts — same helpers as §1):**
 
@@ -2128,40 +2165,45 @@ const subtitle = makeText(
 );
 canvas.appendChild(subtitle);
 
-// Lockup — full lockup at bottom of left half: symbol + horizontal-left cluster.
-// Cluster sized to fit the half's right margin; symbol sized X × X per §Logo.4.
-const clusterH = Math.round(X * 162 / 144);          // 35 — wordmark glyph lands at X per §Logo.4
-const clusterW = Math.round(clusterH * 965 / 162);   // ≈ 209
-const symbolSize = X;                                 // 31
+// Lockup — wordmark alone (entry-points dropped per §Logo.1 floor rule).
+// At X = 31, X × 0.245 ≈ 8 px would put entry-points below the 12 px floor.
+// Standalone wordmark SVG: viewBox 82 × 24. Render so wordmark height = X = 31:
+//   wordmark_w = X × (82 / 24) ≈ 106
+const WORDMARK_SVG = `<svg width="82" height="24" …>…</svg>`;
+const wordmark = figma.createNodeFromSvg(WORDMARK_SVG);
+wordmark.resize(Math.round(X * 82 / 24), X);         // 106 × 31
+wordmark.x = halfW - X - wordmark.width;             // bottom-right of left half
+wordmark.y = canvasH - X - wordmark.height;
+canvas.appendChild(wordmark);
 
-const cluster = figma.createRectangle();
-cluster.resize(clusterW, clusterH);
-cluster.fills = [{ type: 'SOLID', color: { r: 0.3, g: 0.3, b: 0.3 } }];
-cluster.x = halfW - X - cluster.width;               // bottom-right of left half
-cluster.y = canvasH - X - cluster.height;
-canvas.appendChild(cluster);
-
-const symbol = figma.createRectangle();
-symbol.resize(symbolSize, symbolSize);
-symbol.fills = [{ type: 'SOLID', color: { r: 0.3, g: 0.3, b: 0.3 } }];
+// Symbol — black canonical + always-on white stroke (§Logo.3)
+const SYMBOL_SVG = `<svg width="138" height="138" …>…</svg>`;     // black squircle + white inner Q
+const symbol = figma.createNodeFromSvg(SYMBOL_SVG);
+symbol.resize(X, X);                                  // 31 × 31
 symbol.x = X;                                         // bottom-left of left half
-symbol.y = canvasH - X - symbolSize;
+symbol.y = canvasH - X - X;
+// Always-on white stroke on the outer squircle
+const dark = (n) => Array.isArray(n.fills) && n.fills.some(f => f.type === 'SOLID' && f.color.r < 0.1);
+const all = symbol.findAll(n => n.type === 'VECTOR' && dark(n));
+all.sort((a, b) => (b.width * b.height) - (a.width * a.height));
+const squirclePath = all[0];
+squirclePath.strokes = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+squirclePath.strokeWeight = 1;
+squirclePath.strokeAlign = 'INSIDE';
 canvas.appendChild(symbol);
 ```
 
-**Apply image fills (three calls — photo, cluster, symbol):**
+**Apply image fill (photo only — logos are vector per §Logo.9b):**
 
 ```bash
 figma_set_image_fill nodeIds=[photoId]   imageData=/tmp/q-photo-lisa-2160.png  scaleMode=FILL
-figma_set_image_fill nodeIds=[clusterId] imageData=/tmp/q-lockup-h.png         scaleMode=FIT
-figma_set_image_fill nodeIds=[symbolId]  imageData=/tmp/q-symbol-black.png     scaleMode=FIT
 ```
 
 Then re-bind the returned `imageHash` via `figma_execute` (same plugin quirk as §1, §2).
 
 **Side-by-side reading.** Open §2 and §3 next to each other. Same Qonto brand, same colours, same Qonto Sans, same lockup geometry — but the **headline form, vocabulary, register, and rhythm are visibly different**, because §Tone of voice "In tune" adapted those layers to the audience. The principles underneath are unchanged.
 
-*Empirically validated at `1200 × 627` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "LinkedIn Paid Ad Test", section "LinkedIn ad — archetype C split + horizontal lockup". Screenshot verified medium-tier headline at `69 px`, subtitle at `29 px` capped at 70 % width, Lisa office photo on the right half at FILL, and the full lockup with symbol bottom-left + horizontal entry-points cluster bottom-right of the left half (auto gap = 150 px between).*
+*Empirically validated at `1200 × 627` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "LinkedIn Paid Ad Test", section "LinkedIn ad — archetype C split + horizontal lockup". Screenshot verified medium-tier headline at `69 px`, subtitle at `29 px` capped at 70 % width, Lisa office photo on the right half at FILL, **wordmark-alone** (`106 × 31`) bottom-right of the left half, **symbol-multiplier-black with always-on white stroke** (`31 × 31`) bottom-left.*
 
 ---
 
