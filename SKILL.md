@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 3.0
+version: 3.1
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 3.0 · Last updated: 2026-04-28 · Status: living document
+> Version: 3.1 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -413,6 +413,13 @@ Reference: Brand Kit SOT node [220:51714](https://www.figma.com/design/9MBP81zVp
 **Also valid.** All other placements in the SOT Placement section ([node 220:52561](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=220-52561)) are acceptable when the priority placement does not serve the composition. They follow the same rules — `X` margin on all sides, height `X`, tight cluster, auto gap when both symbol and cluster appear:
 
 - **Top edge-anchored, full width.** **Cluster (wordmark / wordmark + entry points) top-LEFT, symbol top-RIGHT** — *reversed* from the priority bottom placement. Reading-path rationale: when the lockup is at the top, the eye lands on the cluster first and travels right to the symbol, mirroring how readers scan a page top-to-bottom and left-to-right. The symbol becomes the trailing "punctuation," not the lead. Auto gap between cluster's right edge and symbol's left edge fills the canvas width. Use this whenever the canvas's bottom is occupied by the brief's primary subject — full-bleed photography (archetype D) where the subject sits in the lower two-thirds, busy compositions where the bottom strip is unavailable, or any layout where the brand needs to read before the content rather than after.
+- **Bisected-canvas placement (content on one half, image on the other).** Reference: SOT [node 564:7739](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=564-7739). When the canvas is split into a content half and an image half (archetype C — common for landscape ads, banners, page-width hero strips), the lockup spans the **full content half** and reverses to read into the image:
+  - **Wordmark at the canvas-edge margin** (left half: at the canvas left, `X` from edge; right half: mirror).
+  - **Divider + entry-points** to the right of the wordmark inside the cluster (so the cluster reads wordmark → entry-points, left-to-right, like the top placement).
+  - **Symbol at the half-canvas divide**, `X` inset from the centre line (the inner edge of the content half — i.e. the boundary between content and image).
+  - **Auto gap** between the cluster's right edge and the symbol's left edge fills the remaining width.
+  - **Reading-path rationale:** the symbol sits exactly at the canvas's horizontal midpoint, acting as a brand "seal" at the threshold between content and image. The eye reads wordmark → entry-points → symbol → image — brand → service descriptor → mark → subject. This is the canonical pattern for left-half-content / right-half-image compositions and inverts cleanly when the halves swap.
+  - **Per §Logo.5b**, use the `horizontal-right-<LANG>` cluster orientation (wordmark on the left of the divider, entry-points on the right) so the cluster reads outward from the canvas edge.
 - **Bottom-right cluster only** (no symbol). Use when the wordmark or wordmark + entry-points configuration is chosen and the symbol is dropped per the §Logo.1 reduction ladder.
 - **Bottom-left cluster only** (no symbol). Mirror of the above.
 - **Top-right / top-left cluster only.** Same, anchored to the top edge — when no symbol is used, the cluster anchors to whichever corner the composition needs.
@@ -2273,7 +2280,7 @@ A `1200 × 627` (LinkedIn sponsored-content default) on §Composition.7 archetyp
 - §Typography — Bold headline at `1.25 × X = 63 px` (LH 98 / +0.5%), Regular subtitle at `0.5 × X = 25 px` (LH 110 / +0.5%). At this small canvas (X = 50) most of §Typography.4's pixel floors win over the X-multipliers — body sizes hit `16 px` floor and caption hits `12 px` before the ratios kick in.
 - §Color — white left half, photographic right half — no product palette.
 - §Photography — right-half photo (`Lisa Cs Office Action.png`) at `scaleMode: 'FILL'` cropped to the half. Picked for B2B warmth — a real moment of customer-facing work.
-- §Logo — **wordmark alone at the bottom of the left half**, *not* the full lockup. Per §Logo.1's reduction ladder, this canvas's `X = 50` (digital 8% of 627) produces entry-points text at `X × 0.245 ≈ 12 px`, below the **20 px digital floor**. Cluster is dropped; the wordmark-alone variant ships instead. Symbol-multiplier (black, `X × X = 50 × 50`, **always-on white stroke** per §Logo.3) at bottom-left, wordmark-alone (height `X = 50`, width `X × 82/24 ≈ 171`) at bottom-right of the left half, auto gap between. Canvas margin = `X = 50` (unified — same anchor for layout and lockup).
+- §Logo — **bisected-canvas placement** per §Logo.5 (SOT [node 564:7739](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=564-7739)): the lockup spans the full content (left) half. **Wordmark at canvas-left margin** (`50` × `171`) → divider (`1 × 50`) → **entry-points** text → auto gap → **symbol at the half-canvas centre** (`50 × 50`, x = `halfW − X − X = 500`, with always-on 1 px white stroke per §Logo.3). The whole lockup reads wordmark → entry-points → symbol → photo, with the symbol sitting at the canvas horizontal centre as the threshold between content and image. **Entry-points exception**: at this canvas's `X = 50`, the EP size of `12 px` is below the standard 20 px digital floor; the SOT bisected-canvas pattern overrides the floor here because the wordmark/EP/symbol reading-path is the brand-comprehension benefit, and the EP at 12 px remains readable on retina screens at intimate viewing distance. Use the `horizontal-right-EN` cluster orientation per §Logo.5b.
 - §Asset library — photo + standalone wordmark SVG + symbol-multiplier-black SVG, all imported via `figma.createNodeFromSvg` (vector — see §Logo.9b).
 
 **Build (key excerpts — same helpers as §1):**
@@ -2314,24 +2321,54 @@ const subtitle = makeText(
 );
 canvas.appendChild(subtitle);
 
-// Lockup — wordmark alone (entry-points dropped per §Logo.1 dual-floor rule).
-// X = 0.08 × min(1200, 627) = 50 (digital). At X = 50, EP = round(50 × 0.245) = 12 px,
-// below the 20 px digital floor → drop entry-points, ship wordmark-alone.
-// Standalone wordmark SVG: viewBox 82 × 24. Render so wordmark height = X = 50:
-//   wordmark_w = X × (82 / 24) ≈ 171
+// Lockup — BISECTED-CANVAS PLACEMENT per §Logo.5 (SOT 564:7739).
+// Spans the full left (content) half: wordmark at canvas-left → divider → entry-points →
+// auto gap → symbol at half-canvas centre. Reading-path: wordmark → EP → symbol → photo.
+//
+// EP exception: at X = 50, EP = round(50 × 0.245) = 12 px — below the 20 px digital floor.
+// The SOT bisected-canvas pattern explicitly shows entry-points at this scale; the reading-
+// path benefit overrides the floor here. EP stays readable on retina at intimate distance.
+const halfL    = Math.round(X / 2);                    // 25 — intra-cluster gap
+const baseY    = canvasH - X - X;                       // 527 — lockup baseline
+const ink      = { r: 0.02, g: 0.02, b: 0.02 };
+
+// 1. Wordmark — anchored at canvas-left X margin
 const WORDMARK_SVG = `<svg width="82" height="24" …>…</svg>`;
 const wordmark = figma.createNodeFromSvg(WORDMARK_SVG);
-wordmark.resize(Math.round(X * 82 / 24), X);                      // 171 × 50
-wordmark.x = halfW - X - wordmark.width;             // bottom-right of left half (canvas margin X)
-wordmark.y = canvasH - X - wordmark.height;
+const wordmarkW = Math.round(X * 82 / 24);             // 171
+wordmark.resize(wordmarkW, X);                          // 171 × 50
+wordmark.x = X;                                         // 50 — canvas-left margin
+wordmark.y = baseY;
 canvas.appendChild(wordmark);
 
-// Symbol — black canonical + always-on white stroke (§Logo.3)
+// 2. Divider — to the right of wordmark with X/2 gap
+const divider = figma.createRectangle();
+divider.resize(1, X);                                   // 1 × 50
+divider.fills = [{ type: 'SOLID', color: ink }];
+divider.x = wordmark.x + wordmarkW + halfL;            // 50 + 171 + 25 = 246
+divider.y = baseY;
+canvas.appendChild(divider);
+
+// 3. Entry-points — Qonto Sans Regular text node, X/2 right of divider
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Regular' });
+const epText = figma.createText();
+epText.fontName = { family: 'Qonto Sans', style: 'Regular' };
+epText.characters = 'Business account\nFinance management\nCompany creation';
+epText.fontSize = Math.round(X * 0.245);               // 12 — sub-floor exception per bisected-canvas pattern
+epText.lineHeight = { unit: 'PIXELS', value: Math.round(X * 0.36) };   // 18
+epText.fills = [{ type: 'SOLID', color: ink }];
+epText.textAutoResize = 'WIDTH_AND_HEIGHT';
+epText.textAlignHorizontal = 'LEFT';
+canvas.appendChild(epText);
+epText.x = divider.x + 1 + halfL;                      // 246 + 1 + 25 = 272
+epText.y = baseY + Math.round((X - epText.height) / 2);   // vertically centre on baseline
+
+// 4. Symbol — black canonical + always-on white stroke (§Logo.3), at the half-canvas centre
 const SYMBOL_SVG = `<svg width="138" height="138" …>…</svg>`;     // black squircle + white inner Q
 const symbol = figma.createNodeFromSvg(SYMBOL_SVG);
-symbol.resize(X, X);                                 // 50 × 50 — symbol = X × X
-symbol.x = X;                                        // bottom-left of left half (canvas margin X)
-symbol.y = canvasH - X - X;
+symbol.resize(X, X);                                    // 50 × 50 — symbol = X × X
+symbol.x = halfW - X - X;                               // 600 - 50 - 50 = 500 — right edge of left half
+symbol.y = baseY;
 // Always-on white stroke on the outer squircle
 const dark = (n) => Array.isArray(n.fills) && n.fills.some(f => f.type === 'SOLID' && f.color.r < 0.1);
 const all = symbol.findAll(n => n.type === 'VECTOR' && dark(n));
@@ -2353,7 +2390,7 @@ Then re-bind the returned `imageHash` via `figma_execute` (same plugin quirk as 
 
 **Side-by-side reading.** Open §2 and §3 next to each other. Same Qonto brand, same colours, same Qonto Sans, same lockup geometry — but the **headline form, vocabulary, register, and rhythm are visibly different**, because §Tone of voice "In tune" adapted those layers to the audience. The principles underneath are unchanged.
 
-*Empirically validated at `1200 × 627` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "LinkedIn Paid Ad Test". Screenshot verified **unified `X = 50`** (digital 8 % of 627): medium-tier headline at 1.25 × X = 63 px wraps to 3 lines, subtitle at 0.5 × X = 25 px capped at 70 % width, Lisa office photo on the right half at FILL, **wordmark-alone** (171 × 50) bottom-right of the left half, **symbol-multiplier-black with always-on white stroke** (50 × 50) bottom-left at canvas margin = X = 50. Entry-points dropped: at `X = 50` the EP size of 12 px is below the 20 px digital floor, so the cluster collapses to wordmark-alone per §Logo.1.*
+*Empirically validated at `1200 × 627` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "LinkedIn Paid Ad Test". Screenshot verified **unified `X = 50`** (digital 8 % of 627): medium-tier headline at 1.25 × X = 63 px wraps to 3 lines, subtitle at 0.5 × X = 25 px capped at 70 % width, Lisa office photo on the right half at FILL, **bisected-canvas lockup placement** per §Logo.5 / SOT 564:7739: wordmark (171 × 50) at canvas-left X margin → divider (1 × 50) at X/2 gap → entry-points text at 12 px (sub-floor exception per bisected-canvas pattern) → auto gap (108 px) → symbol-multiplier-black with always-on white stroke (50 × 50) at the half-canvas centre (x = 500). Reading-path: wordmark → entry-points → symbol → photo, with the symbol acting as the brand "seal" at the threshold between content and image.*
 
 ---
 
