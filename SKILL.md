@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.17
+version: 2.18
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.17 · Last updated: 2026-04-28 · Status: living document
+> Version: 2.18 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -210,25 +210,26 @@ Qonto has five canonical logo configurations. Decide which applies, then use the
 **Decision rule — prefer the richest configuration that fits.** In order of preference:
 
 1. **Full lockup** (symbol + entry points + divider + wordmark) — use this by default whenever the canvas has room. It stretches edge-to-edge between the layout margins (see §Logo.5), so the true test is geometry, not aesthetics. Specifically, it fits when:
-   - Canvas width ≥ **~8 × X** (canvas margin + symbol + minimum auto gap + entry points + X/2 + divider + X/2 + wordmark + canvas margin), AND
-   - `X` ≥ **49 px** so the entry-points text size `round(X × 0.245)` lands at or above the **12 px floor** per §Logo.4. Equivalently: `min(canvas_w, canvas_h) ≥ 980 px`.
+   - Canvas width ≥ **~8 × X_logo** (canvas margin + symbol + minimum auto gap + entry points + X_logo/2 + divider + X_logo/2 + wordmark + canvas margin), AND
+   - Entry-points text `round(X_logo × 0.245)` clears the **medium-specific floor** per §Logo.4: `≥ 12 px` print, `≥ 20 px` digital. Practically: `min(canvas_w, canvas_h) ≥ 980 px` for print, **`≥ 1025 px` for digital** (since `X_logo` jumps to 8 % of min on digital).
 2. **Wordmark + entry points** — when the full lockup would be forced to collapse its auto gap (symbol and cluster touching the minimum). Keeps the service descriptor; drops the symbol.
-3. **Wordmark alone** — when entry-points fall below the 12 px floor (i.e. **X < 49**, or `min(W, H) < 980`), or when the audience already has full brand context. **This is the canonical move for tight social formats** — `1200 × 627` LinkedIn ads (X = 31), `1080 × 600` email banners (X = 30), most YouTube thumbnails (X = 36). Trying to keep entry-points at sub-floor sizes produces unreadable text and breaks the X-anchored hierarchy.
+3. **Wordmark alone** — when entry-points fall below the medium-specific floor, or when the audience already has full brand context. **This is the canonical move for tight social formats** — `1200 × 627` LinkedIn ads (X_logo = 50, EP = 12 below the 20-floor), email banners, most YouTube thumbnails (X_logo = 58, EP = 14 below the 20-floor). Trying to keep entry-points at sub-floor sizes produces unreadable text and breaks the X-anchored hierarchy.
 4. **Symbol only** (squircle multiplier or circular badge) — compact/functional contexts, or when the canvas is too small for the wordmark at 24 px height.
 
 **Quick decision table — which configuration for which surface:**
 
-| Canvas | X | Entry-points size at X × 0.245 | Configuration |
-|---|---|---|---|
-| `1080 × 1080` IG square / `1080 × 1350` IG portrait / `1080 × 1920` IG Story | 54 | **13 px** ✓ | Full lockup or wordmark + entry points |
-| `1920 × 1080` deck slide / OOH derivatives | 54 | **13 px** ✓ | Full lockup |
-| `2880 × 1620` OOH | 81 | **20 px** ✓ | Full lockup |
-| `1200 × 627` LinkedIn sponsored content | 31 | **8 px** ✗ below floor | **Wordmark alone** (drop entry-points) |
-| `1200 × 600` email banner | 30 | **7 px** ✗ below floor | **Wordmark alone** |
-| `1280 × 720` YouTube thumbnail | 36 | **9 px** ✗ below floor | **Wordmark alone** |
-| `400 × 400` favicon-class | 20 | **5 px** ✗ below floor | **Symbol only** |
+| Canvas | Medium | X_logo | EP at X_logo × 0.245 | Configuration |
+|---|---|---|---|---|
+| `1080 × 1080` IG square / `1080 × 1350` IG portrait / `1080 × 1920` IG Story | digital | 86 | **21 px** ✓ (>20) | Full lockup or wordmark + entry points |
+| `1920 × 1080` deck slide (presented on screen) | digital | 86 | **21 px** ✓ | Full lockup |
+| `1920 × 1080` printed deck handout | print | 54 | **13 px** ✓ (>12) | Full lockup |
+| `2880 × 1620` OOH / DOOH (print viewing distance) | print | 81 | **20 px** ✓ | Full lockup |
+| `1200 × 627` LinkedIn sponsored content | digital | 50 | **12 px** ✗ < 20 floor | **Wordmark alone** (drop entry-points) |
+| `1200 × 600` email banner | digital | 48 | **12 px** ✗ < 20 floor | **Wordmark alone** |
+| `1280 × 720` YouTube thumbnail | digital | 58 | **14 px** ✗ < 20 floor | **Wordmark alone** |
+| `400 × 400` favicon-class | digital | 32 | **8 px** ✗ < 20 floor | **Symbol only** |
 
-**The cluster fit-test, plain.** *"Compute `round(X × 0.245)`. If the result is ≥ 12, ship the entry-points cluster. If it's < 12, drop entry-points and use the wordmark alone (or wordmark + symbol composed manually)."* This is the rule that keeps the lockup legible at every scale Qonto ships. **Do not** try to keep entry-points below 12 px by using a smaller proportion or pushing the lockup oversized — both break the X-anchored hierarchy.
+**The cluster fit-test, plain.** *"Compute `round(X_logo × 0.245)`. If the result is ≥ 12 (print) or ≥ 20 (digital), ship the entry-points cluster. Otherwise drop entry-points and use the wordmark alone (or wordmark + symbol composed manually)."* This is the rule that keeps the lockup legible at every scale Qonto ships. **Do not** try to keep entry-points below the floor by using a smaller proportion or pushing the lockup oversized — both break the X-anchored hierarchy.
 
 When in doubt, start from §Logo.5 priority placement and fall back to the next configuration only when the geometry breaks.
 
@@ -304,83 +305,101 @@ No gradients, no brand palette colors, no outlines (except the symbol stroke rul
 
 **DS vs SOT:** if a DS token value disagrees with a hex in this file, the hex wins (the DS is mid-migration to match the SOT). Flag the mismatch to the brand team. Confirmed in-sync as of 2026-04-22: `content/primary-a` = `primary/black` = `#050505`.
 
-### 4. Sizing — the 5% rule
+### 4. Sizing — the X-system
 
-This is the rule from the SOT that replaces the old vague "x-height of wordmark" guidance.
+The X-system replaces the old vague "x-height of wordmark" guidance with a single canvas-anchored ratio. **Two distinct anchors,** decoupled so each can do its job:
 
-> **Wordmark height = clear space = layout margin = 5% of the shortest side of the canvas.**
+| Anchor | What it sizes | Formula |
+|---|---|---|
+| `X` (compositional) | Margins, gutters, vertical rhythm, type sizes (§Typography), content-tile radii (§Object styles), all spacing | `0.05 × min(canvas_w, canvas_h)` |
+| `X_logo` (lockup) | Wordmark, cluster, symbol, entry-points, clear space around the lockup | **Digital:** `0.08 × min(W, H)`. **Print:** `0.05 × min(W, H)` (= `X`). |
 
-Call this value `X`. Every logo dimension is derived from `X`.
+**The original SOT formulation.** *"Wordmark height = clear space = layout margin = 5 % of the shortest side."* The SOT collapses three roles into one ratio — and on print it works perfectly. On digital, the skill splits the lockup off so it can scale up while the layout stays calibrated. **Wordmark height = clear space = `X_logo`** (8 % digital / 5 % print); **layout margin = `X`** (5 % everywhere). The two converge in print; they diverge by a 1.6× factor in digital.
 
-**Verification against SOT.** The reference layout in the Brand Kit SOT is 2000 px wide; its wordmark is rendered at 100 × 356. That matches X = 100 (5% of 2000), wordmark height = X, wordmark width = X × (492 / 138) = 356. Trust this ratio.
+**Why two anchors.** On large print canvases — OOH, brochures, decks projected on a wall — viewing distance is generous and 5 % gives the lockup ample presence. On compact digital canvases — phones, laptop screens, in-app surfaces — the same 5 % rule produces a lockup that disappears against headline copy and image content. Bumping only the lockup to 8 % gives the brand mark its intended visual weight without disrupting the type tiers, margins, or vertical rhythm calibrated against `X`. Mnemonic: **5 for ink, 8 for screens.**
 
-| Canvas | Shortest side | `X` (margin, clear space, wordmark height) | Wordmark width |
-|---|---|---|---|
-| 1080 × 1080 (square social) | 1080 | **54 px** | 193 px |
-| 1080 × 1350 (portrait social) | 1080 | 54 px | 193 px |
-| 1920 × 1080 (16:9 slide / OOH) | 1080 | 54 px | 193 px |
-| 1200 × 630 (OG / link card) | 630 | 32 px | 114 px |
-| 2480 × 3508 (A4 @ 300dpi) | 2480 | 124 px | 442 px |
-| A4 print (210 × 297 mm) | 210 mm | 10.5 mm | 37.4 mm |
+**The print / digital boundary.**
 
-**Margin** — every edge of the canvas has `X` of padding. Do not place anything (logo, text, image) closer to the edge than `X`.
+| Medium | Surfaces | `X_logo` |
+|---|---|---|
+| Digital (intimate viewing) | Social, web, in-app, video, email banners, deck slides presented on screen, dashboards, banner ads | `0.08 × min(W, H)` |
+| Print | OOH, **DOOH** (digital out-of-home — pixels, but viewed at distance), flyers, brochures, posters, business cards, packaging, deck PDFs printed for handout | `0.05 × min(W, H)` (= `X`) |
 
-**Clear space** — `X` on all four sides of the logo. Nothing (text, image, other logo, shape) may enter this zone.
+DOOH is digital pixels at print viewing distance — follow print at 5 %.
+
+**Verification against SOT.** The reference layout in the Brand Kit SOT is 2000 px wide and frames a print artefact; its wordmark is rendered at 100 × 356. That matches `X_logo = X = 100` (5 % of 2000, print medium → no bump), wordmark height = `X_logo`, wordmark width = `X_logo × (492 / 138) = 356`. The SOT ratio is sound; the digital bump is a delta layered on top.
+
+| Canvas | Medium | Min dim | `X` | `X_logo` | Wordmark width |
+|---|---|---|---|---|---|
+| 1080 × 1080 IG square | digital | 1080 | 54 | **86** | 308 |
+| 1080 × 1350 IG portrait | digital | 1080 | 54 | **86** | 308 |
+| 1080 × 1920 IG Story | digital | 1080 | 54 | **86** | 308 |
+| 1920 × 1080 deck (presented on screen) | digital | 1080 | 54 | **86** | 308 |
+| 1920 × 1080 deck (printed handout) | print | 1080 | 54 | 54 | 193 |
+| 1200 × 630 LinkedIn / OG | digital | 630 | 32 | **50** | 179 |
+| 2480 × 3508 A4 brochure | print | 2480 | 124 | 124 | 442 |
+| 2880 × 1620 OOH | print | 1620 | 81 | 81 | 289 |
+| A4 print (210 × 297 mm) | print | 210 mm | 10.5 mm | 10.5 mm | 37.4 mm |
+
+**Margin** — every edge of the canvas has `X` of padding (compositional). Do not place anything (logo, text, image) closer to the edge than `X`.
+
+**Clear space around the lockup** — `X_logo` on all four sides of the lockup. Nothing (text, image, other logo, shape) enters this zone. In digital, `X_logo > X`, so the clear-space zone extends inward beyond the canvas margin — content placed at the canvas margin is fine; content within `X_logo` of the lockup is not.
 
 **Logo dimensions** — the wordmark component (`Qonto logo wordmark`, source 492 × 138, aspect ratio 3.57 : 1):
 
 ```
-wordmark_height = X
-wordmark_width  = X × (492 / 138) ≈ X × 3.57
+wordmark_height = X_logo
+wordmark_width  = X_logo × (492 / 138) ≈ X_logo × 3.57
 ```
 
-The logo is intentionally small — at 1080 px it is ~18 % of canvas width. It anchors the composition; it does not dominate it.
+The logo has intentional brand presence — at 1080 px digital, the wordmark is ~28 % of canvas width. It anchors the composition with weight; it does not dominate it.
 
 After instantiating the component in Figma, call `instance.resize(wordmark_width, wordmark_height)`. The component preserves its internal proportions.
 
 **Cluster sourcing — Figma comps build manually; non-Figma surfaces use the asset-library SVG.** The wordmark + entry-points cluster has two valid construction paths, and the choice matters for legibility:
 
-- **In Figma marketing comps:** **build the lockup manually** — wordmark SVG (vector) + divider rectangle + **entry-points as a Figma TEXT node** (Qonto Sans Regular, size = `round(X × 0.245)` per §Logo.4). Text gets sub-pixel anti-aliasing and font hinting at any scale, which is the difference between "13 px reads cleanly" and "13 px renders as fuzzy paths" — the asset-library cluster SVG ships entry-points as **vector path data**, which loses readability when scaled below ~30 px on screen. Rendering as text fixes that. See §Reference compositions §1 / §2 for the canonical Figma recipe.
+- **In Figma marketing comps:** **build the lockup manually** — wordmark SVG (vector) + divider rectangle + **entry-points as a Figma TEXT node** (Qonto Sans Regular, size = `round(X_logo × 0.245)`). Text gets sub-pixel anti-aliasing and font hinting at any scale, which is the difference between "21 px reads cleanly" and "21 px renders as fuzzy paths" — the asset-library cluster SVG ships entry-points as **vector path data**, which loses readability when scaled below ~30 px on screen. Rendering as text fixes that. See §Reference compositions §1 / §2 for the canonical Figma recipe.
 - **In non-Figma surfaces** (HTML, decks, print exports, social tools that accept SVG): fetch the cluster SVG directly from the asset library — the renderer handles text shaping and the entry-points read fine because it's the renderer's font engine, not Figma's vector rasterizer, doing the work.
 
 The sizing math below applies in both cases — it's the geometry that matters, not the construction.
 
-**Sizing the wordmark + entry-points cluster.** The `wordmark height = X` rule applies to the **wordmark glyph** ("Qonto") regardless of which lockup configuration the agent is rendering. When using the asset-library entry-points cluster SVG (viewBox `965 × 162`) as a single import, the cluster wraps the wordmark inside a larger frame that also holds the divider, the entry-points text, and clear-space padding. **The wordmark glyph in that cluster occupies `144 × 162 = 89 %` of the viewBox height** (measured empirically — Q-glyph cap-height + descender). To render so the wordmark glyph hits `X`:
+**Sizing the wordmark + entry-points cluster.** The `wordmark height = X_logo` rule applies to the **wordmark glyph** ("Qonto") regardless of which lockup configuration the agent is rendering. When using the asset-library entry-points cluster SVG (viewBox `965 × 162`) as a single import, the cluster wraps the wordmark inside a larger frame that also holds the divider, the entry-points text, and clear-space padding. **The wordmark glyph in that cluster occupies `144 × 162 = 89 %` of the viewBox height** (measured empirically — Q-glyph cap-height + descender). To render so the wordmark glyph hits `X_logo`:
 
 ```
-cluster_height = X × (162 / 144) ≈ X × 1.125
-cluster_width  = cluster_height × (965 / 162) ≈ X × 6.7
+cluster_height = X_logo × (162 / 144) ≈ X_logo × 1.125
+cluster_width  = cluster_height × (965 / 162) ≈ X_logo × 6.7
 ```
 
 Worked examples:
 
-| Canvas | X | cluster_height | cluster_width | wordmark glyph in render |
-|---|---|---|---|---|
-| 1080 × 1080 / 1080 × 1350 / 1080 × 1920 (IG square / portrait / Story) | 54 | 61 | 362 | 54 |
-| 1200 × 627 (LinkedIn ad) | 31 | 35 | 207 | 31 |
-| 1920 × 1080 (deck slide) | 54 | 61 | 362 | 54 |
-| 2880 × 1620 (OOH) | 81 | 91 | 543 | 81 |
+| Canvas | Medium | X_logo | cluster_height | cluster_width | wordmark glyph in render |
+|---|---|---|---|---|---|
+| 1080 × 1080 / 1080 × 1350 / 1080 × 1920 (IG square / portrait / Story) | digital | 86 | 97 | 575 | 86 |
+| 1200 × 627 (LinkedIn ad) | digital | 50 | 56 | 333 | 50 — but EP < 20 floor → drop EP, ship wordmark alone |
+| 1920 × 1080 (deck presented on screen) | digital | 86 | 97 | 575 | 86 |
+| 1920 × 1080 (printed deck handout) | print | 54 | 61 | 362 | 54 |
+| 2880 × 1620 (OOH) | print | 81 | 91 | 543 | 81 |
 
-**Don't render the cluster at `h = X` directly** — that pushes the wordmark down to `0.89 X`, undersizing it relative to the X-system, and the entry-points text falls under the 12 px floor at all common social scales. **Don't render the cluster at `h = 162` (1:1 viewBox) either** — that pushes the wordmark up to `1.65 X` (in the IG-square case, wordmark = 144 vs canonical 54), making the lockup compete with the headline rather than anchor below it. Use `h ≈ 1.125 × X` so the wordmark lands at `X` and everything else (divider, entry-points text, clear space) scales proportionally.
+**Don't render the cluster at `h = X_logo` directly** — that pushes the wordmark down to `0.89 X_logo`, undersizing it relative to the X-system. **Don't render the cluster at `h = 162` (1:1 viewBox) either** — that oversizes the wordmark and the lockup competes with the headline rather than anchoring it. Use `h ≈ 1.125 × X_logo` so the wordmark glyph lands at `X_logo` and everything else (divider, entry-points text, clear space) scales proportionally.
 
-**Symbol (flower) dimensions** — when used standalone (app icon, avatar, favicon) or as part of the full lockup: `symbol_size = X × X` (square). The symbol's container handles its own internal padding.
+**Symbol (flower) dimensions** — when used standalone (app icon, avatar, favicon) or as part of the full lockup: `symbol_size = X_logo × X_logo` (square). The symbol's container handles its own internal padding.
 
-**Full lockup spacing** (symbol + entry points + divider + wordmark): each piece has height `X`. The lockup stretches the full layout width — the gap between the **symbol** and the **(entry points + divider + wordmark) cluster** is **auto** (it fills the remaining width between margins). Inside the cluster, gaps are fixed at `X / 2`: entry points → divider = `X/2`, divider → wordmark = `X/2`. Vertical divider: height `X`, 1 px stroke. Squircle corner radius on the symbol's inner `square` frame ≈ `X × 0.22`.
+**Full lockup spacing** (symbol + entry points + divider + wordmark): each piece has height `X_logo`. The lockup stretches the full layout width — the gap between the **symbol** and the **(entry points + divider + wordmark) cluster** is **auto** (it fills the remaining width between margins). Inside the cluster, gaps are fixed at `X_logo / 2`: entry points → divider = `X_logo / 2`, divider → wordmark = `X_logo / 2`. Vertical divider: height `X_logo`, 1 px stroke. Squircle corner radius on the symbol's inner `square` frame ≈ `X_logo × 0.22`.
 
-Minimum auto gap — if the gap would compress below `X`, the full lockup no longer fits: drop to wordmark + entry points per §Logo.1. See §Logo.8 for the exact recipe.
+Minimum auto gap — if the gap would compress below `X_logo`, the full lockup no longer fits: drop to wordmark + entry points per §Logo.1. See §Logo.8 for the exact recipe.
 
 **Scalability floor** — never render below these sizes:
 - Wordmark alone or wordmark+symbol: minimum 24 px height on screen, 0.25 in print.
 - Below 24 px on screen, switch to **symbol only** (favicon/app icon).
-- With entry points: the entry-point text size is the floor — 12 px screen, 8 pt print. If the layout cannot fit 12 px entry-point text, drop the entry points.
+- With entry points: the entry-points text size has a **medium-specific floor** — `< 12 px` (print) or `< 20 px` (digital). If the layout cannot meet its medium's floor, drop the entry points and ship wordmark-alone (or wordmark + symbol).
 
 **Entry-points typography** — from the SOT (measured on node 220:51724):
 - Family: **Qonto Sans** (not Inter). Always use this family name. Some SOT nodes currently carry the intermediate label `Qonto Sans v4` — treat that as a naming artefact and use `Qonto Sans` in all output.
 - Weight: **Regular**.
-- Size: `round(X × 0.245)` px — at X=54 that's 13 px; at X=100 that's 24 px. Hard floor of 12 px (drop the entry points if the computed value falls below).
-- Line-height: `round(X × 0.36)` px — at X=54 that's 19 px; at X=100 that's 36 px.
+- Size: `round(X_logo × 0.245)` px — at `X_logo = 86` (1080 IG digital) that's 21 px; at `X_logo = 100` (large print) that's 24 px. **Dual hard floor: 12 px print, 20 px digital — drop the entry points if the computed value falls below the medium's floor.**
+- Line-height: `round(X_logo × 0.36)` px — at `X_logo = 86` that's 31 px; at `X_logo = 100` that's 36 px.
 - Color: same as the divider and wordmark — `#050505` on light, `#ffffff` on dark.
-- **Alignment: left within the text block.** Lines start flush left; the block's right edge sits `X/2` from the divider. The ragged right edge (Invoicing shorter than Business Account) is intentional — don't right-align.
+- **Alignment: left within the text block.** Lines start flush left; the block's right edge sits `X_logo / 2` from the divider. The ragged right edge (Invoicing shorter than Business Account) is intentional — don't right-align.
 - Three lines maximum: `Business Account\nCompany Creation\nInvoicing` is the canonical copy. Translate per market; keep to three short lines.
 
 ### 5. Placement
@@ -469,18 +488,22 @@ instance.x = X;                                   // bottom-left placement
 instance.y = canvasH - X - wordmarkH;
 ```
 
-**Full lockup recipe** — symbol (squircle) anchored at bottom-left margin `X`, (entry points + divider + wordmark) cluster anchored at bottom-right margin `X`, with **auto space filling between them**. All pieces share height `X`. Squircle multiplier is not a single library component; compose it from `Qonto logo square` with a corner-radius override on its inner `square` frame.
+**Full lockup recipe** — symbol (squircle) anchored at bottom-left margin `X`, (entry points + divider + wordmark) cluster anchored at bottom-right margin `X`, with **auto space filling between them**. All lockup pieces share height `X_logo` (per §Logo.4 — `0.08 × min(W, H)` for digital, `0.05 × min(W, H)` for print). Squircle multiplier is not a single library component; compose it from `Qonto logo square` with a corner-radius override on its inner `square` frame.
 
-Before running: check the configuration actually fits (§Logo.1 decision rule). If canvas width < `8 × X`, fall back to wordmark + entry points.
+Before running: check the configuration actually fits (§Logo.1 decision rule). If canvas width < `8 × X_logo`, fall back to wordmark + entry points.
 
 ```javascript
 const canvasW = 1080;
 const canvasH = 1350;
-const X = Math.round(Math.min(canvasW, canvasH) * 0.05);   // 54
-const cornerR   = Math.round(X * 0.22);                    // 12 — squircle corner
-const clusterGap = Math.round(X * 0.5);                    // 27 — intra-cluster gap
-const wordmarkW = Math.round(X * (492 / 138));             // 193
-const bgIsDark  = false;                                   // flip for dark canvases
+const MEDIUM  = 'digital';                                 // 'digital' or 'print' — see §Logo.4 boundary
+const minDim  = Math.min(canvasW, canvasH);
+const X       = Math.round(minDim * 0.05);                 // 54 — canvas margin, compositional
+const X_logo  = Math.round(minDim * (MEDIUM === 'digital' ? 0.08 : 0.05));   // 86 digital / 54 print
+const epFloor = MEDIUM === 'digital' ? 20 : 12;
+const cornerR    = Math.round(X_logo * 0.22);              // 19 — squircle corner
+const clusterGap = Math.round(X_logo * 0.5);               // 43 — intra-cluster gap
+const wordmarkW  = Math.round(X_logo * (492 / 138));       // 308
+const bgIsDark   = false;                                  // flip for dark canvases
 
 const SQUARE_SET_KEY   = '8aa7d855955618d4b44821f577443de9de00a0eb';
 const WORDMARK_SET_KEY = 'ea8c642aa816c04f75bb326581c12a90e51c833e';
@@ -491,7 +514,7 @@ const inkRGB = bgIsDark ? { r: 1, g: 1, b: 1 } : { r: 0.02, g: 0.02, b: 0.02 };
 
 // 1. Symbol — ALWAYS keep the color=black variant. On dark bg add a white stroke, never flip to color=white.
 const sym = squareSet.children.find(c => c.name === 'color=black').createInstance();
-sym.resize(X, X);
+sym.resize(X_logo, X_logo);
 const innerSq = sym.findOne(n => n.type === 'FRAME' && n.name === 'square');
 if (innerSq) {
   innerSq.cornerRadius = cornerR;                          // squircle
@@ -502,9 +525,9 @@ if (innerSq) {
   }
 }
 
-// 2. Entry-points text — Qonto Sans Regular, scaled from X. Size floors at 12 px.
-const entrySize = Math.max(12, Math.round(X * 0.245));    // 13 at X=54, 24 at X=100
-const entryLH   = Math.round(X * 0.36);                   // 19 at X=54, 36 at X=100
+// 2. Entry-points text — Qonto Sans Regular, scaled from X_logo. Medium-specific floor.
+const entrySize = Math.max(epFloor, Math.round(X_logo * 0.245));   // 21 at X_logo=86 digital
+const entryLH   = Math.round(X_logo * 0.36);                       // 31 at X_logo=86 digital
 await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Regular' });
 const entry = figma.createText();
 entry.fontName = { family: 'Qonto Sans', style: 'Regular' };
@@ -513,20 +536,20 @@ entry.lineHeight = { unit: 'PIXELS', value: entryLH };
 entry.characters = 'Business Account\nCompany Creation\nInvoicing';
 entry.fills = [{ type: 'SOLID', color: inkRGB }];
 entry.textAlignHorizontal = 'LEFT';                       // flush-left block; ragged right is intentional
-entry.resize(entry.width, X);
+entry.resize(entry.width, X_logo);
 
-// 3. Divider — 1 px × X, vertical.
+// 3. Divider — 1 px × X_logo, vertical.
 const divider = figma.createRectangle();
-divider.resize(1, X);
+divider.resize(1, X_logo);
 divider.fills = [{ type: 'SOLID', color: inkRGB }];
 
 // 4. Wordmark — variant follows bg, never stroked.
 const wmVariant = wordmarkSet.children.find(c => c.name === (bgIsDark ? 'color=white' : 'color=black'));
 const wordmark = wmVariant.createInstance();
-wordmark.resize(wordmarkW, X);
+wordmark.resize(wordmarkW, X_logo);
 
-// 5. Compose — symbol at left margin, cluster at right margin, auto gap between.
-const baselineY = canvasH - X - X;                         // bottom margin + height X
+// 5. Compose — symbol at left canvas margin, cluster at right canvas margin, auto gap between.
+const baselineY = canvasH - X - X_logo;                    // canvas margin X + lockup height X_logo
 
 sym.x = X;
 sym.y = baselineY;
@@ -542,10 +565,10 @@ divider.y = baselineY;
 entry.x = divider.x - clusterGap - entry.width;
 entry.y = baselineY;
 
-// Sanity: verify the auto gap didn't collapse — if it did, the configuration doesn't fit.
-const autoGap = entry.x - (sym.x + X);
-if (autoGap < X) {
-  console.warn(`Full lockup does not fit: auto gap = ${autoGap}px < X (${X}). Drop to wordmark + entry points.`);
+// Sanity: verify the auto gap didn't collapse below X_logo (clear-space rule).
+const autoGap = entry.x - (sym.x + X_logo);
+if (autoGap < X_logo) {
+  console.warn(`Full lockup does not fit: auto gap = ${autoGap}px < X_logo (${X_logo}). Drop to wordmark + entry points.`);
 }
 ```
 
@@ -611,43 +634,47 @@ The earlier "rasterise with sips" fallback in §1 / §2 / §3 reference composit
 
 ### 9c. Manual lockup composition for Figma marketing comps
 
-The asset-library entry-points cluster SVG ships entry-points as **vector path data**, not text. At Figma's typical render scales for social / mobile canvases, the wordmark Q-glyph and divider scale cleanly, but the entry-points lines (rendered at `X × 0.245 ≈ 13 px` on a 1080-wide canvas) lose font hinting and read as fuzzy. The fix: **build the lockup manually in Figma** — wordmark vector + divider rectangle + entry-points as a Figma TEXT node — so the entry-points get sub-pixel anti-aliasing and proper hinting.
+The asset-library entry-points cluster SVG ships entry-points as **vector path data**, not text. At Figma's typical render scales for social / mobile canvases, the wordmark Q-glyph and divider scale cleanly, but the entry-points lines (which would render at `X_logo × 0.245 ≈ 21 px` on a 1080 digital canvas) lose font hinting as paths and read as fuzzy. The fix: **build the lockup manually in Figma** — wordmark vector + divider rectangle + entry-points as a Figma TEXT node — so the entry-points get sub-pixel anti-aliasing and proper hinting.
 
 **Anatomy of the manual lockup** (left-to-right, horizontal-LEFT orientation — bottom placement):
 
 ```
-[ entry-points text ]  ←  X/2  →  [ divider, 1 × X ]  ←  X/2  →  [ wordmark, w = X × 82/24 ]
+[ entry-points text ]  ←  X_logo/2  →  [ divider, 1 × X_logo ]  ←  X_logo/2  →  [ wordmark, w = X_logo × 82/24 ]
 ```
 
 For horizontal-RIGHT orientation (top placement, eye-reads-cluster-first per §Logo.5), reverse the order:
 
 ```
-[ wordmark, w = X × 82/24 ]  ←  X/2  →  [ divider, 1 × X ]  ←  X/2  →  [ entry-points text ]
+[ wordmark, w = X_logo × 82/24 ]  ←  X_logo/2  →  [ divider, 1 × X_logo ]  ←  X_logo/2  →  [ entry-points text ]
 ```
 
-**Symbol placement** (separate node, X × X, always-on white stroke per §Logo.3) sits at the canvas's opposite edge with auto-gap to the cluster.
+**Symbol placement** (separate node, `X_logo × X_logo`, always-on white stroke per §Logo.3) sits at the canvas's opposite edge with auto-gap to the cluster.
 
 **Figma recipe — bottom-right cluster (horizontal-LEFT):**
 
 ```javascript
 await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Regular' });
 
-const X = Math.round(Math.min(canvasW, canvasH) * 0.05);
-const halfX = Math.round(X / 2);
-const ink = bgIsDark ? { r: 1, g: 1, b: 1 } : { r: 0.02, g: 0.02, b: 0.02 };
+const minDim  = Math.min(canvasW, canvasH);
+const MEDIUM  = 'digital';                                                    // 'digital' or 'print' — see §Logo.4
+const X       = Math.round(minDim * 0.05);                                    // canvas margin
+const X_logo  = Math.round(minDim * (MEDIUM === 'digital' ? 0.08 : 0.05));    // lockup anchor
+const halfL   = Math.round(X_logo / 2);
+const epFloor = MEDIUM === 'digital' ? 20 : 12;
+const ink     = bgIsDark ? { r: 1, g: 1, b: 1 } : { r: 0.02, g: 0.02, b: 0.02 };
 
 // 1. Wordmark — vector
 const wordmark = figma.createNodeFromSvg(WORDMARK_SVG);              // sourced from asset library
-wordmark.resize(Math.round(X * 82 / 24), X);                          // X × (82/24) ≈ 3.42 X wide
-wordmark.x = canvasW - X - wordmark.width;                            // bottom-right with X margin
-wordmark.y = canvasH - X - X;
+wordmark.resize(Math.round(X_logo * 82 / 24), X_logo);                // X_logo × (82/24) ≈ 3.42 X_logo wide
+wordmark.x = canvasW - X - wordmark.width;                            // bottom-right with X canvas margin
+wordmark.y = canvasH - X - X_logo;
 parent.appendChild(wordmark);
 
-// 2. Divider — 1 × X rectangle (NOT a Figma LINE — line rotation has anchor quirks)
+// 2. Divider — 1 × X_logo rectangle (NOT a Figma LINE — line rotation has anchor quirks)
 const divider = figma.createRectangle();
-divider.resize(1, X);
+divider.resize(1, X_logo);
 divider.fills = [{ type: 'SOLID', color: ink }];
-divider.x = wordmark.x - halfX - 1;
+divider.x = wordmark.x - halfL - 1;
 divider.y = wordmark.y;
 parent.appendChild(divider);
 
@@ -655,16 +682,16 @@ parent.appendChild(divider);
 const epText = figma.createText();
 epText.fontName = { family: 'Qonto Sans', style: 'Regular' };
 epText.characters = 'Business account\nFinance management\nCompany creation';
-epText.fontSize = Math.round(X * 0.245);                              // 13 px at X=54 — above 12 px floor
-epText.lineHeight = { unit: 'PIXELS', value: Math.round(X * 0.36) };  // ~146% LH
+epText.fontSize = Math.max(epFloor, Math.round(X_logo * 0.245));      // 21 px at X_logo=86 digital
+epText.lineHeight = { unit: 'PIXELS', value: Math.round(X_logo * 0.36) };  // ~36% LH
 epText.fills = [{ type: 'SOLID', color: ink }];
 epText.textAutoResize = 'WIDTH_AND_HEIGHT';
 epText.textAlignHorizontal = 'LEFT';
 parent.appendChild(epText);
-epText.x = divider.x - halfX - epText.width;
-epText.y = wordmark.y + Math.round((X - epText.height) / 2);          // vertically centre on wordmark
+epText.x = divider.x - halfL - epText.width;
+epText.y = wordmark.y + Math.round((X_logo - epText.height) / 2);     // vertically centre on wordmark
 
-// 4. Symbol (separate, opposite edge, with always-on white stroke per §Logo.3) — see §Logo.5 placement
+// 4. Symbol (separate, opposite edge, X_logo × X_logo, always-on white stroke per §Logo.3) — see §Logo.5 placement
 ```
 
 **Figma vs non-Figma split — confirm the right path before rendering.**
@@ -1009,7 +1036,7 @@ frame.insertChild(1, scrim);                               // index 1 = just abo
 
 ### 10. Body copy and other type sizes
 
-See §Typography.4 for the full type system. In brief: every non-headline/subtitle text role anchors in `X` with a hard pixel floor — **paragraph body** at `max(16 px, round(X × 0.45))`, **card titles** at `max(22 px, round(X × 0.65))`, **captions / metadata / entry-points** at `max(12 px, round(X × 0.245))`. Do not introduce sizes that sit between the defined ratios.
+See §Typography.4 for the full type system. In brief: every non-headline/subtitle compositional text role anchors in `X` with a hard pixel floor — **paragraph body** at `max(16 px, round(X × 0.45))`, **card titles** at `max(22 px, round(X × 0.65))`, **captions / metadata** at `max(12 px, round(X × 0.245))`. Lockup-internal entry-points are sized off `X_logo` (not `X`) — see §Logo.4. Do not introduce sizes that sit between the defined ratios.
 
 ---
 
@@ -1066,11 +1093,13 @@ Five typographic roles. Every size is a multiple of `X` (the composition base un
 | **Subtitle** | Qonto Sans **Regular** | Small `0.78 × X` · Medium `0.93 × X` · Large `1.37 × X` — see §Composition.1 | 110 % | +0.5 % |
 | **Card title** (sub-headline inside cards / panels / blocks) | Qonto Sans **Bold** | `max(22 px, round(X × 0.65))` | 110 % | 0 % |
 | **Body / paragraph copy** | Qonto Sans **Regular** | `max(16 px, round(X × 0.45))` | 130 % | 0 % |
-| **Caption / metadata / label / entry-points** | Qonto Sans **Regular** | `max(12 px, round(X × 0.245))` | 130 % | 0 % |
+| **Caption / metadata / label** | Qonto Sans **Regular** | `max(12 px, round(X × 0.245))` | 130 % | 0 % |
+| **Entry-points** (lockup-internal — see §Logo.4) | Qonto Sans **Regular** | `round(X_logo × 0.245)` with floor `12 px` print / `20 px` digital | 130 % | 0 % |
 
 - Headlines are set **sub-leading (98 % LH)** — lines crowd into each other so the type block reads as one dense shape; +0.5 % tracking opens the counters back up at display sizes so the crowding doesn't fight legibility.
 - Body uses 130 % LH because reading-mode wants air; tracking stays at 0 — Qonto Sans is already tuned for it.
-- **12 px is the absolute floor.** Never ship type smaller, even for legal footnotes — pick a larger canvas instead.
+- **12 px is the absolute floor for body / caption / metadata.** Never ship type smaller, even for legal footnotes — pick a larger canvas instead.
+- **Entry-points have their own anchor (`X_logo`)** because they belong to the lockup, not the layout — see §Logo.4. The 20 px digital floor for entry-points is higher than the 12 px caption floor because entry-points carry brand information (the service descriptors), not page metadata, and they need to read crisply on phone screens.
 - **Why two body-side rows.** Paragraph copy (the "read this to understand" tier) and captions (the "glance at this for orientation" tier) had collapsed into one row in earlier versions, which let card body land at 12–16 px on social canvases — illegible at phone scale. Splitting the rows and anchoring paragraph copy at `0.45 X` lifts body copy to a thumb-readable size on `1080 × 1080` IG (`24 px`) and `1080 × 1920` IG Story (`24 px`), while staying at the floor on tiny surfaces like a `1200 × 627` LinkedIn ad (`14 → 16 px`). Captions stay where they were.
 
 **Reading the X-anchored sizes by surface.** Walk a few canonical examples to build intuition:
@@ -1846,7 +1875,7 @@ A `1080 × 1080` Instagram-square promo, archetype A spacing (text → 1X → vi
 - §Object styles — two rounded content tiles at the **default X-bracketed radius (`X / 2 = 27`)** per §Object styles.3, Beautiful Shadows 5-layer stack, sharp structural canvas. Card 2's icon box at the **small bracket (`X / 4 = 13`)** with a matching `X / 4 = 14` inset — the concentric `outer = inner + gap` formula resolves both radii and the gap simultaneously per §Object styles.4. Two cards in the same role share the same bracket (uniform stack rule).
 - §Iconography — Material Symbols Outlined glyph at the canonical 72 px size (scales up with the bigger card) in a 144 px app-square box (0.5× ratio), light-grey fill, black ink.
 - §Photography — Sarah Freelancer Studio Portrait at full card width × 60 % height, scaleMode FILL.
-- §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between. Cluster rendered at **`h = X × 1.125 = 61`** so the wordmark glyph inside lands at exactly `X = 54` per §Logo.4. Symbol at `X × X = 54 × 54`.
+- §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between. Lockup uses `X_logo = 0.08 × 1080 = 86` (digital — see §Logo.4). Cluster rendered at **`h = X_logo × 1.125 = 97`** so the wordmark glyph inside lands at exactly `X_logo = 86`. Symbol at `X_logo × X_logo = 86 × 86`. Entry-points text at `round(86 × 0.245) = 21 px` (clears the 20 px digital floor). Canvas margin stays at `X = 54` (compositional 5%).
 - §Asset library — photo, horizontal cluster lockup, and symbol-multiplier all fetched from the netlify library. SVGs rasterised with `sips` and applied via `figma_set_image_fill`.
 
 ```javascript
@@ -1939,9 +1968,11 @@ canvas.appendChild(subtitle);
 // --- 6. Two feature cards (archetype A: text → 1X → visual → 2X → lockup) ---
 //   §Composition.3 mobile rule: 1080-class canvases cap at 2 cells per row.
 //   Card width = (canvasW − 2X margins − 1X gutter) / 2 = (1080 − 162) / 2 = 459.
-const lockupTopY  = canvasH - X - X;                       // X margin + X-tall lockup
-const visualTop   = subtitle.y + subtitle.height + X;
-const visualBottom = lockupTopY - 2 * X;
+//   Lockup band height = canvas margin (X) + cluster height (1.125 × X_logo) per §Logo.4 digital rule.
+const lockupClusterH = Math.round(canvasW * 0.08 * 162 / 144);   // 97 — see §7 below for X_logo derivation
+const lockupTopY     = canvasH - X - lockupClusterH;             // canvas margin + cluster height
+const visualTop      = subtitle.y + subtitle.height + X;
+const visualBottom   = lockupTopY - 2 * X;
 const cardW = 459, cardH = visualBottom - visualTop;
 
 // X-bracketed radii per §Object styles.3 + concentric per §Object styles.4
@@ -2011,14 +2042,16 @@ const card2Body = makeText('Send, track, capture, categorise — all from one pl
 card2.appendChild(card2Body);
 
 // --- 7. Full lockup at bottom: symbol bottom-left + horizontal-left cluster bottom-right ---
-// Per §Logo.5 priority placement. Symbol size X × X. Cluster scaled so it fits the
-// canvas width minus 2X margins minus symbol width minus an auto gap of at least X.
+// Per §Logo.5 priority placement. Lockup keys off X_logo (digital → 8% of min canvas dim).
+// Cluster scaled so it fits the canvas width minus 2X canvas margins minus symbol width
+// minus an auto gap of at least X_logo (clear-space rule).
 //   curl -s "…/Logo/qonto-logo-category-entry-points-horizontal-left-EN.svg" -o /tmp/q-lockup-h.svg
 //   curl -s "…/Logo/qonto-symbol-multiplier-black.svg"                       -o /tmp/q-symbol-black.svg
-// Sizing per §Logo.4 wordmark-glyph-=-X rule: cluster_h = X × (162/144) ≈ 1.125 X.
-const clusterH = Math.round(X * 162 / 144);                  // 61 — wordmark glyph lands at X
-const clusterW = Math.round(clusterH * 965 / 162);           // viewBox 965×162 → ≈ 363
-const symbolSize = X;                                         // 54
+// Sizing per §Logo.4 wordmark-glyph-=-X_logo rule: cluster_h = X_logo × (162/144) ≈ 1.125 X_logo.
+const X_logo     = Math.round(canvasW * 0.08);               // 86 — lockup anchor (digital)
+const clusterH   = Math.round(X_logo * 162 / 144);            // 97 — wordmark glyph lands at X_logo
+const clusterW   = Math.round(clusterH * 965 / 162);          // viewBox 965×162 → ≈ 575
+const symbolSize = X_logo;                                    // 86 — symbol = X_logo × X_logo
 
 const lockupCluster = figma.createRectangle();
 lockupCluster.name = 'Qonto wordmark + entry points (horizontal-left-EN) — bottom-right';
@@ -2041,22 +2074,23 @@ canvas.appendChild(symbol);
 **Logos as vector via `createNodeFromSvg` (canonical workflow).** Per §Logo.9b, brand assets stay vector. After the build script creates the canvas + cards + photo placeholder, run **two more `figma_execute` calls** — one for the cluster (large SVG, ~23 KB), one for the symbol (small SVG, ~1.7 KB) — using `figma.createNodeFromSvg` with the SVG content inlined. Then apply the photo image fill in a separate `figma_set_image_fill` call and re-bind the returned `imageHash`:
 
 ```javascript
-// figma_execute, call N+1: cluster vector at the canonical wordmark = X size
-//   cluster_height = X × (162 / 144) = X × 1.125  →  62 (rounded from 60.75)
-//   cluster_width  = cluster_height × (965 / 162) →  362
+// figma_execute, call N+1: cluster vector at the canonical wordmark = X_logo size
+//   X_logo = 0.08 × 1080 = 86 (digital, see §Logo.4)
+//   cluster_height = X_logo × (162 / 144) = X_logo × 1.125  →  97
+//   cluster_width  = cluster_height × (965 / 162)            →  575
 const CLUSTER_SVG = `<svg width="965" height="162" …>…</svg>`;     // full SVG inlined (~23 KB)
 const cluster = figma.createNodeFromSvg(CLUSTER_SVG);
-cluster.resize(362, 61);
-cluster.x = 1080 - 54 - cluster.width;
+cluster.resize(575, 97);
+cluster.x = 1080 - 54 - cluster.width;             // canvas margin X = 54 (compositional)
 cluster.y = 1080 - 54 - cluster.height;
 parent.appendChild(cluster);
 
-// figma_execute, call N+2: symbol vector at X × X (per §Logo.4)
+// figma_execute, call N+2: symbol vector at X_logo × X_logo (per §Logo.4)
 const SYMBOL_SVG = `<svg width="138" height="138" …>…</svg>`;
 const symbol = figma.createNodeFromSvg(SYMBOL_SVG);
-symbol.resize(54, 54);
-symbol.x = 54;
-symbol.y = 1080 - 54 - 54;
+symbol.resize(86, 86);                              // X_logo × X_logo
+symbol.x = 54;                                      // canvas margin X
+symbol.y = 1080 - 54 - 86;
 parent.appendChild(symbol);
 
 // figma_set_image_fill (photo only — photos stay raster), then re-bind hash:
@@ -2075,7 +2109,7 @@ The earlier "rasterise with sips, apply via image-fill" workflow is **deprecated
 
 **Why two cards, not three.** Three feature cards on a `1080 × 1080` canvas crushes each card to ≈ 288 px. Card body falls below comfortable phone-reading scale and photos read as thumbnails. Per §Composition.3's mobile content-cell rule, mobile / social canvases (`min(W, H) ≤ 1080`) cap at 2 cells per row. Two cards at ≈ 459 px give photo and copy room to breathe — empirically validated against Joan's review (2026-04-28).
 
-*Empirically validated at `1080 × 1080` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Square Instagram Post Test", section "IG Square — 2-card row + photo + full horizontal lockup". Screenshot verified card-title 35 px, body 24 px, Sarah's portrait warmth at full card width, full lockup with symbol bottom-left and horizontal entry-points cluster "Business account / Finance management / Company creation" bottom-right.*
+*Empirically validated at `1080 × 1080` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Square Instagram Post Test", section "IG Square — 2-card row + photo + full horizontal lockup". Screenshot verified card-title 35 px, body 24 px, Sarah's portrait warmth at full card width, **full lockup at digital `X_logo = 86`** with symbol bottom-left (`86 × 86`), horizontal entry-points cluster (wordmark `307 × 86`, divider `1 × 86`, entry-points text at `21 px` clearing the 20 px digital floor) bottom-right. Body composition keeps compositional `X = 54` — type tiers, margins, card geometry untouched.*
 
 ### 2. Instagram Story — D-reversed: lockup top, content bottom
 
@@ -2084,6 +2118,7 @@ A `1080 × 1920` 9:16 Story built on §Composition.7b's **D-reversed** variant �
 **Rules exercised:**
 
 - §Composition.7b D-reversed — subject-aware photo placement: face occupies upper-third → lockup top, copy bottom. Bottom scrim provides headline contrast over Chloe's torso.
+- §Logo.4 dual-anchor — `X = 54` (compositional 5%, used for canvas margin and copy positioning); `X_logo = 86` (digital 8%, used for cluster height `1.125 × X_logo = 97`, symbol `86 × 86`, entry-points text `21 px` ≥ 20 digital floor).
 - §Logo.5 reversed-top placement — **cluster (horizontal-right wordmark + entry-points, white) top-LEFT, symbol-multiplier (canonical black + always-on white stroke per §Logo.3) top-RIGHT**, auto gap between. Reading-path rationale: top placement is read first, left-to-right; cluster reads, then the eye lands on the symbol as the brand "punctuation." **The symbol is *not* inverted on dark backgrounds** — keep the canonical black squircle with white flower and let the always-on white stroke delineate the squircle's edge against the photo.
 - §Logo.5b lockup orientation — horizontal lockup (not vertical) because this is an inline marketing surface, not an end frame.
 - §Tone of voice — *"To the point"* (parallel-structure headline), *"Playful but polished"* (the "boring bits" wink, light enough to land), *"At your service"* (subtitle ends with "the boring bits" — wink without obscuring meaning), *"In tune"* (casual emotive register; contrast with §3's formal LinkedIn register).
@@ -2154,10 +2189,12 @@ canvas.appendChild(topScrim);
 // === LOCKUP AT TOP — D-reversed per §Logo.5 / §Composition.7b ===
 // Cluster (horizontal-right-white = wordmark on left, entry-points on right) at top-LEFT
 // Symbol (white) at top-RIGHT
-const lockupTopY = topSafe + X;                    // 304: X clearance below top safe area
-const clusterH = Math.round(X * 162 / 144);          // 61 — wordmark glyph lands at X per §Logo.4
-const clusterW = Math.round(clusterH * 965 / 162);   // 363
-const symbolSize = X;                               // 54 — symbol = X×X per §Logo.4
+// Lockup keys off X_logo (digital → 8% of min) per §Logo.4.
+const X_logo     = Math.round(Math.min(canvasW, canvasH) * 0.08);   // 86 — lockup anchor (digital)
+const lockupTopY = topSafe + X;                       // 304: canvas margin clearance below top safe area
+const clusterH   = Math.round(X_logo * 162 / 144);    // 97 — wordmark glyph lands at X_logo per §Logo.4
+const clusterW   = Math.round(clusterH * 965 / 162);  // 575
+const symbolSize = X_logo;                            // 86 — symbol = X_logo × X_logo per §Logo.4
 
 // Cluster — vector, white-recoloured horizontal-right SVG
 const CLUSTER_SVG_WHITE = `<svg width="965" height="162" …>…</svg>`;   // sed-recoloured to #FFFFFF
@@ -2209,7 +2246,7 @@ Then re-bind the returned `imageHash` via `figma_execute` (same plugin quirk).
 
 **Why D-reversed.** Per §Composition.7b's subject-detection step: Chloe's face occupies the upper third of the cropped canvas. Putting the headline at the top would land it directly on her face (the violation). Putting the lockup at the top instead lets the headline drop to the bottom band where her torso provides darker backing for white type, and the bottom scrim seals the contrast. The face stays clear — the rule.
 
-*Empirically validated at `1080 × 1920` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Instagram Story Test", section "IG Story — D-reversed: lockup top, content bottom". Screenshot verified Chloe's face fully clear of any copy, lockup top-left + symbol top-right with auto gap, headline + subtitle landing on her torso below the face line.*
+*Empirically validated at `1080 × 1920` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Instagram Story Test", section "IG Story — D-reversed: lockup top, content bottom". Screenshot verified Chloe's face fully clear of any copy, **top lockup at digital `X_logo = 86`** (cluster horizontal-right top-left: wordmark `307 × 86`, divider `1 × 86`, entry-points `21 px`; symbol-multiplier-black + always-on white stroke `86 × 86` top-right with auto gap), headline + subtitle at compositional `X = 54` landing on her torso below the face line.*
 
 ### 3. LinkedIn paid ad — archetype C split (text + photo) + ToV in formal register
 
@@ -2222,7 +2259,7 @@ A `1200 × 627` (LinkedIn sponsored-content default) on §Composition.7 archetyp
 - §Typography — Bold headline at `X × 2.22 = 69 px` (LH 98 / +0.5%), Regular subtitle at `X × 0.93 = 29 px` (LH 110 / +0.5%). At this small canvas (X = 31) most of §Typography.4's pixel floors win over the X-multipliers — body / caption sizes hit `16 / 12 px` floors before the ratios kick in.
 - §Color — white left half, photographic right half — no product palette.
 - §Photography — right-half photo (`Lisa Cs Office Action.png`) at `scaleMode: 'FILL'` cropped to the half. Picked for B2B warmth — a real moment of customer-facing work.
-- §Logo — **wordmark alone at the bottom of the left half**, *not* the full lockup. Per §Logo.1's reduction ladder, this canvas's `X = 31` produces entry-points text at `X × 0.245 ≈ 8 px`, which falls below the **12 px floor**. Cluster is dropped; the wordmark-alone variant ships instead. Symbol-multiplier (black, `X × X = 31 × 31`, **always-on white stroke** per §Logo.3) at bottom-left, wordmark-alone (height `X = 31`, width `X × 82/24 ≈ 106`) at bottom-right of the left half, auto gap between.
+- §Logo — **wordmark alone at the bottom of the left half**, *not* the full lockup. Per §Logo.1's reduction ladder, this canvas's `X_logo = 50` (digital 8% of 627) produces entry-points text at `X_logo × 0.245 ≈ 12 px`, below the **20 px digital floor**. Cluster is dropped; the wordmark-alone variant ships instead. Symbol-multiplier (black, `X_logo × X_logo = 50 × 50`, **always-on white stroke** per §Logo.3) at bottom-left, wordmark-alone (height `X_logo = 50`, width `X_logo × 82/24 ≈ 171`) at bottom-right of the left half, auto gap between. Canvas margin stays at `X = 31` (compositional 5%).
 - §Asset library — photo + standalone wordmark SVG + symbol-multiplier-black SVG, all imported via `figma.createNodeFromSvg` (vector — see §Logo.9b).
 
 **Build (key excerpts — same helpers as §1):**
@@ -2262,23 +2299,25 @@ const subtitle = makeText(
 );
 canvas.appendChild(subtitle);
 
-// Lockup — wordmark alone (entry-points dropped per §Logo.1 floor rule).
-// At X = 31, X × 0.245 ≈ 8 px would put entry-points below the 12 px floor.
-// Standalone wordmark SVG: viewBox 82 × 24. Render so wordmark height = X = 31:
-//   wordmark_w = X × (82 / 24) ≈ 106
+// Lockup — wordmark alone (entry-points dropped per §Logo.1 dual-floor rule).
+// X_logo = 0.08 × min(1200, 627) = 50 (digital). At X_logo = 50, EP = round(50 × 0.245) = 12 px,
+// below the 20 px digital floor → drop entry-points, ship wordmark-alone.
+// Standalone wordmark SVG: viewBox 82 × 24. Render so wordmark height = X_logo = 50:
+//   wordmark_w = X_logo × (82 / 24) ≈ 171
+const X_logo = Math.round(Math.min(canvasW, canvasH) * 0.08);     // 50 — lockup anchor (digital)
 const WORDMARK_SVG = `<svg width="82" height="24" …>…</svg>`;
 const wordmark = figma.createNodeFromSvg(WORDMARK_SVG);
-wordmark.resize(Math.round(X * 82 / 24), X);         // 106 × 31
-wordmark.x = halfW - X - wordmark.width;             // bottom-right of left half
+wordmark.resize(Math.round(X_logo * 82 / 24), X_logo);            // 171 × 50
+wordmark.x = halfW - X - wordmark.width;             // bottom-right of left half (canvas margin X)
 wordmark.y = canvasH - X - wordmark.height;
 canvas.appendChild(wordmark);
 
 // Symbol — black canonical + always-on white stroke (§Logo.3)
 const SYMBOL_SVG = `<svg width="138" height="138" …>…</svg>`;     // black squircle + white inner Q
 const symbol = figma.createNodeFromSvg(SYMBOL_SVG);
-symbol.resize(X, X);                                  // 31 × 31
-symbol.x = X;                                         // bottom-left of left half
-symbol.y = canvasH - X - X;
+symbol.resize(X_logo, X_logo);                       // 50 × 50 — symbol = X_logo × X_logo
+symbol.x = X;                                        // bottom-left of left half (canvas margin X)
+symbol.y = canvasH - X - X_logo;
 // Always-on white stroke on the outer squircle
 const dark = (n) => Array.isArray(n.fills) && n.fills.some(f => f.type === 'SOLID' && f.color.r < 0.1);
 const all = symbol.findAll(n => n.type === 'VECTOR' && dark(n));
@@ -2300,7 +2339,7 @@ Then re-bind the returned `imageHash` via `figma_execute` (same plugin quirk as 
 
 **Side-by-side reading.** Open §2 and §3 next to each other. Same Qonto brand, same colours, same Qonto Sans, same lockup geometry — but the **headline form, vocabulary, register, and rhythm are visibly different**, because §Tone of voice "In tune" adapted those layers to the audience. The principles underneath are unchanged.
 
-*Empirically validated at `1200 × 627` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "LinkedIn Paid Ad Test", section "LinkedIn ad — archetype C split + horizontal lockup". Screenshot verified medium-tier headline at `69 px`, subtitle at `29 px` capped at 70 % width, Lisa office photo on the right half at FILL, **wordmark-alone** (`106 × 31`) bottom-right of the left half, **symbol-multiplier-black with always-on white stroke** (`31 × 31`) bottom-left.*
+*Empirically validated at `1200 × 627` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "LinkedIn Paid Ad Test", section "LinkedIn ad — archetype C split + horizontal lockup". Screenshot verified medium-tier headline at `69 px`, subtitle at `29 px` capped at 70 % width, Lisa office photo on the right half at FILL, **wordmark-alone at digital `X_logo = 50`** (`171 × 50`) bottom-right of the left half, **symbol-multiplier-black with always-on white stroke** (`50 × 50`) bottom-left. Entry-points dropped: at `X_logo = 50` the EP size of 12 px is below the 20 px digital floor, so the cluster collapses to wordmark-alone per §Logo.1.*
 
 ---
 
