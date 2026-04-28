@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 3.4
+version: 3.5
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 3.4 · Last updated: 2026-04-28 · Status: living document
+> Version: 3.5 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -1350,14 +1350,30 @@ Blur treatments require a **visually varied backing** (a photo, a gradient, a bu
 
 All layers `#050505`, spread `0`. Regenerate with the plugin when the object size changes — these values are calibrated for the SOT's `370×370` reference and don't linearly scale. Run the plugin on the actual object rather than copying this stack verbatim to a wildly different size.
 
-**Card padding (X-derived).** Both inner padding levels come from the X-system — no hard-coded pixel values:
+**Card padding — one rule, uniform internally (v3.5).**
 
-| Inset | Value | Used for |
+> **`card_pad = round(0.08 × min(cardW, cardH))`** — minimum spacing for everything inside a card.
+
+The rule applies **uniformly** to:
+- All four card edges (top, right, bottom, left) — the same value on every side.
+- Major element gaps inside the card (e.g. icon-box ↔ text frame).
+
+It does **not** apply to:
+- Within-text-block typography spacing (title ↔ body inside a single auto-layout text frame). Those gaps are typographic — driven by line-height and visual hierarchy, typically `12–16 px` regardless of card scale.
+
+**Worked numbers across the v3.4 / v3.5 surfaces:**
+
+| Card | min(W, H) | `card_pad` |
 |---|---|---|
-| Text content (headline, body, CTA) | `X / 2` | Type-only insets. |
-| Nested rounded tile (icon-box, badge, small image tile) | `X / 4` | Per the concentric-radius rule (§Object styles.4) — outer card `r = X/2`, gap `X/4`, inner tile `r = X/4`. |
+| IG Square cards 432 × 392 | 392 | **31** |
+| Deck slide cards 554 × 454 | 454 | **36** |
+| LinkedIn organic post cards 480 × 378 | 378 | **30** |
 
-When a card carries **both** a nested tile and text, it can't run as a single auto-layout — it needs `layoutMode = NONE` so each child gets its own inset. Cards with text only stay auto-layout. The cards-row, lockup-row, cluster, and headline+subtitle stack are *always* auto-layout (see §Universal rules and §Reference compositions). The card itself is the one place where the auto-layout-first rule relaxes, and only when the two-padding case applies or overlay layering is needed.
+`0.08` is the same anchor as the canvas-X formula (`X = 0.08 × min(W, H)` per §Logo.4), applied at card scale instead of canvas scale. Cards become self-consistent: the same number drives top, right, bottom, left, AND the gap between icon-box and text. Visual rhythm reads as intentional, not residual.
+
+**Concentric-radius consequence.** With the v3.4 model, the card's outer radius (`X/2`) and the icon-box radius (`X/4`) were optically nested via the concentric formula `outer_r = inner_r + gap` (where `gap = X/4`). Under v3.5 the gap becomes `card_pad`, which doesn't generally equal `X/4` — so the formula no longer resolves cleanly. Cards still read as well-composed; the corner-curvature parallel just drifts. We accept that trade-off for padding consistency. Icon-box radius stays at `X/4` (canvas-derived); card radius stays at `X/2`.
+
+**Auto-layout vs NONE.** When a card carries **both** an icon-box (or nested tile) and a text block, it needs `layoutMode = NONE` so each child gets explicitly positioned at `card_pad`. Cards with text only can run auto-layout (`paddingTop = paddingBottom = paddingLeft = paddingRight = card_pad`). The cards-row, lockup-row, cluster, and headline+subtitle stack are *always* auto-layout (see §Universal rules and §Reference compositions). The card itself is the one place where the auto-layout-first rule relaxes, and only when the two-element case (nested tile + text) applies or overlay layering is needed.
 
 ### 7. Anti-patterns
 
@@ -1916,7 +1932,7 @@ A `1080 × 1080` Instagram-square promo with **two** feature cards (per §Compos
 - §Composition — **unified X = 86** (8 % of `min(W, H)`), small headline tier (1X = 86). **Two cards per row** per §Composition.3 mobile rule. Grid gutter `0.5X = 43`. **Cards 432 × 392** (cardH derived: cards fill the vertical real-estate between the text-block and lockup with a 1X gap on each side, all expressed as `canvasH − 5X − textBlock.h`). **1X gap above lockup** (cards-led — the wider X already supplies enough breathing room).
 - §Typography — Bold headline at `X × 1 = 86` (small tier, LH 98 % / +0.5 %), Regular subtitle at `X × 0.5 = 43` (LH 110 % / +0.5 %), **card titles at `max(22, X × 0.55) = 47`**. Bodies at `max(16, X × 0.45) = 39` (LH 130 %). Sentence case throughout.
 - §Color — **white canvas + gray-50 (`#F5F5F5`) cards** per the v3.4 canvas/card pairing rule (§Color.3). Card 1 is tertiary tier (full-bleed photo + scrim — the photo *is* the card surface, no fill colour applies). Card 2 is secondary tier (gray-50 fill on white canvas — the tonal contrast does the work that a shadow would otherwise provide). The icon-box inside Card 2 reverts to **white** (matches the canvas, "punches through" visually). Black ink throughout.
-- §Object styles — two rounded content tiles at the **default X-bracketed radius (`X / 2 = 43`)** per §Object styles.3, sharp structural canvas. Card 2's icon-box at the **small bracket (`X / 4 = 22`)** with a matching `X / 4 = 22` inset — the concentric `outer = inner + gap` formula resolves both radii and the gap simultaneously per §Object styles.4. Card 2 is the **secondary tier**; Card 1 is the **tertiary tier** (full-bleed photo + scrim) — see §Object styles.6.
+- §Object styles — two rounded content tiles at the **default X-bracketed radius (`X / 2 = 43`)** per §Object styles.3, sharp structural canvas. Card 2's icon-box at the **small bracket (`X / 4 = 22`)**. **Card padding (v3.5): uniform `card_pad = round(0.08 × min(cardW, cardH)) = 31`** on all four sides + as the gap between icon-box and text frame. Card 1's overlay text and Card 2's icon-box + text frame both inset 31 px from every edge they touch — same number, every side, every card on the canvas. Card 2 is the **secondary tier**; Card 1 is the **tertiary tier** (full-bleed photo + scrim) — see §Object styles.6.
 - §Iconography — Material Symbols Outlined glyph at the canonical 72 px size in a 144 px app-square box (0.5× ratio), white fill (icon-box), black ink (glyph).
 - §Photography — Sarah Freelancer Studio Portrait full-bleed inside Card 1 (scaleMode FILL), with title + body **white text overlaid** on the photo's lower portion. This is archetype-D-style applied to a card — photo carries the warmth, text overlays for label.
 - §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between (built as a SPACE_BETWEEN auto-layout HORIZONTAL frame). Lockup keys off the unified `X = 86`: cluster `h = 1.125 × X = 97`, symbol `X × X = 86 × 86`, entry-points text at `round(86 × 0.245) = 21 px`.
@@ -2629,6 +2645,7 @@ Log the hash the first time an asset lands so subsequent uses in the same sessio
 
 | Version | Date | Highlights |
 |---|---|---|
+| **3.5** | 2026-04-28 | **Uniform card padding rule** in §Object styles.6 — `card_pad = round(0.08 × min(cardW, cardH))` on every card edge AND between major elements (icon-box ↔ text frame). Replaces the v3.3/v3.4 dual rule (text at `X/2`, nested tile at `X/4`) which produced visibly inconsistent insets across the v3.4 release-confidence cards (top icon-box at one number, side text at another, bottom margin accidental). The new rule uses the same `0.08` anchor as the canvas-X formula but applied at card scale: cards are self-consistent — every inside-the-card distance is the same number. Trade-off: the icon-box concentric-radius formula (outer = inner + gap) no longer resolves; accepted because padding consistency wins over corner-curvature optical purity. Within-text-block typography spacing (title ↔ body) stays at typographic default. All v3.4 surfaces re-rendered (IG Square, deck slide, LinkedIn organic post) at the new rule. |
 | **3.4** | 2026-04-28 | **Unified X = 0.08 × min(W, H)** for every medium. Drops the 5/8 print/digital split — one anchor, simpler mental model, more confident brand presence on print. Mnemonic: *"X is 8 — for everything."* **Canvas/card pairing rule** rewritten in §Color.3: only two valid pairings — *white canvas + gray-50 cards* OR *black canvas + gray-800 cards*. Inverse pairings (gray-50 canvas + white cards) explicitly rejected. **§Object styles.6 secondary tier** updated to match. New anti-patterns: *"a card is never the composition"* (§Object styles.7) and *"don't clone a bottom-lockup at the top without flipping order"* (§Logo.7) — **top lockup is cluster-left + symbol-right**, bottom is symbol-left + cluster-right. §Reference compositions §1 IG Square recipe updated; new release-confidence tests shipped (deck slide, LinkedIn organic post, A4 print one-pager). Email banner rejected as a reference surface. |
 | **3.3** | 2026-04-28 | **Three-tier card model** in §Object styles.6 (primary/secondary/tertiary) with shadow scoped to primary tier only. **Card padding rule** explicit: text `X/2`, nested rounded tile `X/4`. **Image-bg overlay scrim generalised** in §Composition.7 — applies to any card-scale image background, not just full-bleed archetype D. **Card title formula** `× 0.55` (down from `× 0.65`) in §Typography.4 + §Composition.10. **Lockup gap relaxed** in §Composition.2 to `≥ 1X` (default `2X`, relax to `1X` for cards-led layouts). |
 | **3.2** | 2026-04-28 | Auto-layout build pattern (Universal rules). IG Square refinements: gray-50 canvas, 432×392 cards, full-bleed archetype-D photo card, X gap above lockup. LinkedIn H2 stretches full content-area width. |
