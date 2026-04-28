@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 3.1
+version: 3.2
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 3.1 · Last updated: 2026-04-28 · Status: living document
+> Version: 3.2 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -41,6 +41,7 @@ When unclear which context applies, ask.
 - Minimum type size: **12 px** (floor across body, captions, labels, entry-points). See §Typography.4.
 - Generous whitespace. Corner-radius language is split: **structural objects are sharp (`cornerRadius = 0`); rounded corners are reserved for floating content** (product covers, small image tiles, icon bounding boxes, avatars, chips) and resolve to one of the four atomic shapes. See §Object styles.
 - Never use pure `#000000` — Qonto's black is `#050505` (token `primary/black`). See §Color for the full palette.
+- **Build with auto-layout.** When constructing a composition in Figma, use auto-layout for every structural band that stacks content predictably — text-blocks (headline + subtitle), card internals (icon-box + title + body), lockup bands (symbol + cluster with `SPACE_BETWEEN`), grid rows (cards-row with `0.5X` itemSpacing). Auto-layout makes the layout reflow when copy changes, mirrors how human designers work in Figma, and produces files that are editable by hand without breaking. **Reserve absolute positioning** for two cases only: (a) canvas-level placement of the bands themselves (where 1080-class compositions sit comfortably with hard pixel coordinates), and (b) text overlays on full-bleed photo cards (where the overlay floats independently of any stack). Recipes throughout §Reference compositions follow this hybrid pattern — explicit auto-layout where natural, explicit absolute positioning where overlays demand it.
 
 ---
 
@@ -1878,18 +1879,18 @@ Worked examples that exercise multiple sections at once, to prove the rules comp
 
 ### 1. Square Instagram post — two-card row + full horizontal lockup
 
-A `1080 × 1080` Instagram-square promo, archetype A spacing (text → 1X → visual → 2X → lockup), with **two** feature cards (per §Composition.3's mobile content-cell rule — three cards on a 1080 canvas crush imagery and copy). **One photo card + one icon card** so the composition demonstrates §Photography next to §Iconography. **Brief**: announce the breadth of Qonto's offering with breathing room and full-lockup brand presence.
+A `1080 × 1080` Instagram-square promo with **two** feature cards (per §Composition.3's mobile content-cell rule). **One photo card + one icon card** so the composition demonstrates §Photography next to §Iconography. **Brief**: announce the breadth of Qonto's offering with breathing room and full-lockup brand presence. **Build pattern**: auto-layout for the structural bands (text-block, lockup, Card 2 internal stack); absolute positioning at the canvas level and inside Card 1 (where text overlays a full-bleed photo).
 
 **Rules exercised:**
 
-- §Composition — archetype A spacing, **unified X = 86** (digital 8 %), small headline tier (1X = 86 — keeps card real-estate viable on the 1080² canvas). **Two cards per row** per §Composition.3 mobile rule. Grid gutter `0.5X = 43`.
-- §Typography — Bold headline at `X × 1 = 86` (small tier, LH 98 % / +0.5 %), Regular subtitle at `X × 0.5 = 43` (LH 110 % / +0.5 %), card titles at `max(22, X × 0.65) = 56` (LH 110 %), bodies at `max(16, X × 0.45) = 39` (LH 130 %). Sentence case throughout.
-- §Color — white-led, black ink, light grey for the icon box — no product palette.
-- §Object styles — two rounded content tiles at the **default X-bracketed radius (`X / 2 = 43`)** per §Object styles.3, Beautiful Shadows 5-layer stack, sharp structural canvas. Card 2's icon box at the **small bracket (`X / 4 = 22`)** with a matching `X / 4 = 22` inset — the concentric `outer = inner + gap` formula resolves both radii and the gap simultaneously per §Object styles.4. Two cards in the same role share the same bracket (uniform stack rule).
+- §Composition — **unified X = 86** (digital 8 %), small headline tier (1X = 86). **Two cards per row** per §Composition.3 mobile rule. Grid gutter `0.5X = 43`. **Cards expanded to 432 × 392** (cardH derived: cards fill the vertical real-estate between the text-block and lockup with a 1X gap on each side, all expressed as `canvasH − 5X − textBlock.h`). **1X gap above lockup** (not 2X — the wider X already supplies enough breathing room).
+- §Typography — Bold headline at `X × 1 = 86` (small tier, LH 98 % / +0.5 %), Regular subtitle at `X × 0.5 = 43` (LH 110 % / +0.5 %), **card titles at 48 px** (slightly under the X × 0.65 = 56 default — visual-judgment override; card content reads cleaner without a title that competes with the headline). Bodies at `max(16, X × 0.45) = 39` (LH 130 %). Sentence case throughout.
+- §Color — **canvas background `gray-50` (`#F5F5F5`)** rather than pure white — gives cards (white) a subtle "lift" off the canvas, makes the brand mark feel grounded rather than floating in voiding white. Black ink. Light grey for the icon box.
+- §Object styles — two rounded content tiles at the **default X-bracketed radius (`X / 2 = 43`)** per §Object styles.3, sharp structural canvas. Card 2's icon box at the **small bracket (`X / 4 = 22`)** with a matching `X / 4 = 22` inset — the concentric `outer = inner + gap` formula resolves both radii and the gap simultaneously per §Object styles.4. Two cards in the same role share the same bracket (uniform stack rule).
 - §Iconography — Material Symbols Outlined glyph at the canonical 72 px size in a 144 px app-square box (0.5× ratio), light-grey fill, black ink.
-- §Photography — Sarah Freelancer Studio Portrait at full card width × 60 % height, scaleMode FILL.
-- §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between. Lockup keys off the unified `X = 86`: cluster `h = 1.125 × X = 97`, symbol `X × X = 86 × 86`, entry-points text at `round(86 × 0.245) = 21 px` (clears the 20 px digital floor). Canvas margin = `X = 86` for everything (lockup and content alike — no separate compositional margin).
-- §Asset library — photo, horizontal cluster lockup, and symbol-multiplier all fetched from the netlify library. Logos as vector via `figma.createNodeFromSvg`; photo via `figma_set_image_fill`.
+- §Photography — Sarah Freelancer Studio Portrait full-bleed inside Card 1 (scaleMode FILL), with title + body **white text overlaid** on the photo's lower portion. This is archetype-D-style applied to a card — photo carries the warmth, text overlays for label.
+- §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between (built as a SPACE_BETWEEN auto-layout HORIZONTAL frame). Lockup keys off the unified `X = 86`: cluster `h = 1.125 × X = 97`, symbol `X × X = 86 × 86`, entry-points text at `round(86 × 0.245) = 21 px`.
+- §Asset library — photo, cluster lockup, symbol-multiplier all fetched from netlify. Logos as vector via `figma.createNodeFromSvg`; photo via `figma_set_image_fill`.
 
 ```javascript
 // --- 0. Page + section + fonts (dynamic-page-safe) ---
@@ -1918,32 +1919,188 @@ const ICONS = {
   calculator: `<svg width="20" height="20" ...>...</svg>`,
 };
 
-// --- 2. Constants + Beautiful Shadows stack (§Object styles.6) ---
+// --- 2. Constants ---
 const canvasW = 1080, canvasH = 1080;
 const MEDIUM = 'digital';                                                // §Logo.4
-const X = Math.round(Math.min(canvasW, canvasH) * (MEDIUM === 'digital' ? 0.08 : 0.05));   // 86
-const gutter = Math.round(X * 0.5);                                       // 43 — §Composition.3
-const black     = { r: 0.02, g: 0.02, b: 0.02 };
-const white     = { r: 1, g: 1, b: 1 };
-const lightGrey = { r: 0.96, g: 0.96, b: 0.96 };  // ≈ neutral/200
+const X        = Math.round(Math.min(canvasW, canvasH) * (MEDIUM === 'digital' ? 0.08 : 0.05));   // 86
+const halfX    = Math.round(X / 2);                                      // 43 — gutter, intra-cluster gap
+const quarterX = Math.round(X / 4);                                      // 22 — card padding, icon inset
+const cardR    = halfX;                                                  // 43 — X/2 default content-tile radius
+const iconBoxSize = 144, iconSize = 72;
+const iconBoxR = cardR - quarterX;                                       // 21 — concentric per §Object styles.4
+const cardTitleSize = 48;                                                // visual override; below X × 0.65 = 56
+const bodySize = Math.max(16, Math.round(X * 0.45));                     // 39
+const headlineSize = X;                                                  // 86 — small tier 1X
+const subtitleSize = halfX;                                              // 43 — single-tier 0.5X
 
-const shadowStack = [
-  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.10 }, offset: { x:0, y:10 },  radius: 23, spread: 0, visible: true, blendMode: 'NORMAL' },
-  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.09 }, offset: { x:0, y:41 },  radius: 41, spread: 0, visible: true, blendMode: 'NORMAL' },
-  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.05 }, offset: { x:0, y:93 },  radius: 56, spread: 0, visible: true, blendMode: 'NORMAL' },
-  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.01 }, offset: { x:0, y:166 }, radius: 66, spread: 0, visible: true, blendMode: 'NORMAL' },
-  { type: 'DROP_SHADOW', color: { r:0, g:0, b:0, a:0.00 }, offset: { x:0, y:259 }, radius: 73, spread: 0, visible: true, blendMode: 'NORMAL' },
-];
+const black   = { r: 0.02, g: 0.02, b: 0.02 };
+const white   = { r: 1, g: 1, b: 1 };
+const gray50  = { r: 0.96, g: 0.96, b: 0.96 };  // canvas background
 
-// --- 3. Canvas — structural sharp (§Object styles.2) ---
+// --- 3. Canvas — gray-50 background, no canvas-level auto-layout (manages absolute positioning) ---
 const canvas = figma.createFrame();
+canvas.name = 'IG Square canvas (1080×1080)';
 canvas.resize(canvasW, canvasH);
 canvas.cornerRadius = 0; canvas.cornerSmoothing = 0;
-canvas.fills = [{ type: 'SOLID', color: white }];
+canvas.fills = [{ type: 'SOLID', color: gray50 }];
+canvas.clipsContent = true;
 section.appendChild(canvas);
 
-// --- 4. Helpers ---
-const makeIcon = (svg, size, color) => {
+// --- 4. Text block (auto-layout VERTICAL, headline + subtitle) ---
+const textBlock = figma.createFrame();
+textBlock.name = 'Text block';
+textBlock.fills = [];
+textBlock.layoutMode = 'VERTICAL';
+textBlock.primaryAxisSizingMode = 'AUTO';        // hug vertical
+textBlock.counterAxisSizingMode = 'FIXED';
+textBlock.itemSpacing = halfX;                   // 0.5X subtitle gap (§Composition.1)
+canvas.appendChild(textBlock);
+textBlock.resize(canvasW - 2 * X, textBlock.height);
+textBlock.x = X; textBlock.y = X;
+
+const headline = figma.createText();
+headline.fontName = { family: 'Qonto Sans', style: 'Bold' };
+headline.characters = 'Everything your business needs';
+headline.fontSize = headlineSize;
+headline.lineHeight = { unit: 'PERCENT', value: 98 };
+headline.letterSpacing = { unit: 'PERCENT', value: 0.5 };
+headline.fills = [{ type: 'SOLID', color: black }];
+headline.textAutoResize = 'HEIGHT';
+textBlock.appendChild(headline);
+headline.layoutSizingHorizontal = 'FILL';
+
+const subtitle = figma.createText();
+subtitle.fontName = { family: 'Qonto Sans', style: 'Regular' };
+subtitle.characters = 'Banking, invoicing, expenses.';
+subtitle.fontSize = subtitleSize;
+subtitle.lineHeight = { unit: 'PERCENT', value: 110 };
+subtitle.letterSpacing = { unit: 'PERCENT', value: 0.5 };
+subtitle.fills = [{ type: 'SOLID', color: black }];
+subtitle.textAutoResize = 'HEIGHT';
+textBlock.appendChild(subtitle);
+subtitle.layoutSizingHorizontal = 'FILL';
+
+// --- 5. Card geometry derived from layout constraints ---
+//   cardH = canvasH − 5X − textBlock.h
+//   (top X + textBlock + 1X gap + cardH + 1X gap + lockup X + bottom X = canvasH; solve for cardH)
+//   Card width = (canvasW − 2X margins − 0.5X gutter) / 2 ≈ 432
+const cardsRowY = textBlock.y + textBlock.height + X;                          // 1X gap below text-block
+const lockupY   = canvasH - X - X;                                              // X canvas margin + X lockup height
+const cardH     = lockupY - X - cardsRowY;                                      // X gap above lockup
+const cardW     = Math.floor((canvasW - 2 * X - halfX) / 2);                    // 432
+
+// --- 6. Card 1 (no card-internal auto-layout — full-bleed photo with absolute white text overlay) ---
+const card1 = figma.createFrame();
+card1.name = 'Card · Banking (photo)';
+card1.resize(cardW, cardH);
+card1.cornerRadius = cardR; card1.cornerSmoothing = 0;
+card1.fills = [{ type: 'SOLID', color: white }];
+card1.clipsContent = true;
+canvas.appendChild(card1);
+card1.x = X; card1.y = cardsRowY;
+
+const photo = figma.createRectangle();
+photo.name = 'Card photo (Banking)';
+photo.fills = [{ type: 'SOLID', color: gray50 }];   // placeholder — replace via figma_set_image_fill
+card1.appendChild(photo);
+photo.x = 0; photo.y = 0;
+photo.resize(cardW, cardH);                          // full-bleed
+const photoPlaceholderId = photo.id;
+
+// White overlay text — auto-layout VERTICAL, absolutely positioned inside non-autolayout card1.
+const overlay = figma.createFrame();
+overlay.name = 'Card 1 overlay text';
+overlay.fills = [];
+overlay.layoutMode = 'VERTICAL';
+overlay.primaryAxisSizingMode = 'AUTO';
+overlay.counterAxisSizingMode = 'AUTO';
+overlay.itemSpacing = 8;                             // tight title→body
+card1.appendChild(overlay);
+overlay.x = halfX; overlay.y = 188;                  // bottom-third overlay region
+
+const card1Title = figma.createText();
+card1Title.fontName = { family: 'Qonto Sans', style: 'Bold' };
+card1Title.characters = 'Banking';
+card1Title.fontSize = cardTitleSize;
+card1Title.lineHeight = { unit: 'PERCENT', value: 110 };
+card1Title.fills = [{ type: 'SOLID', color: white }];
+card1Title.textAutoResize = 'WIDTH_AND_HEIGHT';
+overlay.appendChild(card1Title);
+
+const card1Body = figma.createText();
+card1Body.fontName = { family: 'Qonto Sans', style: 'Regular' };
+card1Body.characters = 'Move money fast.';
+card1Body.fontSize = bodySize;
+card1Body.lineHeight = { unit: 'PERCENT', value: 130 };
+card1Body.fills = [{ type: 'SOLID', color: white }];
+card1Body.textAutoResize = 'WIDTH_AND_HEIGHT';
+overlay.appendChild(card1Body);
+
+// --- 7. Card 2 (auto-layout VERTICAL — icon-box + text-stack, X/4 padding-top, X/4 itemSpacing) ---
+const card2 = figma.createFrame();
+card2.name = 'Card · Invoicing (icon)';
+card2.cornerRadius = cardR; card2.cornerSmoothing = 0;
+card2.fills = [{ type: 'SOLID', color: white }];
+card2.clipsContent = true;
+card2.layoutMode = 'VERTICAL';
+card2.primaryAxisSizingMode = 'FIXED';
+card2.counterAxisSizingMode = 'FIXED';
+card2.primaryAxisAlignItems = 'MIN';
+card2.paddingLeft = quarterX;                        // X/4 — matches icon-box concentric inset
+card2.paddingRight = halfX;                          // X/2 — text right-padding (looser than left)
+card2.paddingTop = quarterX;                         // X/4
+card2.paddingBottom = quarterX;
+card2.itemSpacing = quarterX;                        // X/4 between icon-box and text-stack
+canvas.appendChild(card2);
+card2.resize(cardW, cardH);
+card2.x = X + cardW + halfX; card2.y = cardsRowY;    // 0.5X gutter
+
+const iconBox = figma.createFrame();
+iconBox.name = 'Icon box';
+iconBox.fills = [{ type: 'SOLID', color: gray50 }];
+iconBox.cornerRadius = iconBoxR; iconBox.cornerSmoothing = 0;
+iconBox.layoutMode = 'VERTICAL';
+iconBox.primaryAxisSizingMode = 'FIXED';
+iconBox.counterAxisSizingMode = 'FIXED';
+iconBox.primaryAxisAlignItems = 'CENTER';
+iconBox.counterAxisAlignItems = 'CENTER';
+card2.appendChild(iconBox);
+iconBox.resize(iconBoxSize, iconBoxSize);
+const ic = makeIcon(ICONS.attachment, iconSize, black);   // helper from §1.4 below
+ic.layoutPositioning = 'AUTO';
+iconBox.appendChild(ic);
+
+const card2TextStack = figma.createFrame();
+card2TextStack.name = 'Card 2 text';
+card2TextStack.fills = [];
+card2TextStack.layoutMode = 'VERTICAL';
+card2TextStack.primaryAxisSizingMode = 'AUTO';
+card2TextStack.itemSpacing = 8;
+card2.appendChild(card2TextStack);
+card2TextStack.layoutSizingHorizontal = 'FILL';
+
+const card2Title = figma.createText();
+card2Title.fontName = { family: 'Qonto Sans', style: 'Bold' };
+card2Title.characters = 'Invoicing';
+card2Title.fontSize = cardTitleSize;
+card2Title.lineHeight = { unit: 'PERCENT', value: 110 };
+card2Title.fills = [{ type: 'SOLID', color: black }];
+card2Title.textAutoResize = 'HEIGHT';
+card2TextStack.appendChild(card2Title);
+card2Title.layoutSizingHorizontal = 'FILL';
+
+const card2Body = figma.createText();
+card2Body.fontName = { family: 'Qonto Sans', style: 'Regular' };
+card2Body.characters = 'All in one place.';
+card2Body.fontSize = bodySize;
+card2Body.lineHeight = { unit: 'PERCENT', value: 130 };
+card2Body.fills = [{ type: 'SOLID', color: black }];
+card2Body.textAutoResize = 'HEIGHT';
+card2TextStack.appendChild(card2Body);
+card2Body.layoutSizingHorizontal = 'FILL';
+
+// --- 4 (helpers continued at top of script) ---
+function makeIcon(svg, size, color) {
   const node = figma.createNodeFromSvg(svg);
   node.resize(size, size);
   const recolor = (n) => {
@@ -1954,166 +2111,106 @@ const makeIcon = (svg, size, color) => {
   };
   recolor(node);
   return node;
-};
+}
 
-const makeText = (chars, weight, size, lhPct, color, x, y, w, tracking) => {
-  const t = figma.createText();
-  t.fontName = { family: 'Qonto Sans', style: weight };
-  t.characters = chars;
-  t.fontSize = size;
-  t.lineHeight = { unit: 'PERCENT', value: lhPct };
-  if (tracking != null) t.letterSpacing = { unit: 'PERCENT', value: tracking };
-  t.fills = [{ type: 'SOLID', color }];
-  t.textAutoResize = w ? 'HEIGHT' : 'WIDTH_AND_HEIGHT';
-  if (w) t.resize(w, t.height);
-  t.x = x; t.y = y;
-  return t;
-};
+// --- 8. Full lockup at bottom — auto-layout HORIZONTAL with SPACE_BETWEEN ---
+//   Per §Logo.5 priority placement. SPACE_BETWEEN distributes symbol left, cluster right,
+//   auto-gap fills the middle. The lockup band itself is X tall (one unit), placed at
+//   bottom-X of the canvas.
+const lockupBand = figma.createFrame();
+lockupBand.name = 'Lockup band';
+lockupBand.fills = [];
+lockupBand.layoutMode = 'HORIZONTAL';
+lockupBand.primaryAxisSizingMode = 'FIXED';
+lockupBand.counterAxisSizingMode = 'AUTO';
+lockupBand.primaryAxisAlignItems = 'SPACE_BETWEEN';
+lockupBand.counterAxisAlignItems = 'CENTER';
+canvas.appendChild(lockupBand);
+lockupBand.resize(canvasW - 2 * X, X);
+lockupBand.x = X; lockupBand.y = canvasH - X - X;            // 908
 
-// --- 5. Headline + subtitle (§Composition.1 small tier — keeps card real-estate viable on 1080²) ---
-const textW = canvasW - 2 * X;
-const headline = makeText('Everything your business needs', 'Bold', Math.round(X * 1), 98, black, X, X, textW, 0.5);
-canvas.appendChild(headline);
-const subtitle = makeText(
-  'Banking, invoicing, expenses.',
-  'Regular', Math.round(X * 0.5), 110, black,
-  X, headline.y + headline.height + Math.round(X * 0.5), textW, 0.5
-);
-canvas.appendChild(subtitle);
+// Symbol — placeholder; replace with vector via createNodeFromSvg in a follow-up call.
+const symbolPh = figma.createFrame();
+symbolPh.name = 'Symbol placeholder (replace with vector)';
+symbolPh.fills = [{ type: 'SOLID', color: black }];
+symbolPh.cornerRadius = Math.round(X * 0.22);                // squircle radius
+symbolPh.cornerSmoothing = 0.8;                              // logo-only exception per §Object styles.5
+lockupBand.appendChild(symbolPh);
+symbolPh.resize(X, X);
 
-// --- 6. Two feature cards (archetype A: text → 1X → visual → 2X → lockup) ---
-//   §Composition.3 mobile rule: 1080-class canvases cap at 2 cells per row.
-//   Card width = (canvasW − 2X margins − 0.5X gutter) / 2 = (1080 − 172 − 43) / 2 ≈ 432.
-//   Lockup band height = canvas margin (X) + cluster height (1.125 × X) per §Logo.4 digital rule.
-const lockupClusterH = Math.round(X * 162 / 144);            // 97 — wordmark glyph lands at X
-const lockupTopY     = canvasH - X - lockupClusterH;          // canvas margin + cluster height
-const visualTop      = subtitle.y + subtitle.height + X;     // 1X band gap (§Composition.2)
-const visualBottom   = lockupTopY - 2 * X;                    // 2X gap above lockup
-const cardW          = Math.floor((canvasW - 2 * X - gutter) / 2);   // 432
-const cardH          = visualBottom - visualTop;
+// Cluster — auto-layout HORIZONTAL with X/2 itemSpacing, hugs content.
+//   Order: entry-points text → divider → wordmark (= horizontal-LEFT cluster orientation per §Logo.5b).
+const cluster = figma.createFrame();
+cluster.name = 'Cluster';
+cluster.fills = [];
+cluster.layoutMode = 'HORIZONTAL';
+cluster.primaryAxisSizingMode = 'AUTO';
+cluster.counterAxisSizingMode = 'AUTO';
+cluster.counterAxisAlignItems = 'CENTER';
+cluster.itemSpacing = halfX;                                 // X/2 between cluster pieces
+lockupBand.appendChild(cluster);
 
-// X-bracketed radii per §Object styles.3 + concentric per §Object styles.4
-const cardR       = Math.round(X / 2);                     // 43 — default content tile bracket
-const iconInset   = Math.round(X / 4);                     // 22 — gap, doubles as inner padding
-const iconBoxR    = cardR - iconInset;                     // 21 ≈ X/4 — small bracket
-const iconBoxSize = 144, iconSize = 72;                    // §Iconography.5: 0.5× ratio
+const entryPoints = figma.createText();
+entryPoints.fontName = { family: 'Qonto Sans', style: 'Regular' };
+entryPoints.characters = 'Business account\nFinance management\nCompany creation';
+entryPoints.fontSize = Math.round(X * 0.245);                // 21 (above 20 digital floor)
+entryPoints.lineHeight = { unit: 'PIXELS', value: Math.round(X * 0.36) };
+entryPoints.fills = [{ type: 'SOLID', color: black }];
+entryPoints.textAutoResize = 'WIDTH_AND_HEIGHT';
+entryPoints.textAlignHorizontal = 'LEFT';
+cluster.appendChild(entryPoints);
 
-// X-anchored type sizes (§Typography.4)
-const cardTitleSize = Math.max(22, Math.round(X * 0.65));  // 56
-const bodySize      = Math.max(16, Math.round(X * 0.45));  // 39
+const divider = figma.createRectangle();
+divider.fills = [{ type: 'SOLID', color: black }];
+cluster.appendChild(divider);
+divider.resize(1, X);
+divider.layoutSizingVertical = 'FIXED';
 
-// Card 1 — photo + title + body (50/50 photo/text split — bigger X needs tighter layout)
-//   Card body copy is intentionally short (one line) per §Tone of voice "to the point" —
-//   long card body doesn't fit at digital X = 86 without spilling card bounds.
-const card1 = figma.createFrame();
-card1.name = 'Card · Banking (photo)';
-card1.resize(cardW, cardH);
-card1.cornerRadius = cardR; card1.cornerSmoothing = 0;
-card1.fills = [{ type: 'SOLID', color: white }];
-card1.effects = shadowStack;
-card1.x = X; card1.y = visualTop;
-card1.clipsContent = true;                                   // rounded card crops the photo
-canvas.appendChild(card1);
+const wordmarkPh = figma.createFrame();
+wordmarkPh.name = 'Wordmark placeholder (replace with vector)';
+wordmarkPh.fills = [{ type: 'SOLID', color: black }];
+cluster.appendChild(wordmarkPh);
+wordmarkPh.resize(Math.round(X * 492 / 138), X);             // 308 wide
 
-const photoH1   = Math.round(cardH * 0.50);                  // 50/50 split
-const cardPad   = Math.round(X / 4);                          // 22 — tighter than 0.5X to fit content at digital X
-const photoBg1 = figma.createRectangle();
-photoBg1.name = 'Card photo (Banking)';
-photoBg1.resize(cardW, photoH1);
-photoBg1.fills = [{ type: 'SOLID', color: lightGrey }];
-card1.appendChild(photoBg1);
-const photoPlaceholderId = photoBg1.id;                       // hand to figma_set_image_fill later
-
-const card1Title = makeText('Banking', 'Bold', cardTitleSize, 110, black,
-  X / 2, photoH1 + cardPad, cardW - X, 0);
-card1.appendChild(card1Title);
-const card1Body = makeText('Move money fast.',
-  'Regular', bodySize, 130, black, X / 2, card1Title.y + card1Title.height + 4, cardW - X, 0);
-card1.appendChild(card1Body);
-
-// Card 2 — icon + title + body
-const card2 = figma.createFrame();
-card2.name = 'Card · Invoicing & expenses (icon)';
-card2.resize(cardW, cardH);
-card2.cornerRadius = cardR; card2.cornerSmoothing = 0;
-card2.fills = [{ type: 'SOLID', color: white }];
-card2.effects = shadowStack;
-card2.x = X + cardW + gutter; card2.y = visualTop;     // 0.5X gutter between cards (§Composition.3)
-card2.clipsContent = true;
-canvas.appendChild(card2);
-
-const iconBox = figma.createFrame();
-iconBox.resize(iconBoxSize, iconBoxSize);
-iconBox.cornerRadius = iconBoxR; iconBox.cornerSmoothing = 0;
-iconBox.fills = [{ type: 'SOLID', color: lightGrey }];
-iconBox.x = iconInset; iconBox.y = iconInset;             // X/4 inset → concentric per §Object styles.4
-card2.appendChild(iconBox);
-
-const ic = makeIcon(ICONS.attachment, iconSize, black);
-ic.x = (iconBoxSize - iconSize) / 2;
-ic.y = (iconBoxSize - iconSize) / 2;
-iconBox.appendChild(ic);
-
-const card2Title = makeText('Invoicing', 'Bold', cardTitleSize, 110, black,
-  X / 2, iconBox.y + iconBox.height + cardPad, cardW - X, 0);
-card2.appendChild(card2Title);
-const card2Body = makeText('All in one place.',
-  'Regular', bodySize, 130, black, X / 2, card2Title.y + card2Title.height + 4, cardW - X, 0);
-card2.appendChild(card2Body);
-
-// --- 7. Full lockup at bottom: symbol bottom-left + horizontal-left cluster bottom-right ---
-// Per §Logo.5 priority placement. Lockup keys off the same unified X (digital 8 %).
-// Cluster scaled so it fits the canvas width minus 2X canvas margins minus symbol width
-// minus an auto gap of at least X (clear-space rule).
-//   curl -s "…/Logo/qonto-logo-category-entry-points-horizontal-left-EN.svg" -o /tmp/q-lockup-h.svg
-//   curl -s "…/Logo/qonto-symbol-multiplier-black.svg"                       -o /tmp/q-symbol-black.svg
-// Sizing per §Logo.4 wordmark-glyph = X rule: cluster_h = X × (162/144) ≈ 1.125 X.
-const clusterH   = lockupClusterH;                            // 97 — see §6 (= X × 162/144)
-const clusterW   = Math.round(clusterH * 965 / 162);          // viewBox 965×162 → ≈ 575
-const symbolSize = X;                                         // 86 — symbol = X × X
-
-const lockupCluster = figma.createRectangle();
-lockupCluster.name = 'Qonto wordmark + entry points (horizontal-left-EN) — bottom-right';
-lockupCluster.resize(clusterW, clusterH);
-lockupCluster.fills = [{ type: 'SOLID', color: lightGrey }];
-lockupCluster.x = canvasW - X - lockupCluster.width;
-lockupCluster.y = canvasH - X - lockupCluster.height;
-canvas.appendChild(lockupCluster);
-
-const symbol = figma.createRectangle();
-symbol.name = 'Qonto symbol multiplier (black) — bottom-left';
-symbol.resize(symbolSize, symbolSize);
-symbol.fills = [{ type: 'SOLID', color: lightGrey }];
-symbol.x = X;
-symbol.y = canvasH - X - symbolSize;
-canvas.appendChild(symbol);
-// Return photoPlaceholderId, lockupCluster.id, symbol.id for the figma_set_image_fill calls.
+// Return: { photoId: photoPlaceholderId, symbolPhId, wordmarkPhId } for follow-up vector swap.
 ```
 
-**Logos as vector via `createNodeFromSvg` (canonical workflow).** Per §Logo.9b, brand assets stay vector. After the build script creates the canvas + cards + photo placeholder, run **two more `figma_execute` calls** — one for the cluster (large SVG, ~23 KB), one for the symbol (small SVG, ~1.7 KB) — using `figma.createNodeFromSvg` with the SVG content inlined. Then apply the photo image fill in a separate `figma_set_image_fill` call and re-bind the returned `imageHash`:
+**Logos as vector via `createNodeFromSvg` — swap-into-auto-layout pattern.** Per §Logo.9b, brand assets stay vector. The build script creates the lockup with auto-layout placeholders; a follow-up `figma_execute` call **swaps the placeholders for vector imports**. This way the SPACE_BETWEEN distribution stays intact — when you swap a child of an auto-layout frame, the parent re-distributes around the new node automatically.
 
 ```javascript
-// figma_execute, call N+1: cluster vector at the canonical wordmark = X size
-//   X = 0.08 × 1080 = 86 (digital, see §Logo.4)
-//   cluster_height = X × (162 / 144) = X × 1.125  →  97
-//   cluster_width  = cluster_height × (965 / 162)  →  575
-const CLUSTER_SVG = `<svg width="965" height="162" …>…</svg>`;     // full SVG inlined (~23 KB)
-const cluster = figma.createNodeFromSvg(CLUSTER_SVG);
-cluster.resize(575, 97);
-cluster.x = 1080 - 86 - cluster.width;             // X canvas margin = 86 (unified, digital)
-cluster.y = 1080 - 86 - cluster.height;
-parent.appendChild(cluster);
+// figma_execute, call N+1: swap symbol placeholder + wordmark placeholder for vectors.
+const symbolPh   = figma.getNodeById('<symbolPhId>');
+const wordmarkPh = figma.getNodeById('<wordmarkPhId>');
+const lockupBand = symbolPh.parent;
+const cluster    = wordmarkPh.parent;
 
-// figma_execute, call N+2: symbol vector at X × X (per §Logo.4)
+// Symbol — black squircle + white flower + always-on white stroke (per §Logo.3)
 const SYMBOL_SVG = `<svg width="138" height="138" …>…</svg>`;
 const symbol = figma.createNodeFromSvg(SYMBOL_SVG);
 symbol.resize(86, 86);                              // X × X
-symbol.x = 86;                                      // X canvas margin
-symbol.y = 1080 - 86 - 86;
-parent.appendChild(symbol);
+symbol.layoutPositioning = 'AUTO';                  // re-engage auto-layout
+lockupBand.insertChild(0, symbol);                  // first child of SPACE_BETWEEN row
+symbolPh.remove();
+// Always-on white stroke on the squircle path (§Logo.3)
+const dark = (n) => Array.isArray(n.fills) && n.fills.some(f => f.type === 'SOLID' && f.color.r < 0.1);
+const all = symbol.findAll(n => n.type === 'VECTOR' && dark(n));
+all.sort((a, b) => (b.width * b.height) - (a.width * a.height));
+const squirclePath = all[0];
+squirclePath.strokes = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+squirclePath.strokeWeight = 1;
+squirclePath.strokeAlign = 'INSIDE';
 
-// figma_set_image_fill (photo only — photos stay raster), then re-bind hash:
-photoBg.fills = [{ type: 'IMAGE', imageHash: '<photo hash>', scaleMode: 'FILL' }];
+// Wordmark — vector, swap into cluster
+const WORDMARK_SVG = `<svg width="492" height="138" …>…</svg>`;
+const wordmark = figma.createNodeFromSvg(WORDMARK_SVG);
+wordmark.resize(Math.round(86 * 492 / 138), 86);    // 308 × 86
+wordmark.layoutPositioning = 'AUTO';
+cluster.appendChild(wordmark);                       // appended after divider
+wordmarkPh.remove();
+
+// Photo — image fill replaces the placeholder rect's solid fill.
+const photo = figma.getNodeById('<photoPlaceholderId>');
+photo.fills = [{ type: 'IMAGE', imageHash: '<photo hash>', scaleMode: 'FILL' }];
 ```
 
 **Generating the inlined SVG strings.** Read the SVG file, JSON-encode it (handles all the escaping cleanly), and paste the result as a string literal:
@@ -2128,7 +2225,7 @@ The earlier "rasterise with sips, apply via image-fill" workflow is **deprecated
 
 **Why two cards, not three.** Three feature cards on a `1080 × 1080` canvas crushes each card to ≈ 288 px. Card body falls below comfortable phone-reading scale and photos read as thumbnails. Per §Composition.3's mobile content-cell rule, mobile / social canvases (`min(W, H) ≤ 1080`) cap at 2 cells per row. Two cards at ≈ 459 px give photo and copy room to breathe — empirically validated against Joan's review (2026-04-28).
 
-*Empirically validated at `1080 × 1080` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Square Instagram Post Test". Screenshot verified **unified `X = 86`** (digital 8 %): canvas margin = 86, grid gutter = 0.5X = 43, two cards 432 × 295 at `cardR = X / 2 = 43`, Card 2 icon-box at `(22, 22)` with `r = X / 4 ≈ 21`, headline "Everything your business needs" at small tier (1 × X = 86 px), subtitle at 0.5 × X = 43 px, full lockup at the same X (cluster 575 × 97, symbol 86 × 86, EP 21 px). The whole composition reads off one anchor.*
+*Empirically validated at `1080 × 1080` in file `mNVOGF8yvrXXMXTVt6cKkr`, page "Square Instagram Post Test", node `107:1197` (auto-layout build). Screenshot verified **unified `X = 86`** (digital 8 %): canvas background `gray-50` (`#F5F5F5`), canvas margin = 86, grid gutter = 0.5X = 43, two cards 432 × 392 at `cardR = X / 2 = 43`. **Card 1 full-bleed photo** with white `Banking` (48 px) + `Move money fast.` (39 px) overlay text. **Card 2 icon-box** at `(22, 22)` with `r = X / 4 ≈ 21`, paperclip glyph centred, `Invoicing` + `All in one place.` text-stack with X/4 itemSpacing. Headline `Everything your business needs` at small tier (1 × X = 86 px), subtitle at 0.5 × X = 43 px. Full lockup at the same X (cluster 575 × 97, symbol 86 × 86, EP 21 px). **Auto-layout structure**: text-block (vertical, FILL h, hug v), Card 2 (vertical, X/4 padding, X/4 itemSpacing), lockup-band (horizontal, SPACE_BETWEEN). Card 1 and the canvas itself stay non-autolayout (overlay-on-photo + canvas-level absolute placement). Reference comparison: Joan's manual edit (`107:1155`) and the original v3.0 (`90:788`) sit alongside for visual baseline.*
 
 ### 2. Instagram Story — D-reversed: lockup top, content bottom
 
@@ -2276,8 +2373,8 @@ A `1200 × 627` (LinkedIn sponsored-content default) on §Composition.7 archetyp
 **Rules exercised:**
 
 - §Tone of voice — *"In tune"* register adaptation: descriptive single-sentence headline ("Banking purpose-built for European SMEs.") instead of IG's parallel imperative. Vocabulary leans formal (`purpose-built`, `SMEs`, `trust`) rather than casual (`admin`, `boring bits`). *"At your service"* via concrete evidence — 500,000+ businesses, five named markets — no "best" / "world-class" / hyperbole. *"To the point"* and *"Playful but polished"* still hold underneath.
-- §Composition — archetype C split: text occupies the left half, photo the right half. Each half observes its own X margins (so text has X-margin from the canvas left and from the half boundary). Headline at medium tier per §Composition.1. Unified `X = 50` (digital 8% of min=627).
-- §Typography — Bold headline at `1.25 × X = 63 px` (LH 98 / +0.5%), Regular subtitle at `0.5 × X = 25 px` (LH 110 / +0.5%). At this small canvas (X = 50) most of §Typography.4's pixel floors win over the X-multipliers — body sizes hit `16 px` floor and caption hits `12 px` before the ratios kick in.
+- §Composition — archetype C split: text occupies the left half, photo the right half. Each half observes its own X margins (so text has X-margin from the canvas left and from the half boundary). Headline at medium tier per §Composition.1. **Subtitle stretches the full content-area width** (`textW = halfW − 2X = 500`) — earlier iterations capped the subtitle at 70 % of textW for "B2B copy density," but the unbroken full-width subtitle reads more confidently and uses the available real-estate. Unified `X = 50` (digital 8% of min=627).
+- §Typography — Bold headline at `1.25 × X = 63 px` (LH 98 / +0.5%), Regular subtitle at `0.5 × X = 25 px` (LH 110 / +0.5%) at full content-area width. At this small canvas (X = 50) most of §Typography.4's pixel floors win over the X-multipliers — body sizes hit `16 px` floor and caption hits `12 px` before the ratios kick in.
 - §Color — white left half, photographic right half — no product palette.
 - §Photography — right-half photo (`Lisa Cs Office Action.png`) at `scaleMode: 'FILL'` cropped to the half. Picked for B2B warmth — a real moment of customer-facing work.
 - §Logo — **bisected-canvas placement** per §Logo.5 (SOT [node 564:7739](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=564-7739)): the lockup spans the full content (left) half. **Wordmark at canvas-left margin** (`50` × `171`) → divider (`1 × 50`) → **entry-points** text → auto gap → **symbol at the half-canvas centre** (`50 × 50`, x = `halfW − X − X = 500`, with always-on 1 px white stroke per §Logo.3). The whole lockup reads wordmark → entry-points → symbol → photo, with the symbol sitting at the canvas horizontal centre as the threshold between content and image. **Entry-points exception**: at this canvas's `X = 50`, the EP size of `12 px` is below the standard 20 px digital floor; the SOT bisected-canvas pattern overrides the floor here because the wordmark/EP/symbol reading-path is the brand-comprehension benefit, and the EP at 12 px remains readable on retina screens at intimate viewing distance. Use the `horizontal-right-EN` cluster orientation per §Logo.5b.
@@ -2317,8 +2414,8 @@ canvas.appendChild(headline);
 const subtitle = makeText(
   '500,000+ businesses across France, Germany, Italy, Spain, and the Netherlands trust Qonto for banking, invoicing, and finance management.',
   'Regular', Math.round(X * 0.5), 110, black,                    // single tier 0.5 X
-  X, headline.y + headline.height + Math.round(X * 0.5), Math.round(textW * 0.7), 0.5
-);
+  X, headline.y + headline.height + Math.round(X * 0.5), textW, 0.5
+);                                                                // subtitle stretches full content-area width
 canvas.appendChild(subtitle);
 
 // Lockup — BISECTED-CANVAS PLACEMENT per §Logo.5 (SOT 564:7739).
