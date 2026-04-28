@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.15
+version: 2.16
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.15 · Last updated: 2026-04-28 · Status: living document
+> Version: 2.16 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -338,7 +338,14 @@ The logo is intentionally small — at 1080 px it is ~18 % of canvas width. It a
 
 After instantiating the component in Figma, call `instance.resize(wordmark_width, wordmark_height)`. The component preserves its internal proportions.
 
-**Sizing the wordmark + entry-points cluster (asset-library SVG).** The `wordmark height = X` rule applies to the **wordmark glyph** ("Qonto") regardless of which lockup configuration the agent is rendering. The asset-library entry-points cluster SVG (viewBox `965 × 162`) wraps the wordmark inside a larger frame that also holds the divider, the entry-points text, and clear-space padding. **The wordmark glyph in that cluster occupies `144 × 162 = 89 %` of the viewBox height** (measured empirically — Q-glyph cap-height + descender). To render so the wordmark glyph hits `X`:
+**Cluster sourcing — Figma comps build manually; non-Figma surfaces use the asset-library SVG.** The wordmark + entry-points cluster has two valid construction paths, and the choice matters for legibility:
+
+- **In Figma marketing comps:** **build the lockup manually** — wordmark SVG (vector) + divider rectangle + **entry-points as a Figma TEXT node** (Qonto Sans Regular, size = `round(X × 0.245)` per §Logo.4). Text gets sub-pixel anti-aliasing and font hinting at any scale, which is the difference between "13 px reads cleanly" and "13 px renders as fuzzy paths" — the asset-library cluster SVG ships entry-points as **vector path data**, which loses readability when scaled below ~30 px on screen. Rendering as text fixes that. See §Reference compositions §1 / §2 for the canonical Figma recipe.
+- **In non-Figma surfaces** (HTML, decks, print exports, social tools that accept SVG): fetch the cluster SVG directly from the asset library — the renderer handles text shaping and the entry-points read fine because it's the renderer's font engine, not Figma's vector rasterizer, doing the work.
+
+The sizing math below applies in both cases — it's the geometry that matters, not the construction.
+
+**Sizing the wordmark + entry-points cluster.** The `wordmark height = X` rule applies to the **wordmark glyph** ("Qonto") regardless of which lockup configuration the agent is rendering. When using the asset-library entry-points cluster SVG (viewBox `965 × 162`) as a single import, the cluster wraps the wordmark inside a larger frame that also holds the divider, the entry-points text, and clear-space padding. **The wordmark glyph in that cluster occupies `144 × 162 = 89 %` of the viewBox height** (measured empirically — Q-glyph cap-height + descender). To render so the wordmark glyph hits `X`:
 
 ```
 cluster_height = X × (162 / 144) ≈ X × 1.125
@@ -601,6 +608,75 @@ script = f'const SVG = {json.dumps(svg)};\nconst lockup = figma.createNodeFromSv
 ```
 
 The earlier "rasterise with sips" fallback in §1 / §2 / §3 reference compositions is **deprecated** — the canonical workflow is `createNodeFromSvg` with the SVG inlined. Reference comp recipes will be updated in the next iteration. If you genuinely cannot inline (e.g. agent runtime caps script length), the raster fallback remains valid as an escape hatch — but flag it as a workaround, not the default.
+
+### 9c. Manual lockup composition for Figma marketing comps
+
+The asset-library entry-points cluster SVG ships entry-points as **vector path data**, not text. At Figma's typical render scales for social / mobile canvases, the wordmark Q-glyph and divider scale cleanly, but the entry-points lines (rendered at `X × 0.245 ≈ 13 px` on a 1080-wide canvas) lose font hinting and read as fuzzy. The fix: **build the lockup manually in Figma** — wordmark vector + divider rectangle + entry-points as a Figma TEXT node — so the entry-points get sub-pixel anti-aliasing and proper hinting.
+
+**Anatomy of the manual lockup** (left-to-right, horizontal-LEFT orientation — bottom placement):
+
+```
+[ entry-points text ]  ←  X/2  →  [ divider, 1 × X ]  ←  X/2  →  [ wordmark, w = X × 82/24 ]
+```
+
+For horizontal-RIGHT orientation (top placement, eye-reads-cluster-first per §Logo.5), reverse the order:
+
+```
+[ wordmark, w = X × 82/24 ]  ←  X/2  →  [ divider, 1 × X ]  ←  X/2  →  [ entry-points text ]
+```
+
+**Symbol placement** (separate node, X × X, always-on white stroke per §Logo.3) sits at the canvas's opposite edge with auto-gap to the cluster.
+
+**Figma recipe — bottom-right cluster (horizontal-LEFT):**
+
+```javascript
+await figma.loadFontAsync({ family: 'Qonto Sans', style: 'Regular' });
+
+const X = Math.round(Math.min(canvasW, canvasH) * 0.05);
+const halfX = Math.round(X / 2);
+const ink = bgIsDark ? { r: 1, g: 1, b: 1 } : { r: 0.02, g: 0.02, b: 0.02 };
+
+// 1. Wordmark — vector
+const wordmark = figma.createNodeFromSvg(WORDMARK_SVG);              // sourced from asset library
+wordmark.resize(Math.round(X * 82 / 24), X);                          // X × (82/24) ≈ 3.42 X wide
+wordmark.x = canvasW - X - wordmark.width;                            // bottom-right with X margin
+wordmark.y = canvasH - X - X;
+parent.appendChild(wordmark);
+
+// 2. Divider — 1 × X rectangle (NOT a Figma LINE — line rotation has anchor quirks)
+const divider = figma.createRectangle();
+divider.resize(1, X);
+divider.fills = [{ type: 'SOLID', color: ink }];
+divider.x = wordmark.x - halfX - 1;
+divider.y = wordmark.y;
+parent.appendChild(divider);
+
+// 3. Entry-points — Figma text node (NOT vector path data — text gets hinting)
+const epText = figma.createText();
+epText.fontName = { family: 'Qonto Sans', style: 'Regular' };
+epText.characters = 'Business account\nFinance management\nCompany creation';
+epText.fontSize = Math.round(X * 0.245);                              // 13 px at X=54 — above 12 px floor
+epText.lineHeight = { unit: 'PIXELS', value: Math.round(X * 0.36) };  // ~146% LH
+epText.fills = [{ type: 'SOLID', color: ink }];
+epText.textAutoResize = 'WIDTH_AND_HEIGHT';
+epText.textAlignHorizontal = 'LEFT';
+parent.appendChild(epText);
+epText.x = divider.x - halfX - epText.width;
+epText.y = wordmark.y + Math.round((X - epText.height) / 2);          // vertically centre on wordmark
+
+// 4. Symbol (separate, opposite edge, with always-on white stroke per §Logo.3) — see §Logo.5 placement
+```
+
+**Figma vs non-Figma split — confirm the right path before rendering.**
+
+| Surface type | Lockup construction |
+|---|---|
+| Figma marketing comps (every reference composition in this file) | **Manual:** wordmark SVG + divider rect + entry-points TEXT node |
+| HTML / React landing pages | Single asset-library cluster SVG (browser font engine handles text) |
+| Decks, Canva, exported PDFs, social tools accepting SVG | Single asset-library cluster SVG |
+| Print exports | Single asset-library cluster SVG, embedded |
+
+The asset-library cluster SVG is **only deprecated for use as a single Figma node**. For every other surface, it's the right artefact.
 
 ---
 
