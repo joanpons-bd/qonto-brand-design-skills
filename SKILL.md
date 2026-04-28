@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 3.2
+version: 3.3
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 3.2 · Last updated: 2026-04-28 · Status: living document
+> Version: 3.3 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -87,6 +87,13 @@ Grayscale exists to **enhance content hierarchy**, not to introduce color. Per t
 | `neutral/25`  | `#F9F9F9` | Page-chrome backgrounds |
 
 The "typical use" column is descriptive — the SOT does not hard-assign each step to a role. Use the scale as a continuous resource: closer steps = subtler hierarchy, further apart = stronger contrast. Honour WCAG contrast for any text step against its background.
+
+**Gray-50 (`#F5F5F5`) as a canonical canvas ground.** When a marketing composition uses **secondary-tier cards** (per §Object styles.6 — flat solid fills, no shadow) and they need to register as distinct surfaces from the canvas, the canonical move is to tint the canvas with `neutral/50` (`#F5F5F5`). Two valid pairings:
+
+- **White card on gray-50 ground** — clean, calm; the default for content-rich layouts (e.g. an IG square with two feature cards).
+- **Gray-50 card on white ground** — softer, useful when the white needs to be the breathing room.
+
+The tonal contrast between card and ground replaces the lift that a shadow would otherwise provide — keeping shadow scoped to the primary tier (special occasions only). Use this whenever a flat secondary card would otherwise disappear into a pure-white canvas.
 
 ### 4. Product color palette — product only
 
@@ -750,7 +757,7 @@ Compositions are built from **horizontal content bands** (headline, image, subti
 
 - **Canvas margins: `X` on all four sides.** The safe content area is `(canvas_w − 2X)` wide by `(canvas_h − 2X)` tall. No content, no lockup, no floating object ever crosses into the X margin.
 - **Gap between adjacent content bands: `1X`.** Use this between headline ↔ image, image ↔ subtitle, or any two directly-stacked content blocks.
-- **Gap between the last content band and the bottom lockup: `2X`.** The lockup always gets a double gutter — it anchors the composition and needs breathing room.
+- **Gap between the last content band and the bottom lockup: `≥ 1X` (prefer `2X`).** The lockup gets generous breathing room by default. **Default: `2X`** for text-led compositions where the lockup needs to feel anchored. **Relax to `1X`** for dense card-heavy compositions (cards-row + lockup, where the wider X already supplies enough breathing room and `2X` would push the cards too far up). Don't go below `1X` — the lockup must visibly separate from the content above it.
 
 Worked examples — print 1080×1350 reference (X = 54) and digital 1080×1080 (X = 86):
 
@@ -759,7 +766,8 @@ Worked examples — print 1080×1350 reference (X = 54) and digital 1080×1080 (
 | Canvas margin (all 4 sides) | 54 | 86 | `1X` |
 | Content column width | 972 | 908 | `canvas_w − 2X` |
 | Adjacent-band gap | 54 | 86 | `1X` |
-| Last-band → lockup gap | 108 | 172 | `2X` |
+| Last-band → lockup gap (text-led, default) | 108 | 172 | `2X` |
+| Last-band → lockup gap (cards-led, relaxed) | 54 | 86 | `1X` |
 | Lockup strip height (symbol / wordmark / cluster glyph) | 54 | 86 | `1X` |
 | Grid gutter (§Composition.3) | 27 | 43 | `0.5X` |
 
@@ -910,12 +918,13 @@ These are the canonical archetypes for Qonto marketing touch points. Every compo
 - **Photography comes from `Photography/` in the [Asset library](#asset-library)** — don't generate or swap in arbitrary imagery for archetypes B, C, D, E.
 - **Photo-archetype fit.** D and E place text *over* the photo, so they require shots with generous negative space and tonal uniformity in the text zones (upper-left for headline, lower-X strip for lockup). If the provided photo is activity-dense, crops tightly onto subjects, or has no calm region for text to breathe, **propose switching to A, B, or C** — where the photo gets its own dedicated band and doesn't fight the text. Don't force-fit a busy photo into D or E. This applies even when the user explicitly asks for D/E: name the mismatch and recommend the better archetype.
 - Lockup sits at the bottom X strip (§Logo.5). In archetype E it sits inside the card, not at the canvas bottom.
-- **Every last content band ends at `lockupY − 2X`**, not at the canvas bottom. This holds for text bands (A), visual bands (B), both halves of a split (C), overlay text blocks (D), and cards (E). The 2X breathing room before the lockup is non-negotiable.
+- **Every last content band ends at `lockupY − ≥1X`** (prefer `2X` for text-led compositions; relax to `1X` for cards-led layouts where the row would push too far up). This holds for text bands (A), visual bands (B), both halves of a split (C), overlay text blocks (D), and cards (E). Never go below `1X` — see §Composition.2.
 - Text block honours horizontal (§Composition.5) and vertical (§Composition.6) alignment rules.
 - Headline tier (§Composition.1) picked for the archetype, not per element.
 - Grid (§Composition.3) as a reference, especially when splitting (C) or sizing the text card (E).
 - **Sharp grounds, rounded accents.** Structural objects (backing cards, scrims, bands, hero images, full-bleed rectangles) are always sharp (`cornerRadius = 0`). Rounded corners belong to content-scale objects that float *inside* the structure — product covers, small image tiles, icon bounding boxes, avatars, chips — picked from the four atomic shapes in §Object styles.1. Full rules in §Object styles.
 - **Copy never crosses a recognisable face** (archetype D, and any photo-overlay variant). When the subject's face occupies the canvas zone where copy would naturally land, do not let the copy cross it — pivot to archetype D's reversed variant (**lockup at the top per §Logo.5 reversed-top placement, copy at the bottom**) or move to archetype B / C where text and image have their own bands. The photo subject is the brief's protagonist; the copy supports them, never obscures them.
+- **Image-bg overlay always — copy over photo gets a scrim.** Whenever copy sits on top of an image — whether a full-bleed archetype D canvas, an archetype E text card on a bleed image, or a **card-scale image background** (a tertiary-tier card per §Object styles.6) — apply a dark gradient scrim where the copy lands. The scrim is mandatory; ship copy on photo without one only when readability is *extremely clear* (rare — assume it isn't). Recipe in §Composition.9b; opacity tuned per scene per the same rules. White text on a yellow shirt is not "extremely clear" — add the scrim.
 
 ### 7b. Archetype D variants — subject-aware photo placement
 
@@ -942,7 +951,7 @@ Archetype D ships in two layouts depending on where the subject sits in the phot
 
 - Do not right-align headlines or subtitles. Left and center only (§Composition.5).
 - Do not bottom-align the headline block. Top and center only (§Composition.6).
-- Do not use band gaps that are not multiples of X (§Composition.2). Adjacent bands = `1X`, last band to lockup = `2X`, margins = `X`.
+- Do not use band gaps that are not multiples of X (§Composition.2). Adjacent bands = `1X`, last band to lockup = `≥ 1X` (default `2X`, relax to `1X` for cards-led), margins = `X`.
 - Do not invent column counts outside the 4 / 8 / 12 ladder (§Composition.3). A 5- or 7-column grid is not Qonto.
 - Do not set gutters that differ from X (§Composition.3). Gutter = X, always.
 - Do not invent a layout outside the six archetypes in §Composition.7 without an explicit reason. Pick A–F first; deviate only when a genuine new need appears.
@@ -1050,7 +1059,7 @@ frame.insertChild(1, scrim);                               // index 1 = just abo
 
 ### 10. Body copy and other type sizes
 
-See §Typography.4 for the full type system. In brief: every non-headline/subtitle text role anchors in `X` with a hard pixel floor — **paragraph body** at `max(16 px, round(X × 0.45))`, **card titles** at `max(22 px, round(X × 0.65))`, **captions / metadata / entry-points** at `max(12 px, round(X × 0.245))` (entry-points additionally bounded by their `20 px digital / 12 px print` floor per §Logo.4). Do not introduce sizes that sit between the defined ratios.
+See §Typography.4 for the full type system. In brief: every non-headline/subtitle text role anchors in `X` with a hard pixel floor — **paragraph body** at `max(16 px, round(X × 0.45))`, **card titles** at `max(22 px, round(X × 0.55))`, **captions / metadata / entry-points** at `max(12 px, round(X × 0.245))` (entry-points additionally bounded by their `20 px digital / 12 px print` floor per §Logo.4). Do not introduce sizes that sit between the defined ratios.
 
 ---
 
@@ -1105,7 +1114,7 @@ Five typographic roles. Every size is a multiple of `X` (the composition base un
 |---|---|---|---|---|
 | **Headline** | Qonto Sans **Bold** | Small `1 × X` · Medium `1.25 × X` · Large `1.5 × X` — see §Composition.1 | **98 %** | +0.5 % |
 | **Subtitle** | Qonto Sans **Regular** | `0.5 × X` (single tier) — see §Composition.1 | 110 % | +0.5 % |
-| **Card title** (sub-headline inside cards / panels / blocks) | Qonto Sans **Bold** | `max(22 px, round(X × 0.65))` | 110 % | 0 % |
+| **Card title** (sub-headline inside cards / panels / blocks) | Qonto Sans **Bold** | `max(22 px, round(X × 0.55))` | 110 % | 0 % |
 | **Body / paragraph copy** | Qonto Sans **Regular** | `max(16 px, round(X × 0.45))` | 130 % | 0 % |
 | **Caption / metadata / label / entry-points** | Qonto Sans **Regular** | `max(12 px, round(X × 0.245))` | 130 % | 0 % |
 
@@ -1117,15 +1126,15 @@ Five typographic roles. Every size is a multiple of `X` (the composition base un
 
 **Reading the X-anchored sizes by surface.** Walk a few canonical examples to build intuition:
 
-| Surface | Medium | X | Headline (M) | Subtitle | Card title min | Body min | Caption min |
+| Surface | Medium | X | Headline (M) | Subtitle | Card title | Body min | Caption min |
 |---|---|---|---|---|---|---|---|
-| `1080 × 1080` IG square | digital | 86 | 108 | 43 | 56 | 39 | 21 |
-| `1080 × 1350` IG portrait | digital | 86 | 108 | 43 | 56 | 39 | 21 |
-| `1080 × 1920` IG Story | digital | 86 | 108 (M) / 129 (L) | 43 | 56 | 39 | 21 |
-| `1200 × 627` LinkedIn ad | digital | 50 | 63 | 25 | 33 | 23 | 12 |
-| `1920 × 1080` deck (screen) | digital | 86 | 108 | 43 | 56 | 39 | 21 |
-| `1920 × 1080` deck (printed handout) | print | 54 | 68 | 27 | 35 | 24 | 13 |
-| `2880 × 1620` OOH | print | 81 | 101 | 41 | 53 | 36 | 20 |
+| `1080 × 1080` IG square | digital | 86 | 108 | 43 | 47 | 39 | 21 |
+| `1080 × 1350` IG portrait | digital | 86 | 108 | 43 | 47 | 39 | 21 |
+| `1080 × 1920` IG Story | digital | 86 | 108 (M) / 129 (L) | 43 | 47 | 39 | 21 |
+| `1200 × 627` LinkedIn ad | digital | 50 | 63 | 25 | 28 | 23 | 12 |
+| `1920 × 1080` deck (screen) | digital | 86 | 108 | 43 | 47 | 39 | 21 |
+| `1920 × 1080` deck (printed handout) | print | 54 | 68 | 27 | 30 | 24 | 13 |
+| `2880 × 1620` OOH | print | 81 | 101 | 41 | 45 | 36 | 20 |
 
 ### 5. Case — sentence case
 
@@ -1303,24 +1312,34 @@ So padding the icon-box at `X / 4` from the card edge resolves both the X-bracke
 
 The atomic shapes in §Object styles.1 all resolve to `cornerSmoothing: 0`; don't override unless you're building the logo itself.
 
-### 6. Style and effect
+### 6. Style and effect — the three-tier card model
 
 From the SOT style-and-effect spec ([node 521:52763](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=521-52763)):
 
 > *"On floating objects we allow full flat black or white backgrounds as well as transparent options with background blur. We recommend Beautiful Shadows plugin to generate subtle and rich drop shadows on objects when needed."*
 
-**Four background treatments** on a floating content tile (canonical SOT object `370×370` at `cornerRadius: 24`, `cornerSmoothing: 0`):
+Cards have a **hierarchy**. Pick the tier that matches the moment, not the look. The three tiers compose the four background treatments below into a strategic ladder, with shadow scoped to the top tier only.
+
+| Tier | Treatment | When to use |
+|---|---|---|
+| **Primary** | Solid fill (white or black) **+ Beautiful Shadows 5-layer stack** | **Special occasions only** — hero cards, lifted moments, the one card that needs to feel like it floats off the page. Shadow signals *"this is the one"*. |
+| **Secondary** | Flat solid fill on a tinted ground (white card on `#F5F5F5` gray-50, or gray-50 card on white) — **no shadow** | **DEFAULT.** Most cards on most surfaces. The tonal contrast between card and ground does the work; shadow is unnecessary. |
+| **Tertiary** | Full-bleed media + dark gradient scrim where copy lands — see §Composition.7 overlay rule | Image-led cards (photo + headline overlay). The scrim is mandatory; never ship copy on photo without one. |
+
+**Default flow.** Reach for **secondary** first. Promote to **primary** only when a single card must be lifted off the page. Use **tertiary** when the message lives on top of an image. A composition with three primary cards in a row defeats the whole hierarchy — pick one to elevate.
+
+**Four background treatments** are still the underlying alphabet. Cards in the secondary tier draw from these; the primary tier adds the shadow stack on top; the tertiary tier replaces the fill with media + scrim.
 
 | Treatment | Fill | Extras |
 |---|---|---|
 | **Flat white** | Solid `#FFFFFF` | No blur, no stroke |
-| **Flat black** | Solid `#000000` | No blur, no stroke |
+| **Flat black** | Solid `#050505` (Qonto's near-black, never `#000000`) | No blur, no stroke |
 | **Blur white** | Transparent fill | Background blur radius `52` over a light scene |
 | **Blur black** | Transparent fill (dark tint) | Background blur radius `52` over a dark scene |
 
 Blur treatments require a **visually varied backing** (a photo, a gradient, a busy composition). Over a flat colour, the blur reads as a washed tint and loses its purpose — use flat white or flat black instead.
 
-**Drop shadows via Beautiful Shadows.** Do not hand-roll single-layer shadows. Use the [Beautiful Shadows](https://www.figma.com/community/plugin/1038073952378169144) plugin to generate a rich multi-layer stack. The SOT canonical shadow on a `370×370` tile is a five-layer stack:
+**Drop shadows via Beautiful Shadows — primary tier only.** Do not hand-roll single-layer shadows, and do not apply shadows by default to every card. Use the [Beautiful Shadows](https://www.figma.com/community/plugin/1038073952378169144) plugin to generate a rich multi-layer stack on cards in the primary tier only. The SOT canonical shadow on a `370×370` tile is a five-layer stack:
 
 | Layer | Y offset | Blur | Opacity |
 |---|---|---|---|
@@ -1330,7 +1349,16 @@ Blur treatments require a **visually varied backing** (a photo, a gradient, a bu
 | 4 | `166` | `66` | `1 %` |
 | 5 | `259` | `73` | `0 %` |
 
-All layers `#000000`, spread `0`. Regenerate with the plugin when the object size changes — these values are calibrated for the SOT's `370×370` reference and don't linearly scale. Run the plugin on the actual object rather than copying this stack verbatim to a wildly different size.
+All layers `#050505`, spread `0`. Regenerate with the plugin when the object size changes — these values are calibrated for the SOT's `370×370` reference and don't linearly scale. Run the plugin on the actual object rather than copying this stack verbatim to a wildly different size.
+
+**Card padding (X-derived).** Both inner padding levels come from the X-system — no hard-coded pixel values:
+
+| Inset | Value | Used for |
+|---|---|---|
+| Text content (headline, body, CTA) | `X / 2` | Type-only insets. |
+| Nested rounded tile (icon-box, badge, small image tile) | `X / 4` | Per the concentric-radius rule (§Object styles.4) — outer card `r = X/2`, gap `X/4`, inner tile `r = X/4`. |
+
+When a card carries **both** a nested tile and text, it can't run as a single auto-layout — it needs `layoutMode = NONE` so each child gets its own inset. Cards with text only stay auto-layout. The cards-row, lockup-row, cluster, and headline+subtitle stack are *always* auto-layout (see §Universal rules and §Reference compositions). The card itself is the one place where the auto-layout-first rule relaxes, and only when the two-padding case applies or overlay layering is needed.
 
 ### 7. Anti-patterns
 
@@ -2592,6 +2620,21 @@ rect.fills = [{ type: 'IMAGE', imageHash: '<stored hash>', scaleMode: 'FILL' }];
 ```
 
 Log the hash the first time an asset lands so subsequent uses in the same session skip the download round-trip.
+
+---
+
+## Changelog
+
+| Version | Date | Highlights |
+|---|---|---|
+| **3.3** | 2026-04-28 | **Three-tier card model** in §Object styles.6 (primary/secondary/tertiary) with shadow scoped to primary tier only. **Card padding rule** explicit: text `X/2`, nested rounded tile `X/4`. **Image-bg overlay scrim generalised** in §Composition.7 — applies to any card-scale image background, not just full-bleed archetype D. **Card title formula** `× 0.55` (down from `× 0.65`) in §Typography.4 + §Composition.10. **Lockup gap relaxed** in §Composition.2 to `≥ 1X` (default `2X`, relax to `1X` for cards-led layouts). **Gray-50 canvas option** explicitly canonicalised in §Color.3 as the canonical pairing for secondary-tier cards. |
+| **3.2** | 2026-04-28 | Auto-layout build pattern (Universal rules). IG Square refinements: gray-50 canvas, 432×392 cards, full-bleed archetype-D photo card, X gap above lockup. LinkedIn H2 stretches full content-area width. |
+| **3.1** | 2026-04-27 | Bisected-canvas lockup placement (SOT 564:7739). EP sub-floor exception scoped to bisected-canvas. |
+| **3.0** | 2026-04-27 | Unified X-system (5% print / 8% digital). Single anchor for margins, gutter, lockup, type, radii. Headline tiers `1 / 1.25 / 1.5 X`. Subtitle single tier `0.5X`. Grid gutter `0.5X`. |
+| 2.18 | 2026-04-26 | X_logo dual anchor (5% print / 8% digital) + dual EP floor (12 px print / 20 px digital). Reverted in 3.0 (single X). |
+| 2.17 | 2026-04-25 | Object styles X-bracketed radius scale + concentric icon-box derivation. |
+| 2.0 | 2026-04-22 | Consolidated single-file SKILL.md. Inline color, typography, tone, logo. |
+| 1.0 | 2026-03-26 | Initial multi-file orchestrator + territory files. |
 
 ---
 
