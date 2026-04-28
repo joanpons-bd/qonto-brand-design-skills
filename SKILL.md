@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.12
+version: 2.13
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.12 · Last updated: 2026-04-28 · Status: living document
+> Version: 2.13 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -524,7 +524,37 @@ For other configurations (wordmark + entry points, flower symbol) instantiate th
 
 **Localisation.** `<LANG>` matches the audience's primary market — pick `EN` for international or English-speaking surfaces, `FR` / `DE` / `IT` / `ES` / `NL` for in-market campaigns. Combined-locale variants (`EN-DE`, `EN-NL`) exist for bilingual contexts. When in doubt, ship `EN` and ask the brand team.
 
-**Ink colour.** The horizontal entry-points lockups ship only in the brand black (`#050505`). For dark / photo-overlay surfaces, generate the white variant locally with one substitution and re-rasterise: `sed 's/#050505/#FFFFFF/g' input.svg > white.svg && sips -s format png …`. The symbol-multiplier and wordmark assets ship in both black and white — ink switches by file.
+**Ink colour.** The horizontal entry-points lockups ship only in the brand black (`#050505`). For dark / photo-overlay surfaces, generate the white variant with one substitution: `sed 's/#050505/#FFFFFF/g' input.svg > white.svg`. The symbol-multiplier and wordmark assets ship in both black and white — ink switches by file.
+
+### 9b. Logos are vector, never raster
+
+**The rule.** When importing a logo into Figma, **always use `figma.createNodeFromSvg(svgString)`** so the result is a vector node. Never rasterise the SVG to PNG and apply via `figma_set_image_fill` — that destroys vector precision, blows up the file size, and looks fuzzy at scale.
+
+```javascript
+// ✅ Vector — preserves brand precision, scales without quality loss
+const svg = await fetch(LOCKUP_URL).then(r => r.text());      // or read from disk
+const lockup = figma.createNodeFromSvg(svg);
+lockup.resize(targetW, targetH);
+lockup.x = …; lockup.y = …;
+parent.appendChild(lockup);
+
+// ❌ Raster — loses precision, fuzzy at scale, large file footprint
+figma_set_image_fill(lockup, '/tmp/lockup.png');              // do not
+```
+
+**Photographs and decorative images** stay raster (PNG / JPG via `figma_set_image_fill`) — that's the right format for them. **Brand assets** (logos, symbols, wordmarks, lockups, icons) stay vector.
+
+**Why this is non-negotiable.** Brand precision is in the curves of the wordmark and the corners of the symbol. Rasterising at any size below the source resolution introduces anti-aliasing and edge softness that diverges from the brand. At export time (deck export, social export, OOH print), Figma re-rasterises the vector at the target resolution — so a vector source produces a clean export at every scale. A pre-rasterised source at the wrong scale produces a soft export.
+
+**Inlining large SVGs in `figma_execute`.** The wordmark + entry-points SVG is ~23 KB. **`figma_execute` accepts scripts well over 25 KB** — empirically validated 2026-04-28. Inline the full SVG as a string literal (use `JSON.stringify(svgContent)` to escape it cleanly):
+
+```python
+import json
+svg = open('/tmp/q-lockup-h-EN.svg').read()
+script = f'const SVG = {json.dumps(svg)};\nconst lockup = figma.createNodeFromSvg(SVG);\n…'
+```
+
+The earlier "rasterise with sips" fallback in §1 / §2 / §3 reference compositions is **deprecated** — the canonical workflow is `createNodeFromSvg` with the SVG inlined. Reference comp recipes will be updated in the next iteration. If you genuinely cannot inline (e.g. agent runtime caps script length), the raster fallback remains valid as an escape hatch — but flag it as a workaround, not the default.
 
 ---
 
@@ -1866,22 +1896,38 @@ canvas.appendChild(symbol);
 // Return photoPlaceholderId, lockupCluster.id, symbol.id for the figma_set_image_fill calls.
 ```
 
-**Apply image fills (three calls — photo, cluster, symbol).** After the build script returns the placeholder IDs, run three `figma_set_image_fill` calls and re-bind each returned `imageHash` via a small `figma_execute` (the plugin's "Image fill applied to 0 nodes" quirk means the hash is valid but the fill must be re-set explicitly):
+**Logos as vector via `createNodeFromSvg` (canonical workflow).** Per §Logo.9b, brand assets stay vector. After the build script creates the canvas + cards + photo placeholder, run **two more `figma_execute` calls** — one for the cluster (large SVG, ~23 KB), one for the symbol (small SVG, ~1.7 KB) — using `figma.createNodeFromSvg` with the SVG content inlined. Then apply the photo image fill in a separate `figma_set_image_fill` call and re-bind the returned `imageHash`:
 
 ```javascript
-// After figma_set_image_fill returns imageHash for each asset:
-photoBg.fills      = [{ type: 'IMAGE', imageHash: '<photo hash>',   scaleMode: 'FILL' }];
-lockupCluster.fills = [{ type: 'IMAGE', imageHash: '<cluster hash>', scaleMode: 'FIT'  }];
-symbol.fills        = [{ type: 'IMAGE', imageHash: '<symbol hash>',  scaleMode: 'FIT'  }];
+// figma_execute, call N+1: cluster vector
+const CLUSTER_SVG = `<svg width="965" height="162" …>…</svg>`;     // full SVG inlined (~23 KB)
+const cluster = figma.createNodeFromSvg(CLUSTER_SVG);
+cluster.resize(596, 100);                                            // 0.62× source viewBox
+cluster.x = 1080 - 54 - cluster.width;
+cluster.y = 1080 - 54 - cluster.height;
+parent.appendChild(cluster);
+
+// figma_execute, call N+2: symbol vector
+const SYMBOL_SVG = `<svg width="138" height="138" …>…</svg>`;
+const symbol = figma.createNodeFromSvg(SYMBOL_SVG);
+symbol.resize(54, 54);
+symbol.x = 54;
+symbol.y = 1080 - 54 - 54;
+parent.appendChild(symbol);
+
+// figma_set_image_fill (photo only — photos stay raster), then re-bind hash:
+photoBg.fills = [{ type: 'IMAGE', imageHash: '<photo hash>', scaleMode: 'FILL' }];
 ```
 
-**Lockup-as-image — canonical workflow.** The entry-points SVG is too long to embed reliably in `figma_execute` (paths push past 23 KB). Three steps:
+**Generating the inlined SVG strings.** Read the SVG file, JSON-encode it (handles all the escaping cleanly), and paste the result as a string literal:
 
-1. Fetch the cluster + symbol SVGs via `curl` from the asset library.
-2. Rasterise to PNG: `sips -s format png --resampleWidth 2400 cluster.svg --out cluster.png` (preserves the SVG aspect ratio cleanly), `sips -s format png --resampleWidth 800 symbol.svg --out symbol.png`.
-3. Apply via `figma_set_image_fill` with `scaleMode: 'FIT'` so each piece centres in its placeholder.
+```python
+import json
+svg = open('/tmp/q-lockup-h-EN.svg').read()
+print(f'const CLUSTER_SVG = {json.dumps(svg)};')
+```
 
-This is the recommended default. The Logos Library Figma component path (`importComponentByKeyAsync`) remains valid in principle but timed out repeatedly during validation; SVG → PNG → image-fill is faster and more reliable.
+The earlier "rasterise with sips, apply via image-fill" workflow is **deprecated** for logos — see §Logo.9b. It remains valid only as an escape hatch when SVG inlining genuinely fails (e.g. agent runtime caps script length below the SVG size).
 
 **Why two cards, not three.** Three feature cards on a `1080 × 1080` canvas crushes each card to ≈ 288 px. Card body falls below comfortable phone-reading scale and photos read as thumbnails. Per §Composition.3's mobile content-cell rule, mobile / social canvases (`min(W, H) ≤ 1080`) cap at 2 cells per row. Two cards at ≈ 459 px give photo and copy room to breathe — empirically validated against Joan's review (2026-04-28).
 
