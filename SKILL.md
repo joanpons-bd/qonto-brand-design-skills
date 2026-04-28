@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 3.3
+version: 3.4
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 3.3 · Last updated: 2026-04-28 · Status: living document
+> Version: 3.4 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -88,12 +88,16 @@ Grayscale exists to **enhance content hierarchy**, not to introduce color. Per t
 
 The "typical use" column is descriptive — the SOT does not hard-assign each step to a role. Use the scale as a continuous resource: closer steps = subtler hierarchy, further apart = stronger contrast. Honour WCAG contrast for any text step against its background.
 
-**Gray-50 (`#F5F5F5`) as a canonical canvas ground.** When a marketing composition uses **secondary-tier cards** (per §Object styles.6 — flat solid fills, no shadow) and they need to register as distinct surfaces from the canvas, the canonical move is to tint the canvas with `neutral/50` (`#F5F5F5`). Two valid pairings:
+**Canvas is white (or black). Cards are tinted off it.** Two — and only two — valid pairings for **secondary-tier cards** (per §Object styles.6 — flat solid fills, no shadow):
 
-- **White card on gray-50 ground** — clean, calm; the default for content-rich layouts (e.g. an IG square with two feature cards).
-- **Gray-50 card on white ground** — softer, useful when the white needs to be the breathing room.
+- **White canvas + gray-50 (`#F5F5F5`) cards** — the default. The canvas stays canonical white; cards register as distinct surfaces via tonal contrast.
+- **Black canvas (`#050505`) + gray-800 (`#262626`) cards** — for hero / announcement / dark-mode contexts. Same logic, inverted.
 
-The tonal contrast between card and ground replaces the lift that a shadow would otherwise provide — keeping shadow scoped to the primary tier (special occasions only). Use this whenever a flat secondary card would otherwise disappear into a pure-white canvas.
+**Never** the inverse pairings: don't tint the canvas with gray-50 and put white cards on it, and don't put gray-800 cards on a gray-50 canvas. The brand canvas is always one of the two canonical primaries (white or black); the gray steps are reserved for the *cards floating on that canvas*. This keeps the brand's white-led identity intact while still allowing flat secondary cards to read as distinct surfaces without a shadow.
+
+The tonal contrast between card and canvas does the work that a shadow would otherwise provide — keeping shadow scoped to the primary tier (special occasions only — see §Object styles.6).
+
+**Nested elements inside cards.** When a gray-50 card on a white canvas needs an icon-box or badge, the inner tile reverts to **white** (matches the canvas, "punches through" visually). When a gray-800 card on a black canvas needs the same, the inner tile reverts to **black** (`#050505`). The rule is symmetric: the inner tile mirrors the canvas, the card sits between them tonally.
 
 ### 4. Product color palette — product only
 
@@ -317,34 +321,26 @@ No gradients, no brand palette colors, no outlines (except the symbol stroke rul
 
 The X-system replaces the old vague "x-height of wordmark" guidance with a single canvas-anchored ratio that governs **everything in the composition** — margins, gutters, lockup, type, content-tile radii, vertical rhythm.
 
-> **`X = 0.05 × min(canvas_w, canvas_h)`** for **print**. **`X = 0.08 × min(canvas_w, canvas_h)`** for **digital**. Mnemonic: **5 for ink, 8 for screens.**
+> **`X = 0.08 × min(canvas_w, canvas_h)`** — for every medium. Mnemonic: **X is 8 — for everything.**
 
-`X` is the single brand unit. Every spec in §Logo, §Composition, §Typography, and §Object styles resolves to a multiple of `X`. The unit collapses what used to be three separately-tuned ratios (compositional X, lockup X, clear-space X) into one — when the SOT was updated 2026-04-28, the lockup-internal anchor was unified back into `X`, and the digital uplift to 8 % carries the whole composition (not just the lockup).
+`X` is the single brand unit. Every spec in §Logo, §Composition, §Typography, and §Object styles resolves to a multiple of `X`. One canvas, one anchor, one number — across print, digital, and DOOH.
 
-**The print / digital boundary.**
+**Why one rule.** The earlier 5/8 split ("5 for ink, 8 for screens") was an artefact of an older brand presence calibration tied to billboard-scale print. In practice, most actual print surfaces (A4 posters, brochures, flyers, deck PDFs) felt under-anchored at 5 %: the lockup looked timid on the page. Going 8 % across the board gives the brand consistent presence at every scale; viewing distance corrections that the 5 % rule was supposed to compensate for turn out not to need a separate anchor. Simpler rule, more confident output.
 
-| Medium | Surfaces | `X` |
-|---|---|---|
-| Digital (intimate viewing) | Social, web, in-app, video, email banners, deck slides presented on screen, dashboards, banner ads | `0.08 × min(W, H)` |
-| Print | OOH, **DOOH** (digital out-of-home — pixels, but viewed at distance), flyers, brochures, posters, business cards, packaging, deck PDFs printed for handout | `0.05 × min(W, H)` |
+**Verification against SOT.** The reference layout in the Brand Kit SOT is 2000 px wide and frames a brand artefact; its wordmark renders at 100 × 356. That matches `X = 100` (5 % of 2000) — but the SOT was sized to the older 5 % anchor. Under v3.4 the same 2000-wide canvas would render at `X = 160`, wordmark `160 × 571`. The SOT itself will catch up; until then, the values in this file are the source of truth.
 
-DOOH is digital pixels at print viewing distance — follow print at 5 %.
-
-**Why one X, not two.** Earlier iterations of this skill (v2.18) split a separate `X_logo` for the lockup so the brand mark could grow on digital while the layout stayed calibrated. The split worked, but produced an inconsistency at the canvas edge: the lockup's clear-space halo (8 %) extended beyond the layout margin (5 %) on digital. The clean fix is to bump *everything* to 8 % on digital — the SOT's new headline tiers (1, 1.25, 1.5 — see §Composition.1) come down to neutralise the cascade so absolute type sizes stay roughly where they were, and the lockup's clear-space halo touches the canvas edge cleanly because they share the same anchor.
-
-**Verification against SOT.** The reference layout in the Brand Kit SOT is 2000 px wide and frames a print artefact; its wordmark is rendered at 100 × 356. That matches `X = 100` (5 % of 2000), wordmark height = `X`, wordmark width = `X × (492 / 138) = 356`. The 8 % digital uplift is a per-medium constant on top of the SOT's print baseline.
-
-| Canvas | Medium | Min dim | `X` | Wordmark width |
-|---|---|---|---|---|
-| 1080 × 1080 IG square | digital | 1080 | **86** | 308 |
-| 1080 × 1350 IG portrait | digital | 1080 | **86** | 308 |
-| 1080 × 1920 IG Story | digital | 1080 | **86** | 308 |
-| 1920 × 1080 deck (presented on screen) | digital | 1080 | **86** | 308 |
-| 1920 × 1080 deck (printed handout) | print | 1080 | 54 | 193 |
-| 1200 × 630 LinkedIn / OG | digital | 630 | **50** | 179 |
-| 2480 × 3508 A4 brochure | print | 2480 | 124 | 442 |
-| 2880 × 1620 OOH | print | 1620 | 81 | 289 |
-| A4 print (210 × 297 mm) | print | 210 mm | 10.5 mm | 37.4 mm |
+| Canvas | Min dim | `X` | Wordmark width |
+|---|---|---|---|
+| 1080 × 1080 IG square | 1080 | **86** | 308 |
+| 1080 × 1350 IG portrait | 1080 | **86** | 308 |
+| 1080 × 1920 IG Story | 1080 | **86** | 308 |
+| 1200 × 1200 LinkedIn organic post | 1200 | **96** | 343 |
+| 1920 × 1080 deck slide | 1080 | **86** | 308 |
+| 1200 × 627 LinkedIn paid ad | 627 | **50** | 179 — but EP < 20 floor → drop EP unless bisected-canvas |
+| 1240 × 1754 A4 print one-pager | 1240 | **99** | 354 |
+| 2480 × 3508 A4 brochure (300 dpi) | 2480 | **198** | 707 |
+| 2880 × 1620 OOH | 1620 | **130** | 464 |
+| A4 print (210 × 297 mm) | 210 mm | **16.8 mm** | 60 mm |
 
 **Margin** — every edge of the canvas has `X` of padding. Do not place anything (logo, text, image) closer to the edge than `X`. The lockup, headlines, body, photos all share this same canvas margin — there is no longer a separate "lockup margin."
 
@@ -377,13 +373,14 @@ cluster_width  = cluster_height × (965 / 162) ≈ X × 6.7
 
 Worked examples:
 
-| Canvas | Medium | X | cluster_height | cluster_width | wordmark glyph in render |
-|---|---|---|---|---|---|
-| 1080 × 1080 / 1080 × 1350 / 1080 × 1920 (IG square / portrait / Story) | digital | 86 | 97 | 575 | 86 |
-| 1200 × 627 (LinkedIn ad) | digital | 50 | 56 | 333 | 50 — but EP < 20 floor → drop EP, ship wordmark alone |
-| 1920 × 1080 (deck presented on screen) | digital | 86 | 97 | 575 | 86 |
-| 1920 × 1080 (printed deck handout) | print | 54 | 61 | 362 | 54 |
-| 2880 × 1620 (OOH) | print | 81 | 91 | 543 | 81 |
+| Canvas | X | cluster_height | cluster_width | wordmark glyph in render |
+|---|---|---|---|---|
+| 1080 × 1080 / 1080 × 1350 / 1080 × 1920 (IG square / portrait / Story) | 86 | 97 | 575 | 86 |
+| 1200 × 1200 (LinkedIn organic post) | 96 | 108 | 643 | 96 |
+| 1200 × 627 (LinkedIn paid ad) | 50 | 56 | 333 | 50 — but EP < 20 floor → drop EP unless bisected-canvas pattern overrides |
+| 1920 × 1080 (deck slide) | 86 | 97 | 575 | 86 |
+| 1240 × 1754 (A4 print one-pager) | 99 | 111 | 663 | 99 |
+| 2880 × 1620 (OOH) | 130 | 146 | 871 | 130 |
 
 **Don't render the cluster at `h = X` directly** — that pushes the wordmark down to `0.89 X`, undersizing it relative to the X-system. **Don't render the cluster at `h = 162` (1:1 viewBox) either** — that oversizes the wordmark and the lockup competes with the headline rather than anchoring it. Use `h ≈ 1.125 × X` so the wordmark glyph lands at `X` and everything else (divider, entry-points text, clear space) scales proportionally.
 
@@ -470,6 +467,7 @@ When a partner logo appears with Qonto:
 - Do not use over busy backgrounds or photography without contrast protection.
 - Do not use the logo below the minimum size.
 - Do not pair with the old Qonto logotype (pre-rebrand) — only the current wordmark.
+- **Do not clone a bottom-lockup band and place it at the top without flipping the order.** Bottom (priority) = symbol-left + cluster-right. Top (reversed) = cluster-left (wordmark with or without entry points) + symbol-right. The reading direction matters: at the top we open with the wordmark (the reader sees the brand name first); at the bottom we close with the wordmark (the reader's eye lands on the brand mark last). Reference: [SOT node 220:52561](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=220-52561). When cloning a lockup band across surfaces, swap the auto-layout child order if you're moving from bottom to top placement.
 
 ### 8. Figma build recipe — copy this
 
@@ -759,17 +757,17 @@ Compositions are built from **horizontal content bands** (headline, image, subti
 - **Gap between adjacent content bands: `1X`.** Use this between headline ↔ image, image ↔ subtitle, or any two directly-stacked content blocks.
 - **Gap between the last content band and the bottom lockup: `≥ 1X` (prefer `2X`).** The lockup gets generous breathing room by default. **Default: `2X`** for text-led compositions where the lockup needs to feel anchored. **Relax to `1X`** for dense card-heavy compositions (cards-row + lockup, where the wider X already supplies enough breathing room and `2X` would push the cards too far up). Don't go below `1X` — the lockup must visibly separate from the content above it.
 
-Worked examples — print 1080×1350 reference (X = 54) and digital 1080×1080 (X = 86):
+Worked examples — `1080 × 1080` IG square (X = 86) and `1240 × 1754` A4 print one-pager (X = 99):
 
-| Element | Print X = 54 | Digital X = 86 | In X |
+| Element | IG square (X = 86) | A4 (X = 99) | In X |
 |---|---|---|---|
-| Canvas margin (all 4 sides) | 54 | 86 | `1X` |
-| Content column width | 972 | 908 | `canvas_w − 2X` |
-| Adjacent-band gap | 54 | 86 | `1X` |
-| Last-band → lockup gap (text-led, default) | 108 | 172 | `2X` |
-| Last-band → lockup gap (cards-led, relaxed) | 54 | 86 | `1X` |
-| Lockup strip height (symbol / wordmark / cluster glyph) | 54 | 86 | `1X` |
-| Grid gutter (§Composition.3) | 27 | 43 | `0.5X` |
+| Canvas margin (all 4 sides) | 86 | 99 | `1X` |
+| Content column width | 908 | 1042 | `canvas_w − 2X` |
+| Adjacent-band gap | 86 | 99 | `1X` |
+| Last-band → lockup gap (text-led, default) | 172 | 198 | `2X` |
+| Last-band → lockup gap (cards-led, relaxed) | 86 | 99 | `1X` |
+| Lockup strip height (symbol / wordmark / cluster glyph) | 86 | 99 | `1X` |
+| Grid gutter (§Composition.3) | 43 | 50 | `0.5X` |
 
 **Floating / overlapping objects.** When a composition uses layered imagery (hero object + backing shapes, as in the SOT third variant), the first object starts `2X` below the headline band. Subsequent objects may overlap each other and visual judgment takes over — but nothing crosses the outer `X` margin, and nothing pushes into the `2X` zone above the lockup.
 
@@ -1124,17 +1122,18 @@ Five typographic roles. Every size is a multiple of `X` (the composition base un
 - **Entry-points share the caption row's formula** (`max(12 px, round(X × 0.245))`) but carry an additional medium-specific floor of `20 px digital / 12 px print` because they ship brand information inside the lockup — see §Logo.4. When the formula falls below the entry-points floor, the lockup drops to wordmark-alone (§Logo.1).
 - **Why two body-side rows.** Paragraph copy (the "read this to understand" tier) and captions (the "glance at this for orientation" tier) had collapsed into one row in earlier versions, which let card body land at 12–16 px on social canvases — illegible at phone scale. Splitting the rows and anchoring paragraph copy at `0.45 X` lifts body copy to a thumb-readable size at digital `X = 86` (`39 px`) and stays at the floor on tiny surfaces like a `1200 × 627` LinkedIn ad (`23 → 16 px floor`).
 
-**Reading the X-anchored sizes by surface.** Walk a few canonical examples to build intuition:
+**Reading the X-anchored sizes by surface.** Walk a few canonical examples to build intuition (X = 8 % of min(W, H), every medium):
 
-| Surface | Medium | X | Headline (M) | Subtitle | Card title | Body min | Caption min |
-|---|---|---|---|---|---|---|---|
-| `1080 × 1080` IG square | digital | 86 | 108 | 43 | 47 | 39 | 21 |
-| `1080 × 1350` IG portrait | digital | 86 | 108 | 43 | 47 | 39 | 21 |
-| `1080 × 1920` IG Story | digital | 86 | 108 (M) / 129 (L) | 43 | 47 | 39 | 21 |
-| `1200 × 627` LinkedIn ad | digital | 50 | 63 | 25 | 28 | 23 | 12 |
-| `1920 × 1080` deck (screen) | digital | 86 | 108 | 43 | 47 | 39 | 21 |
-| `1920 × 1080` deck (printed handout) | print | 54 | 68 | 27 | 30 | 24 | 13 |
-| `2880 × 1620` OOH | print | 81 | 101 | 41 | 45 | 36 | 20 |
+| Surface | X | Headline (M) | Subtitle | Card title | Body min | Caption min |
+|---|---|---|---|---|---|---|
+| `1080 × 1080` IG square | 86 | 108 | 43 | 47 | 39 | 21 |
+| `1080 × 1350` IG portrait | 86 | 108 | 43 | 47 | 39 | 21 |
+| `1080 × 1920` IG Story | 86 | 108 (M) / 129 (L) | 43 | 47 | 39 | 21 |
+| `1200 × 1200` LinkedIn organic post | 96 | 96 (S) / 120 (M) | 48 | 53 | 43 | 24 |
+| `1200 × 627` LinkedIn paid ad | 50 | 63 | 25 | 28 | 23 | 12 |
+| `1920 × 1080` deck slide | 86 | 108 | 43 | 47 | 39 | 21 |
+| `1240 × 1754` A4 print one-pager | 99 | 124 (M) / 149 (L) | 50 | 54 | 45 | 24 |
+| `2880 × 1620` OOH | 130 | 163 | 65 | 72 | 59 | 32 |
 
 ### 5. Case — sentence case
 
@@ -1323,7 +1322,7 @@ Cards have a **hierarchy**. Pick the tier that matches the moment, not the look.
 | Tier | Treatment | When to use |
 |---|---|---|
 | **Primary** | Solid fill (white or black) **+ Beautiful Shadows 5-layer stack** | **Special occasions only** — hero cards, lifted moments, the one card that needs to feel like it floats off the page. Shadow signals *"this is the one"*. |
-| **Secondary** | Flat solid fill on a tinted ground (white card on `#F5F5F5` gray-50, or gray-50 card on white) — **no shadow** | **DEFAULT.** Most cards on most surfaces. The tonal contrast between card and ground does the work; shadow is unnecessary. |
+| **Secondary** | Flat solid fill, tonally offset from the canvas — **gray-50 (`#F5F5F5`) cards on white canvas**, or **gray-800 (`#262626`) cards on black canvas** (`#050505`). No shadow. See §Color.3 for the canvas/card pairing rule. | **DEFAULT.** Most cards on most surfaces. The tonal contrast between card and canvas does the work; shadow is unnecessary. |
 | **Tertiary** | Full-bleed media + dark gradient scrim where copy lands — see §Composition.7 overlay rule | Image-led cards (photo + headline overlay). The scrim is mandatory; never ship copy on photo without one. |
 
 **Default flow.** Reach for **secondary** first. Promote to **primary** only when a single card must be lifted off the page. Use **tertiary** when the message lives on top of an image. A composition with three primary cards in a row defeats the whole hierarchy — pick one to elevate.
@@ -1371,6 +1370,8 @@ When a card carries **both** a nested tile and text, it can't run as a single au
 - **`cornerSmoothing: 0.8` outside the logo.** Imports Apple squircle language; `0.8` is logo-only (§Object styles.5).
 - **Single-layer hand-rolled drop shadow.** Flat and cheap; use Beautiful Shadows (§Object styles.6).
 - **Background blur over a flat background.** No variation for the blur to resolve against — use a flat white or flat black treatment instead (§Object styles.6).
+- **A card is never the composition.** Don't build a layout where a single card fills the canvas and serves as the entire composition (e.g. an email banner where one white-card-with-shadow holds the whole message). Cards are content-scale objects that *float inside* a composition — they need a canvas, headline, and lockup around them to make sense. When the canvas is small, drop the card and use a normal text-and-photo archetype (A, B, C, D, E from §Composition.7) at the canvas scale. The card-as-whole-composition pattern flattens the brand's compositional hierarchy and produces output that reads as a UI component, not a brand surface.
+- **Inverting the canvas/card pairing.** Don't put white cards on a gray-50 canvas, and don't put gray-800 cards on a gray-50 canvas. The canvas is always one of the two canonical primaries (white `#FFFFFF` or black `#050505`); cards tint *off* the canvas (gray-50 cards on white, gray-800 cards on black). See §Color.3 and the secondary-tier definition above.
 
 ### 8. For AI agents — decision ladder
 
@@ -1898,12 +1899,13 @@ Worked examples that exercise multiple sections at once, to prove the rules comp
 | Square Instagram post | `1080 × 1080` (1:1) | ✓ §1 below |
 | Instagram Story / Reel cover | `1080 × 1920` (9:16) — mind safe areas | ✓ §2 below |
 | LinkedIn sponsored content (landscape) | `1200 × 627` (1.91:1) | ✓ §3 below |
+| Deck slide | `1920 × 1080` (16:9) | ✓ release-confidence test (v3.4) |
+| LinkedIn organic post (square) | `1200 × 1200` (1:1) | ✓ release-confidence test (v3.4) |
+| A4 print one-pager (portrait) | `1240 × 1754` (≈ A4 4:3) | ✓ release-confidence test (v3.4) |
 | Portrait Instagram post | `1080 × 1350` (4:5) | queued |
-| LinkedIn paid ad (square) | `1200 × 1200` (1:1) | queued |
-| Email banner | `1200 × 600` (2:1) | queued |
-| Deck slide | `1920 × 1080` (16:9) — covered by §Composition.9b archetype D | shipped |
 | YouTube thumbnail | `1280 × 720` (16:9) | queued |
 | OOH / billboard | varies | queued |
+|  ~~Email banner~~ | ~~`1200 × 600`~~ | **rejected — card-as-composition anti-pattern (see §Object styles.7)** |
 
 ### 1. Square Instagram post — two-card row + full horizontal lockup
 
@@ -1911,11 +1913,11 @@ A `1080 × 1080` Instagram-square promo with **two** feature cards (per §Compos
 
 **Rules exercised:**
 
-- §Composition — **unified X = 86** (digital 8 %), small headline tier (1X = 86). **Two cards per row** per §Composition.3 mobile rule. Grid gutter `0.5X = 43`. **Cards expanded to 432 × 392** (cardH derived: cards fill the vertical real-estate between the text-block and lockup with a 1X gap on each side, all expressed as `canvasH − 5X − textBlock.h`). **1X gap above lockup** (not 2X — the wider X already supplies enough breathing room).
-- §Typography — Bold headline at `X × 1 = 86` (small tier, LH 98 % / +0.5 %), Regular subtitle at `X × 0.5 = 43` (LH 110 % / +0.5 %), **card titles at 48 px** (slightly under the X × 0.65 = 56 default — visual-judgment override; card content reads cleaner without a title that competes with the headline). Bodies at `max(16, X × 0.45) = 39` (LH 130 %). Sentence case throughout.
-- §Color — **canvas background `gray-50` (`#F5F5F5`)** rather than pure white — gives cards (white) a subtle "lift" off the canvas, makes the brand mark feel grounded rather than floating in voiding white. Black ink. Light grey for the icon box.
-- §Object styles — two rounded content tiles at the **default X-bracketed radius (`X / 2 = 43`)** per §Object styles.3, sharp structural canvas. Card 2's icon box at the **small bracket (`X / 4 = 22`)** with a matching `X / 4 = 22` inset — the concentric `outer = inner + gap` formula resolves both radii and the gap simultaneously per §Object styles.4. Two cards in the same role share the same bracket (uniform stack rule).
-- §Iconography — Material Symbols Outlined glyph at the canonical 72 px size in a 144 px app-square box (0.5× ratio), light-grey fill, black ink.
+- §Composition — **unified X = 86** (8 % of `min(W, H)`), small headline tier (1X = 86). **Two cards per row** per §Composition.3 mobile rule. Grid gutter `0.5X = 43`. **Cards 432 × 392** (cardH derived: cards fill the vertical real-estate between the text-block and lockup with a 1X gap on each side, all expressed as `canvasH − 5X − textBlock.h`). **1X gap above lockup** (cards-led — the wider X already supplies enough breathing room).
+- §Typography — Bold headline at `X × 1 = 86` (small tier, LH 98 % / +0.5 %), Regular subtitle at `X × 0.5 = 43` (LH 110 % / +0.5 %), **card titles at `max(22, X × 0.55) = 47`**. Bodies at `max(16, X × 0.45) = 39` (LH 130 %). Sentence case throughout.
+- §Color — **white canvas + gray-50 (`#F5F5F5`) cards** per the v3.4 canvas/card pairing rule (§Color.3). Card 1 is tertiary tier (full-bleed photo + scrim — the photo *is* the card surface, no fill colour applies). Card 2 is secondary tier (gray-50 fill on white canvas — the tonal contrast does the work that a shadow would otherwise provide). The icon-box inside Card 2 reverts to **white** (matches the canvas, "punches through" visually). Black ink throughout.
+- §Object styles — two rounded content tiles at the **default X-bracketed radius (`X / 2 = 43`)** per §Object styles.3, sharp structural canvas. Card 2's icon-box at the **small bracket (`X / 4 = 22`)** with a matching `X / 4 = 22` inset — the concentric `outer = inner + gap` formula resolves both radii and the gap simultaneously per §Object styles.4. Card 2 is the **secondary tier**; Card 1 is the **tertiary tier** (full-bleed photo + scrim) — see §Object styles.6.
+- §Iconography — Material Symbols Outlined glyph at the canonical 72 px size in a 144 px app-square box (0.5× ratio), white fill (icon-box), black ink (glyph).
 - §Photography — Sarah Freelancer Studio Portrait full-bleed inside Card 1 (scaleMode FILL), with title + body **white text overlaid** on the photo's lower portion. This is archetype-D-style applied to a card — photo carries the warmth, text overlays for label.
 - §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between (built as a SPACE_BETWEEN auto-layout HORIZONTAL frame). Lockup keys off the unified `X = 86`: cluster `h = 1.125 × X = 97`, symbol `X × X = 86 × 86`, entry-points text at `round(86 × 0.245) = 21 px`.
 - §Asset library — photo, cluster lockup, symbol-multiplier all fetched from netlify. Logos as vector via `figma.createNodeFromSvg`; photo via `figma_set_image_fill`.
@@ -2627,7 +2629,8 @@ Log the hash the first time an asset lands so subsequent uses in the same sessio
 
 | Version | Date | Highlights |
 |---|---|---|
-| **3.3** | 2026-04-28 | **Three-tier card model** in §Object styles.6 (primary/secondary/tertiary) with shadow scoped to primary tier only. **Card padding rule** explicit: text `X/2`, nested rounded tile `X/4`. **Image-bg overlay scrim generalised** in §Composition.7 — applies to any card-scale image background, not just full-bleed archetype D. **Card title formula** `× 0.55` (down from `× 0.65`) in §Typography.4 + §Composition.10. **Lockup gap relaxed** in §Composition.2 to `≥ 1X` (default `2X`, relax to `1X` for cards-led layouts). **Gray-50 canvas option** explicitly canonicalised in §Color.3 as the canonical pairing for secondary-tier cards. |
+| **3.4** | 2026-04-28 | **Unified X = 0.08 × min(W, H)** for every medium. Drops the 5/8 print/digital split — one anchor, simpler mental model, more confident brand presence on print. Mnemonic: *"X is 8 — for everything."* **Canvas/card pairing rule** rewritten in §Color.3: only two valid pairings — *white canvas + gray-50 cards* OR *black canvas + gray-800 cards*. Inverse pairings (gray-50 canvas + white cards) explicitly rejected. **§Object styles.6 secondary tier** updated to match. New anti-patterns: *"a card is never the composition"* (§Object styles.7) and *"don't clone a bottom-lockup at the top without flipping order"* (§Logo.7) — **top lockup is cluster-left + symbol-right**, bottom is symbol-left + cluster-right. §Reference compositions §1 IG Square recipe updated; new release-confidence tests shipped (deck slide, LinkedIn organic post, A4 print one-pager). Email banner rejected as a reference surface. |
+| **3.3** | 2026-04-28 | **Three-tier card model** in §Object styles.6 (primary/secondary/tertiary) with shadow scoped to primary tier only. **Card padding rule** explicit: text `X/2`, nested rounded tile `X/4`. **Image-bg overlay scrim generalised** in §Composition.7 — applies to any card-scale image background, not just full-bleed archetype D. **Card title formula** `× 0.55` (down from `× 0.65`) in §Typography.4 + §Composition.10. **Lockup gap relaxed** in §Composition.2 to `≥ 1X` (default `2X`, relax to `1X` for cards-led layouts). |
 | **3.2** | 2026-04-28 | Auto-layout build pattern (Universal rules). IG Square refinements: gray-50 canvas, 432×392 cards, full-bleed archetype-D photo card, X gap above lockup. LinkedIn H2 stretches full content-area width. |
 | **3.1** | 2026-04-27 | Bisected-canvas lockup placement (SOT 564:7739). EP sub-floor exception scoped to bisected-canvas. |
 | **3.0** | 2026-04-27 | Unified X-system (5% print / 8% digital). Single anchor for margins, gutter, lockup, type, radii. Headline tiers `1 / 1.25 / 1.5 X`. Subtitle single tier `0.5X`. Grid gutter `0.5X`. |
