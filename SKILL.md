@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 2.13
+version: 2.14
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 2.13 · Last updated: 2026-04-28 · Status: living document
+> Version: 2.14 · Last updated: 2026-04-28 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -309,6 +309,24 @@ wordmark_width  = X × (492 / 138) ≈ X × 3.57
 The logo is intentionally small — at 1080 px it is ~18 % of canvas width. It anchors the composition; it does not dominate it.
 
 After instantiating the component in Figma, call `instance.resize(wordmark_width, wordmark_height)`. The component preserves its internal proportions.
+
+**Sizing the wordmark + entry-points cluster (asset-library SVG).** The `wordmark height = X` rule applies to the **wordmark glyph** ("Qonto") regardless of which lockup configuration the agent is rendering. The asset-library entry-points cluster SVG (viewBox `965 × 162`) wraps the wordmark inside a larger frame that also holds the divider, the entry-points text, and clear-space padding. **The wordmark glyph in that cluster occupies `144 × 162 = 89 %` of the viewBox height** (measured empirically — Q-glyph cap-height + descender). To render so the wordmark glyph hits `X`:
+
+```
+cluster_height = X × (162 / 144) ≈ X × 1.125
+cluster_width  = cluster_height × (965 / 162) ≈ X × 6.7
+```
+
+Worked examples:
+
+| Canvas | X | cluster_height | cluster_width | wordmark glyph in render |
+|---|---|---|---|---|
+| 1080 × 1080 / 1080 × 1350 / 1080 × 1920 (IG square / portrait / Story) | 54 | 61 | 362 | 54 |
+| 1200 × 627 (LinkedIn ad) | 31 | 35 | 207 | 31 |
+| 1920 × 1080 (deck slide) | 54 | 61 | 362 | 54 |
+| 2880 × 1620 (OOH) | 81 | 91 | 543 | 81 |
+
+**Don't render the cluster at `h = X` directly** — that pushes the wordmark down to `0.89 X`, undersizing it relative to the X-system, and the entry-points text falls under the 12 px floor at all common social scales. **Don't render the cluster at `h = 162` (1:1 viewBox) either** — that pushes the wordmark up to `1.65 X` (in the IG-square case, wordmark = 144 vs canonical 54), making the lockup compete with the headline rather than anchor below it. Use `h ≈ 1.125 × X` so the wordmark lands at `X` and everything else (divider, entry-points text, clear space) scales proportionally.
 
 **Symbol (flower) dimensions** — when used standalone (app icon, avatar, favicon) or as part of the full lockup: `symbol_size = X × X` (square). The symbol's container handles its own internal padding.
 
@@ -1702,7 +1720,7 @@ A `1080 × 1080` Instagram-square promo, archetype A spacing (text → 1X → vi
 - §Object styles — two rounded content tiles (`r = 0.14 × 459 = 64`), Beautiful Shadows 5-layer stack, sharp structural canvas. Card 2's icon box at `r = 0.14 × 144 = 20`. Concentric `outer = inner + gap` holds with the larger card width too.
 - §Iconography — Material Symbols Outlined glyph at the canonical 72 px size (scales up with the bigger card) in a 144 px app-square box (0.5× ratio), light-grey fill, black ink.
 - §Photography — Sarah Freelancer Studio Portrait at full card width × 60 % height, scaleMode FILL.
-- §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between. Cluster rendered at height 100 px (small-canvas compromise — entry-points slightly under the §Logo.4 12 px target, but they remain legible on phone scale; the alternative is to drop entry-points entirely per §Logo.1).
+- §Logo — **full lockup at bottom** per §Logo.5 priority: symbol-multiplier bottom-left + **horizontal-left** wordmark + entry-points cluster bottom-right, auto gap between. Cluster rendered at **`h = X × 1.125 = 61`** so the wordmark glyph inside lands at exactly `X = 54` per §Logo.4. Symbol at `X × X = 54 × 54`.
 - §Asset library — photo, horizontal cluster lockup, and symbol-multiplier all fetched from the netlify library. SVGs rasterised with `sips` and applied via `figma_set_image_fill`.
 
 ```javascript
@@ -1872,10 +1890,9 @@ card2.appendChild(card2Body);
 // canvas width minus 2X margins minus symbol width minus an auto gap of at least X.
 //   curl -s "…/Logo/qonto-logo-category-entry-points-horizontal-left-EN.svg" -o /tmp/q-lockup-h.svg
 //   curl -s "…/Logo/qonto-symbol-multiplier-black.svg"                       -o /tmp/q-symbol-black.svg
-//   sips -s format png --resampleWidth 2400 /tmp/q-lockup-h.svg     --out /tmp/q-lockup-h.png
-//   sips -s format png --resampleWidth 800  /tmp/q-symbol-black.svg --out /tmp/q-symbol-black.png
-const clusterH = 100;
-const clusterW = Math.round(clusterH * 965 / 162);           // viewBox 965×162 → ≈ 596
+// Sizing per §Logo.4 wordmark-glyph-=-X rule: cluster_h = X × (162/144) ≈ 1.125 X.
+const clusterH = Math.round(X * 162 / 144);                  // 61 — wordmark glyph lands at X
+const clusterW = Math.round(clusterH * 965 / 162);           // viewBox 965×162 → ≈ 363
 const symbolSize = X;                                         // 54
 
 const lockupCluster = figma.createRectangle();
@@ -1899,15 +1916,17 @@ canvas.appendChild(symbol);
 **Logos as vector via `createNodeFromSvg` (canonical workflow).** Per §Logo.9b, brand assets stay vector. After the build script creates the canvas + cards + photo placeholder, run **two more `figma_execute` calls** — one for the cluster (large SVG, ~23 KB), one for the symbol (small SVG, ~1.7 KB) — using `figma.createNodeFromSvg` with the SVG content inlined. Then apply the photo image fill in a separate `figma_set_image_fill` call and re-bind the returned `imageHash`:
 
 ```javascript
-// figma_execute, call N+1: cluster vector
+// figma_execute, call N+1: cluster vector at the canonical wordmark = X size
+//   cluster_height = X × (162 / 144) = X × 1.125  →  62 (rounded from 60.75)
+//   cluster_width  = cluster_height × (965 / 162) →  362
 const CLUSTER_SVG = `<svg width="965" height="162" …>…</svg>`;     // full SVG inlined (~23 KB)
 const cluster = figma.createNodeFromSvg(CLUSTER_SVG);
-cluster.resize(596, 100);                                            // 0.62× source viewBox
+cluster.resize(362, 61);
 cluster.x = 1080 - 54 - cluster.width;
 cluster.y = 1080 - 54 - cluster.height;
 parent.appendChild(cluster);
 
-// figma_execute, call N+2: symbol vector
+// figma_execute, call N+2: symbol vector at X × X (per §Logo.4)
 const SYMBOL_SVG = `<svg width="138" height="138" …>…</svg>`;
 const symbol = figma.createNodeFromSvg(SYMBOL_SVG);
 symbol.resize(54, 54);
@@ -2013,8 +2032,8 @@ canvas.appendChild(topScrim);
 // Cluster (horizontal-right-white = wordmark on left, entry-points on right) at top-LEFT
 // Symbol (white) at top-RIGHT
 const lockupTopY = topSafe + X;                    // 304: X clearance below top safe area
-const clusterH = 80;                                // smaller than § 1's 100 — top placement reads as banner
-const clusterW = Math.round(clusterH * 965 / 162);  // 477
+const clusterH = Math.round(X * 162 / 144);          // 61 — wordmark glyph lands at X per §Logo.4
+const clusterW = Math.round(clusterH * 965 / 162);   // 363
 const symbolSize = X;                               // 54 — symbol = X×X per §Logo.4
 
 const cluster = figma.createRectangle();
@@ -2111,8 +2130,8 @@ canvas.appendChild(subtitle);
 
 // Lockup — full lockup at bottom of left half: symbol + horizontal-left cluster.
 // Cluster sized to fit the half's right margin; symbol sized X × X per §Logo.4.
-const clusterH = 60;
-const clusterW = Math.round(clusterH * 965 / 162);   // ≈ 357
+const clusterH = Math.round(X * 162 / 144);          // 35 — wordmark glyph lands at X per §Logo.4
+const clusterW = Math.round(clusterH * 965 / 162);   // ≈ 209
 const symbolSize = X;                                 // 31
 
 const cluster = figma.createRectangle();
