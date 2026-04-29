@@ -1,0 +1,112 @@
+name: 🎯 Rule change proposal
+description: Propose a change, addition, or clarification to a brand rule in SKILL.md.
+title: "[rule-change] "
+labels: ["rule-change", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template when you've spotted a pattern in shipped work that suggests the Skill should evolve — either a rule needs to change, a new rule should exist, or an existing rule needs clarification.
+
+        Drift items from the `brand-reviewer` agent's reports are the most common source of these proposals. Speculative proposals (without evidence from real work) are valid but lower priority.
+
+  - type: input
+    id: skill-version
+    attributes:
+      label: Skill version reviewed against
+      description: The version in `SKILL.md` frontmatter at the time of the proposal (e.g. 3.5).
+      placeholder: "3.5"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: change-type
+    attributes:
+      label: Change type
+      options:
+        - Clarification (current rule is right, but ambiguous)
+        - Addition (new rule for a case not currently covered)
+        - Modification (current rule needs to change)
+        - Reversal (current rule is wrong; replace with the opposite or different)
+        - Removal (current rule isn't needed, prune)
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-rule
+    attributes:
+      label: Current rule
+      description: |
+        Quote the relevant section of `SKILL.md`, including the §section reference. Copy the exact wording — don't paraphrase.
+      placeholder: |
+        §Object styles.6 says:
+        > "Card padding: card_pad = round(0.08 × min(cardW, cardH)) — uniform on every card edge AND between major elements."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Proposed change
+      description: What should the rule become? Write the new wording, not just "change X to Y" — concrete drafts are easier to review.
+      placeholder: |
+        Add a sub-rule:
+        > "When a card carries a hero image as its dominant visual element (>60% of card height), the bottom card_pad relaxes to card_pad / 2 to give the image more presence below the copy block."
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: |
+        Concrete examples that motivate the change. Figma URLs, screenshots, links to shipped work. The strongest proposals cite ≥3 independent surfaces.
+      placeholder: |
+        - Q2 hero / Figma node mNVOGF8.../145:678 (built 2026-04-25)
+        - Hiring Berlin / Figma node mNVOGF8.../146:902 (built 2026-04-26)
+        - Open banking promo / Figma node mNVOGF8.../147:115 (built 2026-04-28)
+        All three converged on the same hero-image-bottom-tight pattern independently.
+    validations:
+      required: true
+
+  - type: textarea
+    id: sot-reference
+    attributes:
+      label: SOT reference
+      description: |
+        Which SOT node justifies the change, if any? If the SOT moved and the Skill should follow, cite the node ID. If this is purely an interpretation update with no SOT change, write "no SOT change — interpretation update."
+      placeholder: |
+        SOT node 521:52763 (style and effect) shows the canonical card with a 6-pixel bottom inset on hero-image variants — currently undocumented in SKILL.md §Object styles.6.
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact analysis
+      description: |
+        Which other Skill sections would be affected? Which existing surfaces (in §Reference compositions or shipped work) would need updating?
+      placeholder: |
+        - §Object styles.6 — primary edit
+        - §Reference compositions §1, §4 — both feature hero-image cards, would need recipe updates
+        - Memory file rule_card_padding.md — needs updating
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested version bump
+      options:
+        - Patch (typo, clarification, no semantic change)
+        - Minor (additive — new rule, new surface, new section)
+        - Major (rule reversal, breaking change, removed section)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Pre-flight checks
+      options:
+        - label: I've read the current rule and confirm I'm not duplicating an existing one.
+        - label: My evidence references real shipped work (or, if speculative, I've labelled it as such).
+        - label: I've considered impact on other sections and listed any side-effects above.

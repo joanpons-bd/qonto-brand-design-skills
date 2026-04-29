@@ -4,6 +4,8 @@ An [agent skill](https://docs.claude.com/en/docs/claude-code/skills) that puts Q
 
 This is the **master brand skill**. Future skills covering the product design system, marketing pages, and motion will live in their own repositories, independent of this one.
 
+**Quick links** — [SKILL.md](SKILL.md) (the rules) · [WORKFLOW.md](WORKFLOW.md) (how the Skill is maintained) · [ONBOARDING.md](ONBOARDING.md) (designer-facing intro)
+
 ## Installation
 
 The default command runs an interactive prompt that asks which agent to install into and whether to install globally:
