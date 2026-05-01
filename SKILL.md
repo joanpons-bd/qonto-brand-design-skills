@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 3.6
+version: 3.7
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print, slide decks). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 3.6 · Last updated: 2026-04-30 · Status: living document
+> Version: 3.7 · Last updated: 2026-05-01 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -1904,100 +1904,144 @@ Walk this top-down for any line of customer-facing copy.
 
 ## Slide deck
 
-A slide deck is a 16:9 medium with its own conventions on top of the universal X-system. **Surface:** 1920 × 1080 px. **X = `0.08 × min(W, H) = 86 px`** — same anchor as every other medium.
+A 16:9 internal-working medium with its own conventions. Marketing slide decks (full-bleed photo covers, polished end cards, etc.) are out of scope for this section — they will live in a future § Marketing slide deck.
 
-**Canon:** the 235-series template. The v1 template is deprecated; do not use as reference.
+**Surface:** 1920 × 1080 px.
+**Margin anchor:** **`slide_M = 0.03 × min(W, H) = 32 px`** at 1920×1080. Distinct from canvas-X (`0.08 × min(W, H) = 86 px`). Slide deck is the only medium that overrides the universal X-system anchor.
+**Canon:** the 2026 template (file `N59gmGWEzDfEab5byfnCoY`). The 235-series and v1 templates are deprecated.
+
+> The full slide-deck type scale, corner-radius system, and component library will be formalised in the templatization sprint queued after v3.7. Until then, sizes below are anchored to what the 2026 template uses.
 
 ### 1. Slide types
 
-Four archetypes. Logo presence, header content, and body treatment flow from the type.
+Six archetypes. Surface, footer treatment, and composition flow from the type.
 
-| Type | Role | Logo |
+| Type | Surface | Wordmark | Composition |
+|---|---|---|---|
+| **Cover** | White | Bottom-left | Display headline + date pill. One per deck. |
+| **Section divider** | Black | None | Number-left + title-right at top edge. |
+| **Agenda** | White | None | Numbered list of sections. |
+| **Content master** | White | None | Narrative split-panel, photo split-panel, single-column. |
+| **KPI grid** | White | None | 3- or 4-column metric cards. |
+| **Statement** | White or black | None | Full-bleed typographic moment. |
+
+A **template-cover** (a meta-slide that identifies the .fig file itself, like "TEMPLATE - 2026" in a pill) sits OUTSIDE this taxonomy. Template-covers are not subject to slide-deck rules — they are file-identification chrome.
+
+### 2. Margin
+
+Every slide element respects a **32 px margin** from each canvas edge — `slide_M = 0.03 × min(W, H)`. No header band, no footer separator rule. The margin and the content, nothing else.
+
+### 3. Logo placement
+
+| Slide type | Bottom-left | Bottom-right |
 |---|---|---|
-| **Cover** | First slide of the deck | ✓ wordmark top-left |
-| **Section divider** | Opens a new section | ✗ |
-| **Content master** | Body slides — agenda, narrative, KPI, people, pull-quote sub-types | ✗ |
-| **End** | Closing slide | ✗ |
+| **Cover** | Qonto wordmark | Multiplier |
+| **All other slides** | "Qonto \| confidential" | Multiplier |
 
-The logo appears **only on the cover**. Every other slide reuses the top-left zone for the running header.
+The cover grounds the deck with the wordmark. Subsequent slides drop the wordmark — the multiplier alone carries brand presence.
 
-### 2. Running header
+### 4. Footer
 
-Every slide carries a header band along the top of the canvas, with a horizontal separator rule below it.
+The footer is the bottom-corner pair from §3. Two variants:
 
-| Position | Cover | All other slides |
-|---|---|---|
-| Top-left | Qonto wordmark (per §Logo.5) | Section name |
-| Top-right | Date — "Month YYYY" | Date — "Month YYYY" |
+- **Cover footer:** wordmark BL + multiplier BR.
+- **All-other footer:** "Qonto \| confidential" BL + multiplier BR.
 
-- **Type:** Qonto Sans Regular at 0.245X = 21 px (matches EP-floor — see §Logo.4).
-- **Color:** neutral/500 (`#8F8F8F`).
-- **Separator:** thin horizontal rule, full canvas width, neutral/200 (`#E5E5E5`), 1 px stroke.
+"Qonto \| confidential" specifics: Qonto Sans Regular, **20 px**, neutral/300 (`#CCCCCC`). No "©", no period. Lowercase "confidential".
 
-### 3. Footer
+### 5. Display tier
 
-Every slide carries a single footer line in the bottom-left.
+Reserved for **cover headlines, section divider titles, and statement slides** only. Not used on agenda, content masters, or KPI grids.
 
-- **Content:** "© Qonto | Confidential"
-- **Type:** Qonto Sans Regular at 0.245X = 21 px.
-- **Color:** neutral/500 (`#8F8F8F`).
-- **No other footer content** — no slide numbers, no URLs, no credits.
+- **Size:** 160–200 px.
+- **Weight:** Qonto Sans **Regular** (not Bold, not Light).
+- **Color:** `#050505` on white, `#FFFFFF` on black.
 
-### 4. No decorative bars
+Body headlines on content slides cap at tier 3 (1.5X = 129 px) per §Composition.1. Display tier is the slide-deck extension above tier 3.
 
-Slides do not use vertical accent bars, heading-indicator bars, or section accent rules. The only sharp/structural elements on a slide are the header separator (§2) and any divider that serves a defined content purpose.
+### 6. Body type
 
-### 5. Section divider layout
+Slide body sits at a fixed **36 px Regular** — `#050505` on white, `#FFFFFF` on black. Distinct from the canvas-X body floor in §Typography.4 — slide deck has its own scale, calibrated to 1920×1080 reading distance.
 
-Section dividers contain only a headline and a descriptor.
+### 7. Section divider layout
 
-- **Headline:** tier 3 (1.5X = 129 px), Qonto Sans Bold, `#050505`.
-- **Descriptor:** body floor (0.45X = 39 px), Qonto Sans Regular, neutral/700 (`#444444`).
-- **No section number** — not even in black. The section name in the running header carries that role.
-- **No ghost text, no tinted text.** §Typography.8 (black or white only) applies — no exemption for "background numerals" or texture treatments.
-- **Alignment:** left-aligned at canvas-X (86 px) from the left edge.
+Black canvas (`#050505`). Two-element top band, both on one baseline:
 
-### 6. KPI / metric cards — hero number type tier
+- **Number** (e.g. "01", "02") at `x = 32, y = 32`. Qonto Sans Regular, 160 px, white.
+- **Title** right-aligned to canvas-right minus 32 px margin. Same size, weight, color.
 
-When a numeric value IS the hero content of a card (KPI, metric, big-number cards), it sizes per **headline tiers** — not the card-title cap.
+The visual gap between number and title flexes with title length — this is intentional, not drift. Both elements occupy the top band; the body of the divider is empty.
 
-- **KPI hero number:** up to tier 3 (1.5X = 129 px), Qonto Sans Bold, `#050505`.
+No number ghost, no descriptor, no decorative bar. The number + title alone carries the divider.
+
+### 8. Pill / chip — labeling primitive
+
+A rounded-rectangle label used for date stamps on covers, category labels, and comparison badges.
+
+- **Fill:** `#F5F5F5` (neutral/50) for neutral chips. Product-semantic fills (Success `#2BAD5F`, Error `#E04545`) permitted only in dataviz / comparison contexts per §Color.5.
+- **Shape:** fully rounded — `cornerRadius` set to half the chip height (full pill).
+- **Type inside:** Qonto Sans Regular at body size (36 px) or smaller. Color stays `#050505` or `#FFFFFF` only — no tinted text.
+- **Roles:** date label below cover headline, category label, comparison badge.
+
+### 9. KPI / metric cards — hero number type tier
+
+When a numeric value IS the hero content of a card, it sizes per **headline tiers** — not the card-title cap.
+
+- **KPI hero number:** up to display tier (200 px), Qonto Sans Bold, `#050505`.
 - **The 0.55X card-title cap (§Typography.4) does not apply** to KPI hero numbers — only to label text within the same card.
 
-**Card padding still follows `round(0.08 × min(cardW, cardH))`** per §Object styles.6 — **computed at card scale, never substituted with canvas-X.** A 405×598 KPI card uses 32 px padding (not 43, which would be canvas-X/2). Common build error.
+**Card padding still follows `round(0.08 × min(cardW, cardH))`** per §Object styles.6 — computed at card scale, never substituted with canvas-X or `slide_M`.
 
-### 7. Color and surface
+**Card surfaces** on white canvas — three variants permitted side-by-side on the same slide:
 
-Same canvas/card pairing as every other medium (§Color.3):
-- White canvas + gray-50 (`#F5F5F5`) cards — default.
-- Black canvas + gray-800 (`#222222`) cards — alt for dramatic decks or section openers.
-- Inverse pairings forbidden.
+- Gray-50 (`#F5F5F5`) — default.
+- Black (`#050505`) — accent.
+- Gradient (per §Color.7) — special-occasion.
+
+Corner radius: 10–20 px by content density (compact metric cards lean larger; tall KPI cards lean smaller). The templatization sprint will codify the radius scale.
+
+### 10. Color, surface, and scrim
+
+- White canvas — default for all content slides.
+- Black canvas — section dividers (canonical), statement slides (variant).
+- Card surfaces follow §9 (three variants on white).
 
 Typography stays `#050505` or `#FFFFFF` only.
 
-### 8. Anti-patterns
+**Scrim:** required only when copy lands on **photography**. Gradient backgrounds (per §Color.7 plugin-generated) do **not** require scrim — gradients are designed for contrast.
 
-- **Logo on every slide.** Brand presence ≠ logo repetition. Cover only.
-- **Ghost section numbers** (large numerals at neutral/200 as background texture). Violates §Typography.8.
-- **Vertical decorative bars** anywhere on the slide.
-- **Card padding computed at canvas-X** instead of card-X formula. Recompute at card scale.
-- **Mixed template versions** in one deck. Pick 235-series.
-- **Wordmark floating mid-canvas** on end slides. §Logo.5 still applies — anchor to a margin (and remember: end slides have no wordmark by §1).
-- **Right-aligned body text.** The running-header date is the only right-aligned element on a slide.
+### 11. No decorative bars
 
-### 9. For AI agents — slide-deck decision ladder
+Slides do not use vertical accent bars, heading-indicator bars, or section accent rules. Sharp/structural elements only when they serve a defined content purpose.
 
-1. **Identify slide type.** Cover, section divider, content master, or end. Logo presence flows from this (§1).
-2. **Apply running header** — section name top-left (omit on cover where wordmark sits), date top-right. Both at 21 px / neutral/500. Separator rule below.
-3. **Apply footer** — "© Qonto | Confidential", bottom-left, 21 px / neutral/500.
-4. **Compose body** per slide-type sub-rules:
-   - **Cover:** wordmark + presentation title (tier 3) + subtitle (0.5X) + optional image tile.
-   - **Section divider:** headline (tier 3) + descriptor (body floor). No number, no bar.
-   - **Content master:** apply §Composition + §Object styles cards.
-   - **KPI cards:** hero number per §6 (headline-tier sizing).
-   - **End:** brand tagline + closing content. No wordmark.
-5. **Verify zero decorative bars.** If you placed one, remove it.
-6. **Verify card padding computed at card scale.** A card's padding is NOT canvas-X/2 — it is `round(0.08 × min(cardW, cardH))` of the card.
+### 12. Anti-patterns
+
+- **Wordmark top-left on covers.** v3.6 placement; v3.7 moves it to bottom-left.
+- **Running header band** — section name top-left + date top-right + separator rule. v3.6 pattern; removed in v3.7.
+- **Date in top-right corner.** Now lives in a chip below the headline.
+- **"© Qonto | Confidential" footer string.** v3.6 string; v3.7 uses "Qonto \| confidential" (no "©", lowercase).
+- **White section dividers.** Black is canonical.
+- **Bold display headlines.** Regular for display tier (160–200 px).
+- **86 px slide margin.** v3.6 used canvas-X; v3.7 uses 32 px.
+- **Ghost section numbers** at neutral/200 — still violates §Typography.8.
+- **Decorative bars** anywhere — still off.
+- **Marketing-deck layouts** (full-bleed photo covers, polished end cards) — out of scope for this section. Future surface.
+
+### 13. For AI agents — slide-deck decision ladder
+
+1. **Identify slide type.** Cover, section divider, agenda, content master, KPI grid, statement.
+2. **Pick the surface.** White (default), black (section divider canonical, statement variant).
+3. **Apply the margin.** 32 px from every canvas edge.
+4. **Apply the footer.**
+   - Cover: wordmark BL + multiplier BR.
+   - All others: "Qonto \| confidential" BL + multiplier BR.
+5. **Compose body** per slide type:
+   - **Cover:** display headline (160–200 px Regular) + date pill below.
+   - **Section divider:** number + right-aligned title at top, on black.
+   - **Content master:** 36 px body + headlines at tier 1–3 sizes.
+   - **KPI grid:** hero numbers per §9 (display-tier sizing on cards).
+   - **Statement:** display headline only, white or black canvas.
+6. **Verify:** no decorative bars, no wordmark on non-cover slides, no running header band, no white section dividers, no scrim on gradients (only on photography).
 
 ---
 
@@ -2744,6 +2788,7 @@ Log the hash the first time an asset lands so subsequent uses in the same sessio
 
 | Version | Date | Highlights |
 |---|---|---|
+| **3.7** | 2026-05-01 | **§ Slide deck rewritten** based on the 2026 template (file `N59gmGWEzDfEab5byfnCoY`). Joan's manual revamp surfaced systematic divergence from v3.6's slide-deck rules. **Breaking changes vs. v3.6:** (1) **cover wordmark moves bottom-left** (was top-left); (2) **running header band removed entirely** — no section name top-left, no date top-right, no separator rule; (3) **section dividers are black canvas** with number-left + title-right at the top edge (was white canvas with headline + descriptor); (4) **display headlines use Regular weight** at 160–200 px (was Bold capped at tier 3 = 129 px); (5) **slide margin = 32 px** (`slide_M = 0.03 × min(W, H)`) instead of canvas-X (86 px) — slide deck is the only medium that overrides the universal X anchor. **Additive:** (6) **pill / chip primitive** formalised as labeling component with `#F5F5F5` fill and full-radius rounding, used for date labels and category labels; (7) **scrim rule clarified** — required for copy over photography only, not gradients (§10); (8) **card surfaces** — three variants permitted side-by-side on white canvas (gray-50 / black / gradient, §9); (9) **template-cover** (file-identification meta-slide) explicitly excluded from slide-deck rules. **Scope:** internal working decks only. Marketing slide-deck rules are a future surface. **Templatization sprint** (queued) will formalise the full slide-deck type scale and corner-radius system. v3.6's § Slide deck only existed for ~1 day; no production work depends on it, so the rewrite is non-breaking in practice. |
 | **3.6** | 2026-04-30 | **§ Slide deck** added — new top-level section codifying slide-deck conventions calibrated against the 2025 Qonto Slide template (45-slide test deck `N59gmGWEzDfEab5byfnCoY`). Decisions: **(1) logo cover-only** — no wordmark on section dividers, content masters, or end slides; **(2) running header** = section name top-left + date top-right at 21 px / neutral/500, with thin neutral/200 separator rule below; **(3) footer** = "© Qonto \| Confidential" bottom-left, single line; **(4) no decorative bars** anywhere — vertical accents, heading indicators, and section bars all retired; **(5) section dividers** = headline + descriptor only, no number and no ghost text — §Typography.8 (black or white only) enforced with no exemption; **(6) KPI hero number tier** — when a metric IS the hero content of a card, it sizes per headline tiers up to 1.5X, bypassing the 0.55X card-title cap; **(7) card padding** clarification — `round(0.08 × min(cardW, cardH))` is computed at *card scale*, never substituted with canvas-X (caught a systematic build-recipe error in the test deck where canvas-X/2 = 43 px was used as a shortcut on cards that should have used 32 px). 235-series template is canonical; v1 deprecated. |
 | **3.5** | 2026-04-28 | **Uniform card padding rule** in §Object styles.6 — `card_pad = round(0.08 × min(cardW, cardH))` on every card edge AND between major elements (icon-box ↔ text frame). Replaces the v3.3/v3.4 dual rule (text at `X/2`, nested tile at `X/4`) which produced visibly inconsistent insets across the v3.4 release-confidence cards (top icon-box at one number, side text at another, bottom margin accidental). The new rule uses the same `0.08` anchor as the canvas-X formula but applied at card scale: cards are self-consistent — every inside-the-card distance is the same number. Trade-off: the icon-box concentric-radius formula (outer = inner + gap) no longer resolves; accepted because padding consistency wins over corner-curvature optical purity. Within-text-block typography spacing (title ↔ body) stays at typographic default. All v3.4 surfaces re-rendered (IG Square, deck slide, LinkedIn organic post) at the new rule. |
 | **3.4** | 2026-04-28 | **Unified X = 0.08 × min(W, H)** for every medium. Drops the 5/8 print/digital split — one anchor, simpler mental model, more confident brand presence on print. Mnemonic: *"X is 8 — for everything."* **Canvas/card pairing rule** rewritten in §Color.3: only two valid pairings — *white canvas + gray-50 cards* OR *black canvas + gray-800 cards*. Inverse pairings (gray-50 canvas + white cards) explicitly rejected. **§Object styles.6 secondary tier** updated to match. New anti-patterns: *"a card is never the composition"* (§Object styles.7) and *"don't clone a bottom-lockup at the top without flipping order"* (§Logo.7) — **top lockup is cluster-left + symbol-right**, bottom is symbol-left + cluster-right. §Reference compositions §1 IG Square recipe updated; new release-confidence tests shipped (deck slide, LinkedIn organic post, A4 print one-pager). Email banner rejected as a reference surface. |
