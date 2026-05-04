@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 3.10
+version: 3.11
 description: "Qonto brand as code. Apply Qonto's brand guidelines — logo, composition, color, typography, tone, photography — to any output (Figma, HTML, social, print, slide decks). Pulls ground truth from the Brand Kit SOT Figma file. Always uses Figma library components — never recreates from scratch."
 ---
 
 # Qonto Brand Design Skill
 
-> Version: 3.10 · Last updated: 2026-05-04 · Status: living document
+> Version: 3.11 · Last updated: 2026-05-04 · Status: living document
 >
 > Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT) · `fileKey: 9MBP81zVpoj7hlLS8gf4eV`
 
@@ -37,7 +37,7 @@ When unclear which context applies, ask.
 ## Universal rules
 
 - Primary typeface: **Qonto Sans** (custom, proprietary). Fallback: Manrope → Arial. See §Typography.
-- Available weights: **Thin, Light, Regular, Bold, Black** — each with an italic. There is **no Medium** and **no Semi Bold** weight; passing `style: 'Medium'` or `style: 'Semi Bold'` to Figma will fail to load. Default: Regular. Headlines: Bold. Sentence case only — never ALL CAPS.
+- Available weights: **Thin, Light, Regular, Semi Bold, Bold, Black** — each with an italic. There is **no Medium** weight; passing `style: 'Medium'` to Figma will fail to load. Default: Regular. Headlines: Bold or Semi Bold (per surface — see §Slide deck §6 for slide-specific weight assignments). Sentence case only — never ALL CAPS.
 - Minimum type size: **12 px** (floor across body, captions, labels, entry-points). See §Typography.4.
 - Generous whitespace. Corner-radius language is split: **structural objects are sharp (`cornerRadius = 0`); rounded corners are reserved for floating content** (product covers, small image tiles, icon bounding boxes, avatars, chips) and resolve to one of the four atomic shapes. See §Object styles.
 - Never use pure `#000000` — Qonto's black is `#050505` (token `primary/black`). See §Color for the full palette.
@@ -1961,30 +1961,34 @@ The footer is the bottom-corner pair from §3. Two variants:
 
 Reserved for **cover headlines, section divider titles, and statement slides** only. Not used on agenda, content masters, or KPI grids.
 
-- **Size:** 160–200 px.
-- **Weight:** Qonto Sans **Regular** (not Bold, not Light).
+- **Size:** 160–200 px (canonical: Title style at 200).
+- **Weight:** Qonto Sans **Light** (canonical, editorial feel) or **Regular** (neutral feel) — both permitted. Bold and Semi Bold are reserved for content headers and KPI hero per §6 / §9.
 - **Color:** `#050505` on white, `#FFFFFF` on black.
 
 Body headlines on content slides cap at tier 3 (1.5X = 129 px) per §Composition.1. Display tier is the slide-deck extension above tier 3.
 
 ### 6. Type scale
 
-Slide deck uses six tiers, all Qonto Sans Regular, all `#050505` on white / `#FFFFFF` on black:
+Slide deck uses **ten canonical text styles** living as Figma Text Styles in the 2026 template (Qonto Sans family). All `#050505` on white / `#FFFFFF` on black. Apply via `node.setTextStyleIdAsync(styleId)` rather than inline font properties — style updates propagate to every text node referencing them.
 
-| Tier | Size | Use |
-|---|---|---|
-| Footer | 20 px | "Qonto \| confidential" only (per §4); team · role on photo cards (per §10) |
-| Caption | 26 px | Person name on photo cards in tight-column layouts (per §10) |
-| Body | 36 px | Body copy, date pill text, slide-section labels on simple slide types |
-| List / subhead | 72 px | Agenda items, list rows, slide-section labels — the band between body and headlines |
-| Tier 1 | 86 px | Content-master headlines — small |
-| Tier 2 | 108 px | Content-master headlines — medium |
-| Tier 3 | 129 px | Content-master headlines — large |
-| Display | 160–200 px | Cover headline, section divider title, statement, gradient-panel year text (per §5, §10) |
+| Style | Size | Weight | Use |
+|---|---|---|---|
+| **Note** | 20 px | Regular | Footer text "Qonto \| confidential" (per §4); team · role on photo cards (per §10) |
+| **Body 3** | 24 px | Regular | Tertiary body copy |
+| **Caption** | 26 px | Regular | Person name on photo cards in tight-column layouts (per §10) |
+| **Body 2** | 30 px | Regular | Secondary body copy |
+| **Body 1** | 36 px | Regular | Body copy, date pill text, slide-section labels on simple slide types |
+| **Header 3** | 48 px | **Semi Bold** | Smaller emphatic header |
+| **Header 2** | 68 px | **Semi Bold** | Medium emphatic header |
+| **List** | 72 px | Regular | Agenda items, list rows — the band between body and headlines |
+| **Header 1** | 100 px | **Semi Bold** | Large emphatic header |
+| **Title** | 200 px | Light | Cover headline, section divider title, statement (display tier per §5) |
 
 Distinct from the canvas-X body floor in §Typography.4 — slide deck has its own scale, calibrated to 1920×1080 reading distance.
 
-**Bold exception:** §9 KPI hero numbers use Qonto Sans **Bold** at display tier. This is the only place Bold appears at headline scale on slide deck.
+**Bold exception:** §9 KPI hero numbers use Qonto Sans **Bold** at display tier. This is the only place Bold appears on slide deck.
+
+**Semi Bold scope:** Headers 1/2/3 are the canonical Semi Bold homes. Use Semi Bold elsewhere only when an explicit emphatic role calls for it (e.g., a content master sub-header).
 
 ### 7. Section divider layout
 
@@ -2125,7 +2129,6 @@ Slides do not use vertical accent bars, heading-indicator bars, or section accen
 - **Bold display headlines.** Regular for display tier (160–200 px). Bold is reserved for KPI hero numbers per §9.
 - **86 px slide margin.** v3.6 used canvas-X; v3.7+ uses 32 px.
 - **Body tier (36 px) for agenda / list items.** Reads anemic at 1920×1080 reading distance — use list/subhead tier (72 px) per §6.
-- **"Qonto Sans Semi Bold" weight.** Doesn't exist in the Qonto Sans family (per §Typography). Silently falls back. Use **Bold** instead.
 - **Rounded gradient panels.** Gradient panels on Qontoversary slides are structural — keep them sharp (`cornerRadius = 0`) per §Object styles.2. Card-tier elements (KPI cards, comparison cards) keep their 10–20 px radius.
 - **Pill semantic colors on body text or headlines.** The Don't/Do red/green colors are scoped to chip components in comparison/decision contexts (§12) — never on regular text or headlines.
 - **Ghost section numbers** at neutral/200 — still violates §Typography.8.
@@ -2152,7 +2155,7 @@ Slides do not use vertical accent bars, heading-indicator bars, or section accen
    - **Device mockup:** device on white canvas at ≈75–80% canvas height, no card wrapper. Centre 1-up; equal-gap n-up (108 px reference for iPhones).
    - **Comparison:** bare-text 2-column OR card-surface 2-column with semantic pill (`#E04545` Don't, `#2BAD5F` Do, white Light text at 40 px, full-radius pill at 76 px tall). Pill colors confined to chip components only — never on body text or headlines.
 6. **Apply vertical rhythm** per §14 — multiples of `slide_M = 32 px` between elements.
-7. **Verify:** no decorative bars; no wordmark on non-cover slides; no running header band; no white section dividers; no scrim on gradients (only on photography); no body-tier text in lists; card padding computed at card scale and only for text/icon-box content (centred media is exempt); no "Semi Bold" weight (use Bold); gradient panels are sharp; pill semantic colors only on chip components.
+7. **Verify:** no decorative bars; no wordmark on non-cover slides; no running header band; no white section dividers; no scrim on gradients (only on photography); no body-tier text in lists; card padding computed at card scale and only for text/icon-box content (centred media is exempt); gradient panels are sharp; pill semantic colors only on chip components.
 
 ### 18. Component library — slide deck
 
@@ -2928,6 +2931,7 @@ Log the hash the first time an asset lands so subsequent uses in the same sessio
 
 | Version | Date | Highlights |
 |---|---|---|
+| **3.11** | 2026-05-04 | **Semi Bold weight reinstated + slide-deck text styles codified.** v3.9 anti-pattern *"Qonto Sans Semi Bold doesn't exist"* was wrong on the facts — Semi Bold is a real installed weight in the Qonto Sans family, just unused at the time. Now properly catalogued. **§Typography weight list** — added Semi Bold to the canonical six (Thin/Light/Regular/Semi Bold/Bold/Black). **§Slide deck §5** display tier — weight allowance widened to **Light or Regular** (Light is canonical, Regular permitted). Drops the v3.10 *"Regular only"* restriction. **§Slide deck §6 Type scale** — replaced abstract tier names with the **ten canonical Figma Text Styles** as they actually live in the 2026 template: Note 20 Regular, Body 3 24 Regular, Caption 26 Regular, Body 2 30 Regular, Body 1 36 Regular, **Header 3 48 Semi Bold**, **Header 2 68 Semi Bold**, List 72 Regular, **Header 1 100 Semi Bold**, Title 200 Light. The three Header tiers are the canonical Semi Bold home. Bold remains reserved for KPI hero (§9). **Anti-pattern removed** — the v3.9 *"Semi Bold doesn't exist"* bullet is gone from §16 + §17 verify list. **Phase 1 cleanup note** — the 21 nodes converted from Semi Bold → Bold in the 2026 template during v3.10 work were subsequently overwritten to Regular by the v3.11 text-style migration; not worth restoring (Joan's call). |
 | **3.10** | 2026-05-04 | **Slide-deck component library catalogued (§18)** — published Figma components for the slide-deck system now have a single home in SKILL.md. Built / extracted during the templatization sprint kickoff (Phase 2 of work in `Qonto Brand Creative Direction` file `15MmXB5MyAhfNDRIVv6eF3`). **New components built this version:** Photo card (`483514b6…`), Semantic pill set with Don't/Do variants + Label TEXT prop (`360e2d29…`), Date pill with Date TEXT prop (`04dd7e6f…`), Footer block with rescaled multiplier instance (`3ddf5adb…`). **Catalogued from existing components:** `qonto-multiplier` squircle, `metric-1` (compact 596×356) and `metric-2` (taller 596×371) KPI sets each with Light/Dark/Gradient themes, `Gradient background` (nested inside KPI cards). **Approved gradient names** documented for the first time: Morning Veil, Daybreak 1, Daybreak 2, Lavender Rise, Golden Hour. **Build-recipe gotcha** captured: rescaling multiplier from 67×67 → 32×32 must use `instance.rescale(32/67)`, NOT `resize(32, 32)` (the latter keeps cornerRadius at 16, rendering as a perfect circle on a 32 px square). **Anti-pattern reinforced** — Gradient background is never used standalone, only nested inside KPI cards. **Phase 1 cleanup** also landed in the 2026 template: 21 nodes converted from "Qonto Sans Semi Bold" to Bold (slides 16, 17, 25, 30, 31), and slide 11 gradient panel `cornerRadius` 10 → 0 to match §Object styles.2 sharp-grounds rule. **Out of scope (deferred to Phase 3+ of the templatization sprint):** Slide Templates per archetype (Figma Slides feature), locked chrome + placeholders, library publish, "How to use" doc + ONBOARDING.md update. |
 | **3.9** | 2026-05-04 | **Slide-deck slide types extended** — three new clusters codified from patterns the brand-reviewer extracted from the 2026 template that v3.7 + v3.8 deferred. **§10 People & celebration slides (new)** — photo card unit (square photo `cornerRadius = 10` + 22 px gap + name at caption tier + role at footer tier), four grid variants (4-up / 1-up centred / 1-person right-panel / 2×2 right-panel), gradient panel as a structural left column (`cornerRadius = 0` per §Object styles.2, "Golden Hour" named SOT gradient, white display-tier year text bottom-left, no scrim). Optional emoji top-right at 36 px on celebration slides. **§11 Device mockup slides (new)** — device on white canvas at ≈75–80% canvas height, no card wrapper, centred or equal-gapped (108 px reference for 3-up iPhones). **§12 Comparison cards (new)** — two-variant pattern (bare-text 2-column / card-surface 2-column), with **semantic pill labels** in card-surface variant: "Don't" `#E04545` / "Do" `#2BAD5F` at 40 px Light white in a full-radius pill. Scoped extension of the §Color.5 dataviz exception — pill colors confined to chip components only. **§6 Type scale** — caption tier (26 px Regular) added between footer (20) and body (36) for tight-column person names on photo cards. **§9 card-padding clarified** — `round(0.08 × min(cardW, cardH))` applies to text + icon-box content; **centred media frames** (product screenshots, hero images) are a separate placement pattern (visually centred, not edge-padded). **§16 Anti-patterns** — three new entries: "Qonto Sans Semi Bold" weight (doesn't exist in family — caught a silent fallback in slide 18 of the 2026 template; use Bold), rounded gradient panels (gradient panels are structural — sharp), pill semantic colors used outside chip contexts. Sections renumbered: §10 Color → §13, §11 Rhythm → §14, §12 Bars → §15, §13 Anti-patterns → §16, §14 AI agents → §17. Decision ladder (§17) refreshed with the three new slide types. |
 | **3.8** | 2026-05-04 | **Slide-deck type scale + logo sizing + vertical rhythm** — based on a clean-room test (file `MIk7vRlm9IegAPCYpiiLGT`) where a 7-slide deck was built from v3.7 alone, surfacing 24 detail-level gaps. **Additive (no breaking changes):** **(1) §6 Type scale** — replaced the single-tier body rule with a six-tier table (footer 20, body 36, list/subhead 72, tier 1–3 86/108/129, display 160–200). All Regular except KPI hero numbers (Bold at display per §9). The new **list/subhead tier (72 px)** fills the previous gap between body (36) and headlines (86+) — agenda items, list rows, and slide-section labels now have a defined tier. **(2) §3 logo sizing** — slide-deck wordmark and multiplier sized at `logo_h = slide_M = 32 px` (squircle with 22% corner radius). Slide deck overrides the universal X-based logo sizing alongside its margin override. **Multiplier color inverts by canvas** (white → `#050505`, black → `#FFFFFF`) — affects section dividers and statement slides. **(3) §11 Vertical rhythm (new section)** — element-to-element spacing as multiples of `slide_M`: 1× (32) for within-block / default, 3× (96) for section breaks, 4× (128) for cluster gaps. Card padding still uses §Object styles.6 formula at card scale. **(4) Anti-pattern added** — body tier (36 px) for agenda / list items reads anemic at 1920×1080 reading distance; use list/subhead tier (72 px). **§14 decision ladder** updated to reference the new type scale + rhythm + logo sizing. **Process:** ONBOARDING.md gains a "Before you build a new slide deck" checklist (subscribe Logos library — fresh Slides files don't auto-subscribe). **Out of scope (deferred to v3.9 + templatization sprint):** split-panel ratios + gutters, KPI card aspect presets, gradient name catalogue, statement vertical alignment, agenda active/inactive number colors, image-area corner-radius rules. |
