@@ -38,21 +38,26 @@ and a feature card on the right with a paperclip icon.
 
 The agent will fetch SOT colour values, place a Qonto wordmark at the right size, build the cards using the v3.5 canvas/card pairing rule, and lay everything out per the X-system. If you have the Figma MCP plugin connected, it'll build directly in Figma.
 
-Check the result against the v3.8 reference compositions in `SKILL.md` §Reference compositions.
+Check the result against the v3.12 reference compositions in `SKILL.md` §Reference compositions.
 
 ## Before you build a slide deck
 
-Slide decks have one extra setup step. **Fresh Figma Slides files don't auto-subscribe to the brand libraries**, and component imports (the wordmark and multiplier per `SKILL.md` §Logo.2) will silently fail without them.
+Slide decks have one extra setup step. **Fresh Figma Slides files don't auto-subscribe to brand libraries**, and component imports (the wordmark, multiplier, KPI cards, photo cards, pills, footer block — per `SKILL.md` §Slide deck §18) will silently fail without them.
 
 One-time setup per Slides file:
 
 1. Open the Figma Slides file
 2. Open the **Assets panel** (left sidebar)
 3. Click the **"Libraries"** button
-4. Enable **"Logos - Library"**
-5. Optionally enable **"In-app assets"** (only needed if your deck includes product UI screenshots)
+4. Enable the libraries below.
 
-Without this, any AI agent placing a logo will fail with `Could not find a published component with the key …`. The libraries themselves are accessible from any account that's signed into Qonto's Figma workspace.
+| Library | File | Why |
+|---|---|---|
+| **Logos - Library** | (brand library) | Wordmark, flower, badge, square logos |
+| **Qonto Brand Kit — SOT** | `9MBP81zVpoj7hlLS8gf4eV` | All slide-deck components (KPI cards, photo card, semantic pill, date pill, footer block, gradients) — see SKILL §Slide deck §18 |
+| **In-app assets** *(optional)* | (product library) | Only needed if your deck includes product UI screenshots |
+
+Without the SOT subscription, any AI agent placing a slide-deck component will fail with `Could not find a published component with the key …`. The libraries themselves are accessible from any account signed into Qonto's Figma workspace.
 
 ## Reviewing your own work
 
