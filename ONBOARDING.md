@@ -38,7 +38,21 @@ and a feature card on the right with a paperclip icon.
 
 The agent will fetch SOT colour values, place a Qonto wordmark at the right size, build the cards using the v3.5 canvas/card pairing rule, and lay everything out per the X-system. If you have the Figma MCP plugin connected, it'll build directly in Figma.
 
-Check the result against the v3.5 reference compositions in `SKILL.md` §Reference compositions.
+Check the result against the v3.8 reference compositions in `SKILL.md` §Reference compositions.
+
+## Before you build a slide deck
+
+Slide decks have one extra setup step. **Fresh Figma Slides files don't auto-subscribe to the brand libraries**, and component imports (the wordmark and multiplier per `SKILL.md` §Logo.2) will silently fail without them.
+
+One-time setup per Slides file:
+
+1. Open the Figma Slides file
+2. Open the **Assets panel** (left sidebar)
+3. Click the **"Libraries"** button
+4. Enable **"Logos - Library"**
+5. Optionally enable **"In-app assets"** (only needed if your deck includes product UI screenshots)
+
+Without this, any AI agent placing a logo will fail with `Could not find a published component with the key …`. The libraries themselves are accessible from any account that's signed into Qonto's Figma workspace.
 
 ## Reviewing your own work
 
