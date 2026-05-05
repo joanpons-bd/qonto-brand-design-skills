@@ -1,0 +1,7 @@
+{
+  "name": "brand-design",
+  "version": "0.1.0",
+  "description": "Qonto's brand design system as code — applied automatically to Figma, slide decks, social, web, and dashboards. Includes the brand-reviewer subagent and Figma session safety hooks.",
+  "author": "Brand team — Joan Pons <joan.pons@qonto.com>",
+  "homepage": "https://github.com/qonto-private/ai-marketplace/tree/master/plugins/brand-design"
+}

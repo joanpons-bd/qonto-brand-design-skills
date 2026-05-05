@@ -1,0 +1,24 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__figma-console__figma_take_screenshot|mcp__figma-console__figma_get_component_image",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/figma-screenshot-guard.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__e3725d7f-662e-49b4-894c-1a1203b6fbd4__get_screenshot",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/figma-official-redirect.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
