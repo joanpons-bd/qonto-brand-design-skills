@@ -4,7 +4,7 @@ Qonto's brand design system as code. Apply Qonto's visual identity — logo, col
 
 ## What's inside
 
-- **`skills/qonto-brand-design/SKILL.md`** — the canonical brand rules. Loaded automatically by Claude when relevant.
+- **`agents/qonto-brand-design.md`** — the canonical brand rules.
 - **`agents/brand-reviewer.md`** — subagent that audits any Figma node against the brand. Returns `✓ Aligned / ✗ Violations / ⚠ Drift`.
 - **`agents/weekly-brand-pulse.md`** — dormant subagent for weekly brand-drift digests (cron-triggered).
 - **`hooks/hooks.json`** — Figma session safety: blocks REST screenshots at scale > 1 and redirects the official Figma MCP screenshot tool to the size-capped `figma_capture_screenshot` (prevents the 2000 px image-budget crash that breaks long Figma sessions).
@@ -27,7 +27,7 @@ Review Figma node 15MmXB5MyAhfNDRIVv6eF3/231:6309 against the brand-design Skill
 
 ## Working in slide decks
 
-Slide decks have one extra setup step per file — see [`ONBOARDING.md`](./ONBOARDING.md) for the library subscription instructions. The full slide-deck specification (12 canonical text styles, 9 reusable components, 6-color palette) lives in [`SKILL.md` § Slide deck](./skills/qonto-brand-design/SKILL.md).
+Slide decks have one extra setup step per file — see [`ONBOARDING.md`](./ONBOARDING.md) for the library subscription instructions. The full slide-deck specification (12 canonical text styles, 9 reusable components, 6-color palette) lives in [`agents/qonto-brand-design.md` § Slide deck](./agents/qonto-brand-design.md).
 
 ## Versioning + contributing
 
