@@ -1,20 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 4.4
+version: 4.5
 description: "Qonto brand foundations — color, typography, logo, composition, object styles, iconography, and tone of voice. Universal rules that apply to any surface or tool."
 ---
 
 # Qonto Brand Design Skill — Foundations
 
-> Version: 4.4 · Last updated: 2026-05-08 · Scope: brand foundations only
->
-> Single source of truth: [Qonto Brand Kit — SOT (Figma)](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT)
->
-> Figma build recipes, component keys, and surface-specific production guides live in `FIGMA.md`.
-
-These are the rules that keep Qonto looking like Qonto — on a booth wall, a Google Slides deck, a social post, an email, or a Figma frame. They don't change per surface; they anchor every surface to the same system.
-
----
+> Version: 4.5 · Last updated: 2026-05-08 · Scope: brand foundations only
 
 ## North Star
 
@@ -758,6 +750,7 @@ If a brand element (gradient, logo, specific component) can't be correctly repro
 
 | Version | Date | Changes |
 |---|---|---|
+| 4.5 | 2026-05-08 | Removed header boilerplate (SOT link, FIGMA.md pointer, platform-listing paragraph). North Star is now the true opening. |
 | 4.4 | 2026-05-08 | §Color.4: hex values updated to official Colors — Library values (sourced from Notion). Status families restructured to 50/300/400/800/1000 scale. Accent updated to `brand/blueberry-800 #71A5E0`. |
 | 4.3 | 2026-05-08 | §Color: token names updated to match Colors — Library (`neutral/gray-XX`, `brand/[family]-[shade]`, `status/[name]-[shade]`). |
 | 4.2 | 2026-05-08 | Added North Star. Added Quick reference Do/Don't table. §Composition.7 archetypes condensed to a pointer — full descriptions moved to FIGMA.md. |
