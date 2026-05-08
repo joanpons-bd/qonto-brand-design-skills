@@ -1,12 +1,12 @@
 ---
 name: qonto-brand-design-skill
-version: 4.5
+version: 4.6
 description: "Qonto brand foundations — color, typography, logo, composition, object styles, iconography, and tone of voice. Universal rules that apply to any surface or tool."
 ---
 
 # Qonto Brand Design Skill — Foundations
 
-> Version: 4.5 · Last updated: 2026-05-08 · Scope: brand foundations only
+> Version: 4.6 · Last updated: 2026-05-08 · Scope: brand foundations only
 
 ## North Star
 
@@ -41,13 +41,13 @@ When unclear which context applies, ask.
 - Minimum type size: **12 px** across body, captions, labels, entry-points.
 - Structural objects are **sharp (`cornerRadius = 0`)**. Rounded corners belong to floating content only — product cards, small image tiles, icon bounding boxes, avatars, chips.
 - Never use pure `#000000` — Qonto's black is `#050505`.
-- **Default canvas is white (`#FFFFFF`).** Black (`#050505`) canvas is a deliberate choice reserved for section dividers, statement slides, or when the brief explicitly calls for it. Never default to black, dark navy, or any other dark background.
+- **Default canvas is white (`#FFFFFF`).** Black (`#050505`) canvas is a deliberate choice reserved for section dividers or when the brief explicitly calls for it. Never default to black, dark navy, or any other dark background.
+- **Use exact hex values.** No improvising. If a tool doesn't support the exact hex, use the closest available and document the delta.
+- **Flag rather than improvise.** If a brand element can't be correctly reproduced in the target tool, flag it to the designer. A placeholder is safer than an off-brand render that gets treated as canon.
 
 ---
 
 ## Quick reference — do / don't
-
-The rules that matter most, at a glance. Full detail in the sections below.
 
 | ✅ Always | ❌ Never |
 |---|---|
@@ -61,6 +61,35 @@ The rules that matter most, at a glance. Full detail in the sections below.
 | Logo imported from library component | Logo drawn as text or shapes |
 | Photography as the only "colour" in marketing | Decorative shapes, patterns, or tints |
 | One headline tier per composition | Mixing headline tiers in one layout |
+
+---
+
+## X-system
+
+> **`X = 0.08 × min(canvas_w, canvas_h)`** — for every medium. Mnemonic: *X is 8 — for everything.*
+
+`X` is the single brand unit. Every margin, gutter, type size, logo dimension, and spacing decision in this file resolves to a multiple of `X`. One canvas, one anchor.
+
+| Element | Value |
+|---|---|
+| Canvas margin (all four edges) | `X` |
+| Clear space around lockup | `X` |
+| Wordmark height | `X` |
+| Wordmark width | `X × 3.57` (aspect ratio locked) |
+| Symbol size | `X × X` (square) |
+| Entry-points size | `round(X × 0.245)` |
+| Entry-points line-height | `round(X × 0.36)` |
+| Gutter between columns | `0.5X` |
+| Gap between adjacent content bands | `1X` |
+| Gap from last content band to lockup | `≥ 1X` (default `2X`) |
+| Headline tier 1 (Small) | `1X` cap height |
+| Headline tier 2 (Medium) | `1.25X` cap height |
+| Headline tier 3 (Large) | `1.5X` cap height |
+| Subtitle | `0.5X` |
+
+**Cap height vs. font-size:** the tier values above are optical cap heights, not the font-size shown in the panel. For Qonto Sans, cap-height ratio ≈ **0.706**, so `font-size = cap_height ÷ 0.706`. At X = 24 px: Small headline → cap 24 px → font-size ≈ 34 px.
+
+**Scalability floor:** wordmark minimum 24 px height on screen, 0.25 in print.
 
 ---
 
@@ -78,8 +107,6 @@ Qonto marketing is **black and white**, with grayscale for content hierarchy. Th
 |---|---|---|
 | `primary/white` | `#FFFFFF` | Primary surface; primary ink on dark |
 | `primary/black` | `#050505` | Secondary surface; primary ink on light |
-
-Never use pure `#000000`. Qonto black is `#050505` — a near-black that reads richer against photography and print.
 
 ### 3. Grayscale
 
@@ -172,28 +199,24 @@ When a marketing composition includes rendered product UI, keep the UI's real co
 
 ## Logo
 
-The logo is the most frequently misapplied element in AI-generated work.
-
 ### 1. Configurations — pick one before anything else
 
-Five canonical configurations. Pick the richest one that fits the canvas. Do not invent combinations.
+Four canonical configurations. Pick the richest one that fits the canvas. Do not invent combinations.
 
 1. **Full lockup** (symbol + entry points + divider + wordmark) — default when canvas has room. Fits when canvas width ≥ ~8 × X and entry-points text clears the medium floor (≥ 20 px digital, ≥ 12 px print).
 2. **Wordmark + entry points** — when the full lockup cannot fit without collapsing the auto gap.
-3. **Wordmark alone** — when entry-points fall below the medium floor, or when the audience already has full brand context. Canonical for tight social formats (LinkedIn 1200×627, email banners, YouTube thumbnails).
+3. **Wordmark alone** — when entry-points fall below the medium floor, or when the audience already has full brand context.
 4. **Symbol only** (squircle multiplier or circular badge) — compact/functional contexts, or when the canvas is too small for the wordmark at 24 px height.
-
-**Entry-points fit test:** compute `round(X × 0.245)`. If ≥ 20 px (digital) or ≥ 12 px (print) → include entry points. If below → drop entry points.
 
 **Quick reference:**
 
-| Canvas | X | EP at `X × 0.245` | Configuration |
+| Canvas | X | EP size | Configuration |
 |---|---|---|---|
 | 1080 × 1080 / 1080 × 1350 / 1080 × 1920 | 86 | 21 px ✓ | Full lockup or wordmark + EP |
-| 1920 × 1080 deck | 86 | 21 px ✓ | Full lockup |
-| 1200 × 627 LinkedIn paid | 50 | 12 px ✗ | Wordmark alone |
-| 1200 × 600 email banner | 48 | 12 px ✗ | Wordmark alone |
-| 400 × 400 favicon | 32 | 8 px ✗ | Symbol only |
+| 1920 × 1080 | 86 | 21 px ✓ | Full lockup |
+| 1200 × 627 | 50 | 12 px ✗ | Wordmark alone |
+| 1200 × 600 | 48 | 12 px ✗ | Wordmark alone |
+| 400 × 400 | 32 | 8 px ✗ | Symbol only |
 
 ### 2. Color — two modes only
 
@@ -204,34 +227,11 @@ Five canonical configurations. Pick the richest one that fits the canvas. Do not
 
 The 1 px white stroke on the symbol is always on — on light it is invisible, on dark it delineates the edge. Never invert the symbol to a white container. No gradients, no brand palette colors, no effects.
 
-### 3. The X-system — one formula for everything
+### 3. Entry points
 
-> **`X = 0.08 × min(canvas_w, canvas_h)`** — for every medium. Mnemonic: X is 8 — for everything.
+Qonto Sans Regular, size `round(X × 0.245)`, left-aligned, flush-left block (ragged right is intentional). Three lines maximum.
 
-`X` is the single brand unit. Every spec in this file resolves to a multiple of `X`. One canvas, one anchor.
-
-**What X governs:**
-
-| Element | Value |
-|---|---|
-| Canvas margin (all four edges) | `X` |
-| Clear space around lockup | `X` |
-| Wordmark height | `X` |
-| Wordmark width | `X × 3.57` (aspect ratio locked — width follows height) |
-| Symbol size | `X × X` (square) |
-| Entry-points size | `round(X × 0.245)` |
-| Entry-points line-height | `round(X × 0.36)` |
-| Gutter between columns | `0.5 × X` |
-| Gap between adjacent content bands | `1 × X` |
-| Gap from last content band to lockup | `≥ 1X` (default `2X`) |
-| Headline tier 1 | `1 × X` |
-| Headline tier 2 | `1.25 × X` |
-| Headline tier 3 | `1.5 × X` |
-| Subtitle | `0.5 × X` |
-
-**Entry-points typography:** Qonto Sans Regular, size `round(X × 0.245)`, left-aligned, flush-left block (ragged right is intentional). Three lines maximum. Always call the family `Qonto Sans` — the SOT's `Qonto Sans v4` label is a transitional artefact.
-
-**Scalability floor:** wordmark minimum 24 px height on screen, 0.25 in print.
+**Fit test:** if `round(X × 0.245)` < 20 px digital / 12 px print → drop entry points, step down to wordmark alone.
 
 ### 4. Placement
 
@@ -318,9 +318,7 @@ Compositions are built from horizontal content bands stacked vertically. Every g
 
 ### 3. Grid
 
-- Outer margin: `X` on all four sides.
-- Gutter between columns: `0.5X`.
-- All columns equal width.
+- Gutter between columns: `0.5X`. All columns equal width.
 
 | Canvas shape | Aspect ratio | Columns |
 |---|---|---|
@@ -360,7 +358,7 @@ Subtitle follows the headline's alignment. Never mix within one composition.
 
 ### 7. Archetypes — A through F
 
-Six canonical patterns (Stack text/visual, Stack visual/text, Split, Overlay full-bleed, Overlay card, Layered floating). Every composition belongs to one. Full descriptions and Figma build recipes in `FIGMA.md § Composition archetypes`.
+Six canonical patterns (Stack text/visual, Stack visual/text, Split, Overlay full-bleed, Overlay card, Layered floating). Every composition belongs to one — including paid ads, which map to five of these six. Full descriptions and build recipes in `FIGMA.md § Composition archetypes`.
 
 **Shared rule for all archetypes:** outer margin `X` on all sides; every content band ends at `lockupY − ≥1X`; copy on photography always gets a dark gradient scrim.
 
@@ -384,13 +382,14 @@ Six canonical patterns (Stack text/visual, Stack visual/text, Split, Overlay ful
 
 Qonto Sans is the brand's primary typeface. Proprietary — internal use only.
 
-Five weights, each with an italic:
+Six weights, each with an italic:
 
 | Weight | Use |
 |---|---|
 | **Thin** / Thin Italic | Editorial accent only |
 | **Light** / Light Italic | Editorial accent only |
 | **Regular** / Regular Italic | Default body, subtitle, entry-points, UI labels |
+| **Semi Bold** / Semi Bold Italic | Emphasis within body; UI secondary labels |
 | **Bold** / Bold Italic | Default headline |
 | **Black** / Black Italic | Hero-headline accent |
 
@@ -417,8 +416,6 @@ Always call the family `Qonto Sans`. The SOT's `Qonto Sans v4` label is a transi
 - Headlines are sub-leading (98%) so the type block reads as one dense shape; +0.5% tracking opens the counters at display sizes.
 - 12 px is the absolute floor. Never ship type smaller.
 - Entry-points carry an additional medium-specific floor: 20 px digital / 12 px print. Below the floor, the lockup drops to wordmark-alone.
-
-> **Cap height vs. font-size** — The size values above (`1X`, `1.25X`, `1.5X`) refer to **optical cap height** (the height of a flat uppercase letter like "H" or "Z"), not the font-size value shown in the right panel. For Qonto Sans the cap-height ratio is ≈ **0.706**, so the Figma/CSS font-size required to hit a given cap height is `cap_height ÷ 0.706`. At X = 24 px: Small headline → cap 24 px → font-size ≈ 34 px. Never flag a font-size as off-tier before converting it to cap height first.
 
 ### 4. Case — sentence case
 
@@ -680,69 +677,13 @@ The customer is the protagonist; Qonto sits in the wings. Frame outcomes as oppo
 
 ### 6. Practical writing rules
 
-- **Pronouns:** `you` = customer. `we` = collective. No self-aggrandising `we`.
-- **Sentence case.** No ALL CAPS for emphasis. Brand names retain canonical casing (`Qonto`).
-- **No jargon.** No "leverage," "synergise," "frictionless paradigm shift." Plain language always.
-- **No hyperbole without evidence.** Don't claim "best," "fastest," "most-loved" without a citation.
-- **Positivity framing.** Present problems as opportunities and outcomes as possibilities.
-- **Inclusivity.** Language inclusive of every Qontoer and every audience member. Avoid metaphors that don't translate across FR / DE / IT / ES / NL.
-- **Brand-name discipline.** Always `Qonto` — never `qonto`, `QONTO`, or stylised variants.
-
-### 7. Anti-patterns
-
-- No fluff or filler — every word earns its place.
-- No hyperbole or self-promotion without evidence.
-- No `we` as Qonto-alone in self-aggrandising context.
-- No one-size-fits-all copy across different surfaces.
-- No clever wordplay that obscures meaning.
-- No ALL CAPS, no decorative tracking, no italics for shouting.
-- No jargon or internal-speak in customer-facing copy.
-- No exclusionary metaphors — test against the FR / DE / IT / ES / NL audience.
-- Always `Qonto` — never `qonto` or `QONTO`.
-
----
-
-## Paid ad compositions
-
-There are **five canonical layout patterns** for paid ads, in two formats each (landscape 1920 × 1080 and portrait 1080 × 1350). Every paid ad composition must belong to one of these five. Do not invent a layout.
-
-| Pattern | Description |
-|---|---|
-| **Full bleed** | Image fills the entire canvas. Text sits on a scrim over the image. |
-| **Split** | Canvas divided into a content half and an image half (archetype C). |
-| **Framed image** | Structural white frame containing a centred, smaller image. |
-| **Floating box** | A floating content card sits over a full-bleed or split background. |
-| **Open canvas** | Typography-led. No photography as the primary visual — graphic elements only. |
-
-When a brief doesn't map to one of these five: flag it, propose the closest match, and let the brand team decide. Do not compose freehand.
-
-SOT reference: [node 450:51900](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=450-51900) (landscape series), [node 562:7514](https://www.figma.com/design/9MBP81zVpoj7hlLS8gf4eV/Qonto-Brand-Kit---SOT?node-id=562-7514) (portrait series).
-
----
-
-## Non-Figma outputs
-
-When building brand outputs outside Figma — Google Slides, HTML, email, Notion, Canva, or any other tool — the same brand foundations apply. The tool doesn't change the rules.
-
-### 1. Color — exact values only
-
-Use the hex values from §Color verbatim. No improvising. If a tool doesn't support the exact hex, use the closest available and document the delta.
-
-### 2. Typography — follow the fallback chain
-
-Use `Qonto Sans` if available. If not: Manrope. If not: Arial. Never substitute Inter, Helvetica, or SF Pro for the Qonto Sans slot.
-
-### 3. No decorative geometry
-
-Do not introduce dark navy backgrounds, teal accents, decorative geometric shapes, or any color or shape not in §Color and §Object styles. The absence of Figma is not a licence to improvise visually.
-
-### 4. Slide conventions apply everywhere
-
-Deck slides, presentation tools, and document covers follow §Composition and §Logo placement rules. The X-system applies to every canvas — compute X from the slide dimensions and apply the same rules.
-
-### 5. Flag rather than improvise
-
-If a brand element (gradient, logo, specific component) can't be correctly reproduced in the target tool, flag it to the designer rather than substituting an approximation. A placeholder is safer than an off-brand render that gets treated as canon.
+- `you` = customer. `we` = collective, never Qonto-alone.
+- Sentence case. Brand names retain canonical casing (`Qonto` — never `qonto` or `QONTO`).
+- No jargon. No "leverage," "synergise," "frictionless paradigm shift."
+- No hyperbole without evidence. Don't claim "best," "fastest," "most-loved" without a citation.
+- Positivity framing — problems as opportunities, outcomes as possibilities.
+- Inclusive language across FR / DE / IT / ES / NL. No metaphors that don't translate.
+- Every word earns its place. No filler, no one-size-fits-all copy, no wordplay that obscures meaning.
 
 ---
 
@@ -750,14 +691,10 @@ If a brand element (gradient, logo, specific component) can't be correctly repro
 
 | Version | Date | Changes |
 |---|---|---|
-| 4.5 | 2026-05-08 | Removed header boilerplate (SOT link, FIGMA.md pointer, platform-listing paragraph). North Star is now the true opening. |
+| 4.6 | 2026-05-08 | Full audit: X-system promoted to top-level section. §Non-Figma and §Paid ads removed. Bugs fixed (logo configs count, Semi Bold weight). Redundant anti-patterns, duplicate notes, and changelog history trimmed. |
+| 4.5 | 2026-05-08 | Removed header boilerplate. North Star is now the true opening. |
 | 4.4 | 2026-05-08 | §Color.4: hex values updated to official Colors — Library values (sourced from Notion). Status families restructured to 50/300/400/800/1000 scale. Accent updated to `brand/blueberry-800 #71A5E0`. |
 | 4.3 | 2026-05-08 | §Color: token names updated to match Colors — Library (`neutral/gray-XX`, `brand/[family]-[shade]`, `status/[name]-[shade]`). |
 | 4.2 | 2026-05-08 | Added North Star. Added Quick reference Do/Don't table. §Composition.7 archetypes condensed to a pointer — full descriptions moved to FIGMA.md. |
 | 4.1 | 2026-05-08 | §Typography.3: clarified that headline tier sizes (1X / 1.25X / 1.5X) are optical cap heights, not font-size values. Added Qonto Sans cap-height ratio (≈ 0.706) and conversion note. |
-| 4.0 | 2026-05-07 | Major restructure: SKILL.md now contains brand foundations only. All Figma build recipes, component keys, slide deck specs, and reference compositions extracted to FIGMA.md. Scope is now universal — any surface, any tool. |
-| 3.14 | 2026-05-04 | Added §Paid ad compositions with 5 layout patterns and SOT node IDs. Added §Non-Figma outputs. Codified white canvas as default. |
-| 3.13 | 2026-04-30 | Desktop Bridge documentation added to ONBOARDING.md and README.md. |
-| 3.12 | 2026-04-28 | Subtitle is single-tier (always `0.5X`). Body paragraph split from caption in typography hierarchy. |
-| 3.5 | 2026-04-22 | Card padding rule unified: `card_pad = round(0.08 × min(cardW, cardH))`. |
-| 3.4 | 2026-04-21 | X-system unified to `0.08 × min(W,H)` for all media. Headline multipliers recalibrated to 1/1.25/1.5. |
+| 4.0 | 2026-05-07 | Major restructure: brand foundations only. All Figma-specific content extracted to FIGMA.md. |
